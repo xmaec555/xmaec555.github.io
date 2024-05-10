@@ -251,7 +251,7 @@
 				"ratio": 1.1
 			}
 		},
-    {"key": "csp_XYQHiker_freeok","name":"FEK┃磁力 ","type":3,"api":"csp_XYQHiker","searchable":1,"quickSearch":1,"filterable":1,"ext":"./lib/mp4电影.json","jar":"./lib/Hk.jar"},
+    {"key": "csp_XYQHiker_freeok","name":"FEK┃磁力 ","type":3,"api":"csp_XBPQ","searchable":1,"quickSearch":1,"filterable":1,"ext":"./lib/mp4电影.json","jar":"./lib/Hk.jar"},
 		{
 			"key": "NanGua",
 			"name": "南瓜|弹幕",
