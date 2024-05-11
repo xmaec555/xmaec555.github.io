@@ -1,7 +1,3 @@
-/*
-欢迎使用 km 在线接口
-资源均来源于网络，仅供测试和交流！请勿用于商业用途，并于下载后24小时内删除！否则后果自负，与本人无关！如有侵权，可联系删除！
-*/
 {
 	"spider":"./pg.jar",
 	"sites":[
@@ -90,18 +86,14 @@
 				"页面代理":"proxy"
 			}
 		},
-		{
-      "key": "圣城",
-      "name": "圣城",
-      "type": 3,
-      "api": "csp_XBPQ",
-      "searchable": 1,
-      "quickSearch": 1,
-      "timeout": 60,
-      "filterable": 1,      
-      "jar": "./lib/XBPQ.jar",
-      "ext": "./js/圣城1080.json"
-    },
+		{"key":"XBPQ_BaiPiao","name":"白嫖影视|XBPQ","type":3,"api":"csp_XBPQ", "jar":"./lib/XBPQ.jar",
+			"ext": {
+				"地区":"[替换:大陆>>中国大陆#香港>>中国香港#台湾>>中国台湾]",
+				"分类": "电影$1#电视剧$2#动漫$3#短剧$4#综艺$5",
+				"分类url": "https://www.baipiaoys.com:9092/show/area/{area}/by/{by}/class/{class}/id/{cateId}/page/{catePg}/year/{year}.html",
+				"页面代理": "proxy"
+			}
+		},
 		{"key":"XBPQ_黑狐影院","name":"黑狐影院|XBPQ","type":3,"api":"csp_XBPQ", "jar":"./lib/XBPQ.jar",
 			"ext": {
 				"站名": "黑狐影院",
@@ -251,7 +243,6 @@
 				"ratio": 1.1
 			}
 		},
-    {"key": "csp_XYQHiker_freeok","name":"FEK┃磁力 ","type":3,"api":"csp_XBPQ","searchable":1,"quickSearch":1,"filterable":1,"ext":"./lib/mp4电影.json","jar":"./lib/Hk.jar"},
 		{
 			"key": "NanGua",
 			"name": "南瓜|弹幕",
