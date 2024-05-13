@@ -662,7 +662,7 @@
 			"api": "csp_Market",
 			"searchable": 0,
 			"changeable": 0,
-			"ext": "./YY.json"
+			"ext": "./yy.json"
 		}],
 		"lives":[
 			{
