@@ -13,7 +13,7 @@
 		},		
 		{
 			"key": "直播转点播",
-			"name": "📺中港澳台电视",
+			"name": "▶中港澳台电视",
 			"type": 3,
 			"searchable": 0,
 			"api": "https://gitee.com/linjun1001/pg/raw/master/lib/xmlive2vod.js",
