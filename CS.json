@@ -484,15 +484,7 @@
 			"changeable": 0,
 			"ext":"proxy"
 		},
-		{
-			"key": "獨播",
-			"name": "獨播 | 海外",
-			"type": 3,
-			"api": "csp_XPathMacFilter",
-			"searchable": 1,
-			"changeable": 0,
-			"ext": "./lib/duboku.json$$$proxy"
-		},
+		{"key":"Mayiys","name":"蚂蚁","type":3,"api":"csp_Mayiys","searchable":1,"quickSearch":1,"filterable":1,"changeable":1},
 		{
 			"key": "haiwaikan",
 			"name": "海外看",
