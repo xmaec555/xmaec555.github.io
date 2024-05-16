@@ -464,7 +464,7 @@
 			"filterable": 1
 		},
 		{ "key": "Ikanbot", "name": "爱看机器人", "type": 3, "api": "csp_Ikanbot", "searchable": 1, "quickSearch": 1, "filterable": 1, "changeable": 1 , "ext":"https://v.ikanbot.com$$$proxy"},
-		{ "key":"csp_YingShi","name":"影视|海外","type":3,"api":"csp_YingShi","ext":"proxy"},
+		{"key": "圣城1080","name": "圣城1080","type": 3,"api": "csp_XBPQ","timeout":60,"searchable":1,"quickSearch":1,"filterable":1,"ext":"./js/圣城1080.json","jar": "./lib/XBPQ.jar;md5;423e33ec108c0f7816200cebaf18fb69"},
 		{ 
 			"key": "泥巴", 
 			"name": "泥巴 | 海外", 
