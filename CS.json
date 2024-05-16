@@ -19,6 +19,7 @@
 			"api": "./lib/live2vod.js",
 			"ext": "https://gitee.com/linjun1001/gao/raw/master/lib/xmfeimaolive.json"
 		},
+		{"key":"drpy_js_蜻蜓FM","name":"广播 ┃ FM","type":3,"api":"https://github.moeyy.xyz/https://raw.githubusercontent.com/xmaec555/gao/master/lib/drpy2.min.js","ext":"https://github.moeyy.xyz/https://raw.githubusercontent.com/xmaec555/gao/master/js/%E8%9C%BB%E8%9C%93FM.js","playerType":"2"},
 		{"key": "网盘配置",
 			"name": "网盘及彈幕配置",
 			"type": 3,
