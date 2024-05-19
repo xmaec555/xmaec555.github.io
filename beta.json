@@ -3,7 +3,7 @@
 	"sites":[
 		{
 			"key": "豆瓣",
-			"name": "微信公众号：【洪溪208】维护",
+			"name": "内部测试，慎用",
 			"type": 3,
 			"api": "csp_Douban",
 			"searchable": 0,
