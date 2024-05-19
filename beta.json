@@ -3,7 +3,7 @@
 	"sites":[
 		{
 			"key": "豆瓣",
-			"name": "内部测试，慎用",
+			"name": "线路6月1日失效，微信公众号获取最新线路",
 			"type": 3,
 			"api": "csp_Douban",
 			"searchable": 0,
@@ -20,14 +20,6 @@
 			"ext": "https://gitee.com/linjun1001/pg/raw/master/lib/xmfeimaolive.json"
 		},
 		{"key":"drpy_js_蜻蜓FM","name":"广播 ┃ FM","type":3,"api":"https://github.moeyy.xyz/https://raw.githubusercontent.com/xmaec555/gao/master/lib/drpy2.min.js","ext":"https://github.moeyy.xyz/https://raw.githubusercontent.com/xmaec555/gao/master/js/%E8%9C%BB%E8%9C%93FM.js","playerType":"2"},
-		{"key": "网盘配置",
-			"name": "网盘及彈幕配置",
-			"type": 3,
-			"api": "csp_Config",
-			"searchable": 0,
-			"changeable": 0,
-			"ext":"./lib/tokenm.json"
-		},
 		{"key":"Wobg","name":"🚬弘明红烟酒行|阿里盘","type":3,"api":"csp_Wobg","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://wobge.run.goorm.io$$$proxy$$$1$$$./lib/wogg.json"},
 		{"key":"yydsys","name":"玩你|阿里盘","type":3,"api":"csp_Wobg","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://tv.yydsys.top/$$$proxy$$$1$$$./lib/wogg.json"},
 		{"key":"ddys","name":"低端|夸克盘","type":3,"api":"csp_Ddys","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://ddys.pro/$$$proxy$$$1$$$"},
@@ -520,6 +512,14 @@
 			"changeable": 0
 		},
 		{"key": "push_agent","name": "推送","type": 3,"api": "csp_Push","changeable":0, "timeout":30, "ext":"./lib/tokenm.json"},
+		{"key": "网盘配置",
+			"name": "网盘及彈幕配置",
+			"type": 3,
+			"api": "csp_Config",
+			"searchable": 0,
+			"changeable": 0,
+			"ext":"./lib/tokenm.json"
+		},
 		{
 			"key": "應用商店",
 			"name": "應用商店",
@@ -527,7 +527,7 @@
 			"api": "csp_Market",
 			"searchable": 0,
 			"changeable": 0,
-			"ext": "./lib/yy.json"
+			"ext": "./lib/yes.json"
 		}],
 		"lives":[
 			{
