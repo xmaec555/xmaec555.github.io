@@ -3,7 +3,7 @@
 	"sites":[
 		{
 			"key": "豆瓣",
-			"name": "自用测试线路",
+			"name": "测试线路,不能长期用",
 			"type": 3,
 			"api": "csp_Douban",
 			"searchable": 0,
