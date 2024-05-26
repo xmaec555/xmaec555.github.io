@@ -12,17 +12,6 @@
 			"ext": "./lib/douban.json"
 		},
 		{
-      "key": "yjys",
-      "name": "缘觉｜XBPQ",
-      "type": 3,
-      "api": "csp_XBPQ",
-      "jar": "./lib/XBPQ.jar",
-      "ext": {
-        "分类url":"https://www.yjys.me/api.php/provide/vod/?ac=list&ac=detail&t={cateId}&pg={catePg}",
-        "分类": "*" 
-      }
-    },
-		{
 			"key": "直播转点播",
 			"name": "▶中港澳台电视",
 			"type": 3,
@@ -775,6 +764,7 @@
 			}
 		],
 		"parses":[
+			{"name":"虾米","type":0,"url":"https://jx.xmflv.com/?url="},
 			{"name":"777","type":0,"url":"https://jx.777jiexi.com/player/?url="},
 			{"name":"杰森","type":0,"url":"https://jx.jsonplayer.com/player/?url="}, 
 			{"name":"战狼","type":0,"url":"https://jx.zhanlangbu.com/?url="},
