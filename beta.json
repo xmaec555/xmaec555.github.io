@@ -16,17 +16,7 @@
       "name": "缘觉｜XBPQ",
       "type": 3,
       "api": "csp_XBPQ",
-      "jar": ".{
-      "key": "yjys",
-      "name": "缘觉｜XBPQ",
-      "type": 3,
-      "api": "csp_XBPQ",
-      "jar": "./lib/XBPQ.jar",
-      "ext": {
-        "分类url":"https://www.yjys.me/api.php/provide/vod/?ac=list&ac=detail&t={cateId}&pg={catePg}",
-        "分类": "*" 
-      }
-    },",
+      "jar": "./XBPQ.jar",
       "ext": {
         "分类url":"https://www.yjys.me/api.php/provide/vod/?ac=list&ac=detail&t={cateId}&pg={catePg}",
         "分类": "*" 
