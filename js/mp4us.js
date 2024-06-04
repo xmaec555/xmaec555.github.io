@@ -55,10 +55,10 @@ d.forEach(function(it) {
 	}
 });
 if (tabsm === true){
-	TABS.push("磁力");
+	TABS.push("关注公众号【洪溪208】");
 }
 if (tabse === true){
-	TABS.push("電驢");
+	TABS.push("电驴");
 }
 if (false && tabsa.length + tabsq.length > 1){
 	TABS.push("選擇右側綫路");
