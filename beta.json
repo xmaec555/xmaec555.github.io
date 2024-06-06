@@ -1,5 +1,5 @@
 {
-	"spider":"./lib/pg.jar",
+	"spider":"./libA/pg.jar",
 	"logo":"./js/1LOGO.png",
 	"sites":[
 		{
