@@ -152,7 +152,7 @@
 		},
 		{
 			"key": "红牛",
-			"name": "红牛电影",
+			"name": "湖厝影视",
 			"type": 1,
 			"api": "http://127.0.0.1:10079/p/0/proxy/https://www.hongniuzy2.com/api.php/provide/vod/?",
 			"playUrl": "json:http://127.0.0.1:10079/parse/?thread=0&proxy=proxy&url=",
@@ -602,7 +602,7 @@
 			"api": "csp_Market",
 			"searchable": 0,
 			"changeable": 0,
-			"ext": "https://gitlab.com/hieravgun69/xmaec-gitxmyx-beta/-/raw/main/yes.json"
+			"ext": "https://gitlab.com/hieravgun69/xmaec-gitxmyx-beta/-/raw/main/yes.json?ref_type=heads"
 		}],
 		"lives":[
 			{
