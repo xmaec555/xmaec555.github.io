@@ -414,17 +414,6 @@
 			"timeout": 60,
 			"ext": "./lib/tokenm.json$$$https://www.66ss.org$$$null$$$1"
 		},
-		{
-			"key": "BT天堂",
-			"name":"BT磁力|海外",
-			"type":3,
-			"api":"csp_XBPQ",
-			"searchable":1,
-			"quickSearch":1,
-			"filterable":1,
-			"ext": "./lib/bttt.json",
-			"jar": "./lib/XBPQ.jar"
-		},
         {
 			"key": "迅雷8",
 			"name": "迅雷吧|磁力",
@@ -469,6 +458,7 @@
 				"ratio": 1.1
 			}
 		},
+        {"key":"团长资源","name":"团长网盘|海外","type":3,"api":"csp_TZFile", "quickSearch":1, "changeable":1, "filterable":1, "timeout":60,"ext":"./lib/tokenm.json$$$proxy$$$1"},
 		{"key":"drpy_js_酷吧","name":"酷吧┃磁力","type":3,"api":"./lib/drpy2.min.js","ext":"./js/kuba.js", "quickSearch":1, "changeable":1, "timeout":60},
 		{"key":"Local","name":"本地|我的TV","type":3,"api":"csp_Local"},
 		{"key":"PushShare","name":"我的资源分享","type":3, "api":"csp_PushShare","searchable":1,"quickSearch":1, "changeable":1, "filterable":0, "timeout":60, "ext":"./lib/tokenm.json$$$./lib/pushshare.txt$$$db$$$1",
