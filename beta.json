@@ -1,5 +1,5 @@
 {
-	"spider":"./libA/pg.jar",
+	"spider":"./lib/pg.jar",
 	"logo":"./js/1LOGO.png",
 	"sites":[
 		{
@@ -602,7 +602,7 @@
 			"api": "csp_Market",
 			"searchable": 0,
 			"changeable": 0,
-			"ext": "https://gitee.com/linjun1001/pg/raw/master/lib/yes.json"
+			"ext": "https://gitlab.com/hieravgun69/xmaec-gitxmyx-beta/-/raw/main/yes.json"
 		}],
 		"lives":[
 			{
