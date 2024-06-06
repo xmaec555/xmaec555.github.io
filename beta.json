@@ -116,7 +116,7 @@
 			"quickSearch": 1,
 			"searchable": 1,
 			"timeout":60,
-			"ext": "./lib/tokenm.json$$$https://www.yjys.me/$$$proxy$$$1"
+			"ext": "https://raw.githubusercontent.com/xmaec555/CCTV/main/business.json"
 		},
 		{
 			"key": "haokongbu",
