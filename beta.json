@@ -415,21 +415,15 @@
 			"ext": "./lib/tokenm.json$$$https://www.66ss.org$$$null$$$1"
 		},
 		{
-			"key":"Youtube",
-			"name":"Youtube|海外",
+			"key": "BT天堂",
+			"name":"BT磁力|海外",
 			"type":3,
-			"api": "csp_Youtube",
-			"searchable": 1,
-			"quickSearch": 0,
-			"changeable": 0,
-			"ext":{
-				"type":"直播#新闻#音乐#体育#剧集#电影#8K#4K#HDR#movie#music#documentary",
-				"proxy":"proxy"
-			},
-			"style": {
-				"type": "rect",
-				"ratio": 1.5
-			}
+			"api":"csp_XBPQ",
+			"searchable":1,
+			"quickSearch":1,
+			"filterable":1,
+			"ext": "./lib/bttt.json",
+			"jar": "./lib/XBPQ.jar"
 		},
         {
 			"key": "迅雷8",
