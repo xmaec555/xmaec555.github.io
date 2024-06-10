@@ -4,7 +4,7 @@
 	"sites":[
 		{
 			"key": "豆瓣",
-			"name": "会员⓶公众号[洪溪𝟚𝟘𝟠]维护",
+			"name": "⓶公众号[洪溪𝟮𝟬𝟴]维护",
 			"type": 3,
 			"api": "csp_Douban",
 			"searchable": 0,
@@ -13,14 +13,17 @@
 			"ext": "./lib/douban.json"
 		},		
         {
-			"key": "广告商店",
-			"name": "洪溪居民，有优惠！",
+			"key": "广告位1",
+			"name": "机顶盒350元/台",
 			"type": 3,
 			"api": "csp_Market",
 			"searchable": 0,
 			"changeable": 0,
 			"ext": "https://gitee.com/linjun1001/pg/raw/master/lib/guanggao.json"
 		},
+		{"key":"fAn","name":"请勿相信视频中广告","type":3,"api":"csp_XPath","searchable":0,"quickSearch":0,"changeable":0},
+        {"key":"fBn","name":"线路更新时间：6-10","type":3,"api":"csp_XPath","searchable":0,"quickSearch":0,"changeable":0},
+        {"key":"光速资源","name":"祝您：端午节快乐！","type":1,"api":"http://api.guangsuapi.com/api.php/provide/vod/","searchable":1,"changeable":1,"categories":["动作片","喜剧片","爱情片","科幻片","剧情片","恐怖片","战争片","动漫电影","大陆剧","欧美剧","港澳剧","韩剧","日剧","台湾剧","泰剧","综艺","动漫","记录片"]},
 {
       "key": "348影视网",
       "name": "洪溪影视网",
@@ -60,15 +63,17 @@
     },
        {
 			"key":"Youtube",
-			"name":"Youtube",
+			"name":"Youtube┃海外",
 			"type":3,
 			"api": "csp_Youtube",
 			"searchable": 1,
 			"quickSearch": 0,
 			"changeable": 0,
 			"ext":{
+				"json":"./lib/youtube.json",
 				"type":"直播#新闻#剧集#电影#综艺#纪录片#音乐#体育#动物#风光#放松#4K#HDR#movie#music#documentary#bbc documentary#national geographic documentary",
 				"proxy":"proxy",
+				"keywords":"排行榜,HOT,TRENDS,热门话题,热门趋势,热门综艺,热门电影,热门电视剧,小姐姐",
 				"codecs":""
 			},
 			"style": {
@@ -109,7 +114,7 @@
 {"key": "XBPQ_麻衣影院","name":"明哥影院","type":3,"api":"csp_XBPQ","searchable":1,"quickSearch":1,"filterable":1,"jar": "./lib/XBPQ.jar",
 			"ext": {"分类url":"https://www.huanyuxing.com/s/{cateId}/area/{area}/class/{class}/page/{catePg}/year/{year}.html","分类":"电影$id-a#电视剧$id-b#动漫$id-c#综艺$id-d"}
 		},
-		{ "key": "Ikanbot", "name": "洪溪影线[多线]", "type": 3, "api": "csp_Ikanbot", "searchable": 1, "quickSearch": 1, "filterable": 1, "changeable": 1 , "ext":"https://v.aikanbot.com$$$proxy"},
+		{ "key": "Ikanbot", "name": "洪溪影线[推荐]", "type": 3, "api": "csp_Ikanbot", "searchable": 1, "quickSearch": 1, "filterable": 1, "changeable": 1 , "ext":"https://v.aikanbot.com$$$proxy"},
 		{"key":"XBPQ_文才","name":"有才影视","type":3,"api":"csp_XBPQ", "jar":"./lib/XBPQ.jar",
 			"ext":{"分类": "国产剧&短剧&喜剧片&爱情片&恐怖片&战争片&科幻片&动作片&综艺&欧美剧&港台剧&日韩剧",
 				"分类值": "14&42&22&26&36&25&30&23&69&15&16&62",
@@ -241,6 +246,44 @@
 			"changeable": 1
 		},
 		{
+			"key": "非凡",
+			"name": "非凡┃海外",
+			"type": 1,
+			"api": "http://127.0.0.1:10079/p/0/proxy/http://api.ffzyapi.com/api.php/provide/vod/?",
+			"playUrl": "json:http://127.0.0.1:10079/parse/?thread=0&proxy=proxy&url=",
+			"playerType":1,
+			"searchable": 1,
+			"changeable": 1,
+			"categories": [
+				"动作片",
+				"喜剧片",
+				"爱情片",
+				"科幻片",
+				"恐怖片",
+				"剧情片",
+				"战争片",
+				"国产动漫",
+				"日韩动漫",
+				"国产剧",
+				"韩国剧",
+				"日本剧",
+				"动漫片",
+				"香港剧",
+				"欧美剧",
+				"记录片",
+				"台湾剧",
+				"海外剧",
+				"泰国剧",
+				"大陆综艺",
+				"港台综艺",
+				"日韩综艺",
+				"欧美综艺",
+				"欧美动漫",
+				"港台动漫",
+				"海外动漫"
+			]
+		},
+		{
 			"key": "索尼资源",
 			"name": "索尼电影",
 			"type": 1,
@@ -352,45 +395,10 @@
 				"分类url": "http://fagmn.com/list/{cateId}_{catePg}.html?order=time"
 			}
 		},
-        {"key":"AList","name":"网盘|Alist分享","type":3,"api":"csp_AList","searchable":1,"filterable":1,"changeable":1,"ext":"./js/alistjar.json"},
-		{"key":"Wobg","name":"🚬弘明红烟酒行|阿里盘","type":3,"api":"csp_Wobg","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://wobge.run.goorm.io$$$proxy$$$1$$$./lib/wogg.json"},
-		{"key":"yydsys","name":"多多|阿里盘","type":3,"api":"csp_Wobg","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://tv.yydsys.top/$$$proxy$$$1$$$./lib/wogg.json"},
-{"key":"Wogg","name":"翔安哥|阿里盘","type":3,"api":"csp_Wogg","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://wogg.link/$$$proxy$$$1$$$./lib/wogg.json"},
-{"key":"Hdhive","name":"影巢|阿里盘","type":3,"api":"csp_Hdhive","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$proxy$$$1"},
-{"key":"Ppxzy","name":"皮皮虾|阿里盘","type":3,"api":"csp_Ppxzy", "quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://ppxzy.ink$$$proxy$$$1"},
-        {"key":"YunPan","name":"厦门云盘|阿里盘","type":3,"api":"csp_YunPan","timeout":60, "ext":"./lib/tokenm.json$$$null$$$proxy$$$1"        },
-		{"key":"ddys","name":"低端|夸克盘","type":3,"api":"csp_Ddys","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://ddys.pro/$$$proxy$$$1$$$"},
-		{"key":"校长影视","name":"校长|夸克盘","type":3,"api":"csp_XiaoZhang", "quickSearch":1, "changeable":1, "filterable":1, "timeout":60,"ext":"./lib/tokenm.json$$$https://xzyshd.com$$$proxy$$$1"},
-		{"key":"Moli","name":"HDmoli|综合盘","type":3,"api":"csp_Moli","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://www.hdmoli.pro/$$$proxy$$$1$$$./lib/moli.json"},
-		{"key":"Xinshijue","name":"新视觉|综合盘","type":3,"api":"csp_Xinshijue","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://www.80yy3.com/$$$proxy$$$1$$$./lib/wogg.json"},
-		{"key":"Libvio","name":"LIBVIO|综合盘","type":3,"api":"csp_Libvio","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://www.libvio.fun/$$$null"},
-        {
-            "key": "蜡笔网盘",
-            "name": "蜡笔|夸克盘",
-            "type": 3,
-            "api": "csp_Wobg",
-            "quickSearch": 1,
-            "changeable": 1,
-            "filterable": 1,
-            "timeout": 30,
-            "ext": "./lib/tokenm.json$$$https://duopan.fun/$$$proxy$$$1$$$./lib/wogg.json"
-        },
-		{"key":"Panta","name":"盘Ta|移动盘","type":3,"api":"csp_Panta","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://www.91panta.cn/$$$null$$$1",
-			"style": {
-				"type": "list",
-				"ratio": 1.1
-			}
-		},
 		{"key":"Wo4k","name":"玩偶4K|磁力","type":3,"api":"csp_Wo4k","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://www.wo4k.net/$$$proxy$$$1$$$./lib/wogg.json"},
 		{"key":"Gaoqing","name":"中国高清|磁力","type":3,"api":"csp_Gaoqing","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://gaoqing.la/$$$proxy$$$1"},
-		{"key":"drpy_js_磁力熊搜索","name":"熊力熊","type":3,"api":"./lib/xmdrpy2.min.js","ext":"./js/xmcilixiong.js","searchable":0,"quickSearch":0,"changeable":1},
+		{"key":"drpy_js_磁力熊搜索","name":"熊力熊┃索引","type":3,"api":"./lib/xmdrpy2.min.js","ext":"./js/xmcilixiong.js","searchable":0,"quickSearch":0,"changeable":1},
 		{"key":"drpy_js_MP4US","name":"MP4电影|磁力","type":3,"api":"./lib/drpy2.min.js","ext":"./js/mp4us.js", "quickSearch":1, "changeable":1, "timeout":60},
-		{"key":"4KHDR","name":"4KHDR|磁力","type":3,"api":"csp_FourKHDR","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$./lib/4khdr.txt$$$1",
-			"style": {
-				"type": "list",
-				"ratio": 1.1
-			}
-		},
 		{"key":"布谷tv",
 			"name":"布谷|4K磁力",
 			"type":3,
@@ -461,26 +469,6 @@
 			"timeout":60,
 			"ext": "./lib/tokenm.json$$$https://www.yjys01.com/$$$proxy$$$1"
 		},
-		{
-			"key": "haokongbu",
-			"name": "好恐怖|磁力",
-			"type": 3,
-			"api": "csp_XBPQ",
-			"searchable":1,
-			"quickSearch":1,
-			"filterable":1,
-			"ext": {
-				"主页url": "https://m.haokongbu.top/",
-				"分类url": "https://m.haokongbu.top/{cateId}/index_{catePg}.html[https://m.haokongbu.top/{cateId}/index.html]",
-				"分类": "国产剧$guochanju#港剧$gangju#动作片$dongzuopian#喜剧片$xijupian#爱情片$aiqingpian#科幻片$kehuanpian#恐怖片$kongbupian#战争片$zhanzhengpian#剧情片$juqingpian#微电影$weidianying#记录片$m_jlp#高清$gaoqing#动漫$donghuapian#台湾$taiwanju#日本$riju#韩国$hanju#欧美$oumeiju#泰国$taiguoju#海外$haiwaiju",
-				"副标题": "class=\"typeset\"&&</i>",
-				"起始页": 2,
-				"倒序": 1,
-				"播放数组": "下载地址</h2>&&</ul>[不包含:网盘]",
-				"播放列表":"<ul>&&</div>[包含:magnet]"
-			},
-			"jar": "./lib/XBPQ.jar"
-		},
         {
 			"key": "迅雷8",
 			"name": "迅雷吧|磁力",
@@ -496,8 +484,57 @@
 			}
 		},
 		{"key":"drpy_js_酷吧","name":"酷吧┃磁力","type":3,"api":"./lib/drpy2.min.js","ext":"./js/kuba.js", "quickSearch":1, "changeable":1, "timeout":60},
-		{"key":"Local","name":"本地|我的TV","type":3,"api":"csp_Local"},
-		{"key":"PushShare","name":"我的资源分享","type":3, "api":"csp_PushShare","searchable":1,"quickSearch":1, "changeable":1, "filterable":0, "timeout":60, "ext":"./lib/tokenm.json$$$./lib/pushshare.txt$$$db$$$1",
+		{
+			"key": "haokongbu",
+			"name": "布啦啦|磁力",
+			"type": 3,
+			"api": "csp_XBPQ",
+			"searchable":1,
+			"quickSearch":1,
+			"filterable":1,
+			"ext": {
+				"主页url": "https://www.haokongbu123.com/",
+				"分类url": "https://www.haokongbu123.com/{cateId}/index_{catePg}.html[https://m.haokongbu.top/{cateId}/index.html]",
+				"分类": "国产剧$guochanju#港剧$gangju#动作片$dongzuopian#喜剧片$xijupian#爱情片$aiqingpian#科幻片$kehuanpian#恐怖片$kongbupian#战争片$zhanzhengpian#剧情片$juqingpian#微电影$weidianying#记录片$m_jlp#高清$gaoqing#动漫$donghuapian#台湾$taiwanju#日本$riju#韩国$hanju#欧美$oumeiju#泰国$taiguoju#海外$haiwaiju",
+				"副标题": "class=\"typeset\"&&</i>",
+				"起始页": 2,
+				"倒序": 1,
+				"播放数组": "下载地址</h2>&&</ul>[不包含:网盘]",
+				"播放列表":"<ul>&&</div>[包含:magnet]"
+			},
+			"jar": "./lib/XBPQ.jar"
+		},
+        {"key":"AList","name":"网盘|Alist分享","type":3,"api":"csp_AList","searchable":1,"filterable":1,"changeable":1,"ext":"./js/alistjar.json"},
+		{"key":"Wobg","name":"🚬弘明红烟酒行|阿里盘","type":3,"api":"csp_Wobg","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://wobge.run.goorm.io$$$proxy$$$1$$$./lib/wogg.json"},
+		{"key":"yydsys","name":"多多|阿里盘","type":3,"api":"csp_Wobg","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://tv.yydsys.top/$$$proxy$$$1$$$./lib/wogg.json"},
+{"key":"Wogg","name":"翔安哥|阿里盘","type":3,"api":"csp_Wogg","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://wogg.link/$$$proxy$$$1$$$./lib/wogg.json"},
+{"key":"Hdhive","name":"影巢|阿里盘","type":3,"api":"csp_Hdhive","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$proxy$$$1"},
+{"key":"Ppxzy","name":"皮皮虾|阿里盘","type":3,"api":"csp_Ppxzy", "quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://ppxzy.ink$$$proxy$$$1"},
+        {"key":"YunPan","name":"厦门云盘|阿里盘","type":3,"api":"csp_YunPan","timeout":60, "ext":"./lib/tokenm.json$$$null$$$proxy$$$1"        },
+		{"key":"ddys","name":"低端|夸克盘","type":3,"api":"csp_Ddys","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://ddys.pro/$$$proxy$$$1$$$"},
+		{"key":"校长影视","name":"校长|夸克盘","type":3,"api":"csp_XiaoZhang", "quickSearch":1, "changeable":1, "filterable":1, "timeout":60,"ext":"./lib/tokenm.json$$$https://xzyshd.com$$$proxy$$$1"},
+		{"key":"Moli","name":"HDmoli|综合盘","type":3,"api":"csp_Moli","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://www.hdmoli.pro/$$$proxy$$$1$$$./lib/moli.json"},
+		{"key":"Xinshijue","name":"新视觉|综合盘","type":3,"api":"csp_Xinshijue","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://www.80yy3.com/$$$proxy$$$1$$$./lib/wogg.json"},
+		{"key":"Libvio","name":"LIBVIO|综合盘","type":3,"api":"csp_Libvio","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://www.libvio.fun/$$$null"},
+        {
+            "key": "蜡笔网盘",
+            "name": "蜡笔|夸克盘",
+            "type": 3,
+            "api": "csp_Wobg",
+            "quickSearch": 1,
+            "changeable": 1,
+            "filterable": 1,
+            "timeout": 30,
+            "ext": "./lib/tokenm.json$$$https://duopan.fun/$$$proxy$$$1$$$./lib/wogg.json"
+        },
+		{"key":"Panta","name":"盘Ta|移动盘","type":3,"api":"csp_Panta","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://www.91panta.cn/$$$null$$$1",
+			"style": {
+				"type": "list",
+				"ratio": 1.1
+			}
+		},
+		{"key":"Local","name":"本地|本机内存","type":3,"api":"csp_Local"},
+		{"key":"PushShare","name":"我的网盘┃分享","type":3, "api":"csp_PushShare","searchable":1,"quickSearch":1, "changeable":1, "filterable":0, "timeout":60, "ext":"./lib/tokenm.json$$$./lib/pushshare.txt$$$db$$$1",
 			"style": {
 				"type": "list",
 				"ratio": 1.1
@@ -622,9 +659,9 @@
 			"searchable": 1,
 			"changeable": 0
 		},
-		{"key": "push_agent","name": "推送","type": 3,"api": "csp_Push","changeable":0, "timeout":30, "ext":"./lib/tokenm.json"},
+		{"key": "push_agent","name": "版本号：240609-1718","type": 3,"api": "csp_Push","changeable":0, "timeout":30, "ext":"./lib/tokenm.json"},
                 {"key": "网盘配置",
-			"name": "配置中心",
+			"name": "配置中心|网盘配置",
 			"type": 3,
 			"api": "csp_Config",
 			"searchable": 0,
@@ -633,7 +670,7 @@
 		},
         {
 			"key": "應用商店",
-			"name": "联系我们|App升级",
+			"name": "联系我们|APP升级",
 			"type": 3,
 			"api": "csp_Market",
 			"searchable": 0,
@@ -682,6 +719,12 @@
 				"type": 0,
 				"playerType": 1,
 				"url": "https://github.moeyy.xyz/https://raw.githubusercontent.com/zwc456baby/iptv_alive/master/live.txt"
+			},
+			{
+				"name": "❽台湾电视",
+				"type": 0,
+				"playerType": 1,
+				"url": "https://github.moeyy.xyz/https://raw.githubusercontent.com/880824/TV/main/live-online.m3u"
 			},
 			{
 				"name": "⓺在线收音机",
@@ -856,6 +899,7 @@
 			}
 		],
 		"parses":[
+			{"name":"非凡","type":0,"url":"https://svip.ffzyplay.com/?url="},
 			{"name":"777","type":0,"url":"https://jx.777jiexi.com/player/?url="},
 			{"name":"杰森","type":0,"url":"https://jx.jsonplayer.com/player/?url="}, 
 			{"name":"战狼","type":0,"url":"https://jx.zhanlangbu.com/?url="},
