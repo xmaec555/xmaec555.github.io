@@ -25,7 +25,7 @@
 		},
 		{"key":"fAn","name":"视频水印广告,请勿相信","type":3,"api":"csp_XPath","searchable":0,"quickSearch":0,"changeable":0},
 		{ "key": "Ikanbot", "name": "💥洪溪影线┃多线", "type": 3, "api": "csp_Ikanbot", "searchable": 1, "quickSearch": 1, "filterable": 1, "changeable": 1 , "ext":"https://v.aikanbot.com$$$proxy"},
-		{"key": "js_6V","name": "💥洪溪影线┃磁力","type": 3,"api": "./lib/drpy2.min.js","searchable": 1,"quickSearch": 1,"filterable": 1,"ext": "https://gitlab.com/xmaec555/CCTV/-/raw/main/js/6V.js?ref_type=heads"},
+		{"key": "js_6V","name": "💥洪溪影线┃磁力","type": 3,"api": "./lib/drpy2.min.js","searchable": 1,"quickSearch": 1,"filterable": 1,"ext": "https://gitlab.com/xmaec555/CCTV/-/raw/main/js/6V.js"},
 		{"key":"PushShare","name":"💥洪溪影线┃网盘","type":3, "api":"csp_PushShare","searchable":1,"quickSearch":1, "changeable":1, "filterable":0, "timeout":60, "ext":"./lib/tokenm.json$$$./lib/pushshare.txt$$$db$$$1",
 			"style": {
 				"type": "list",
