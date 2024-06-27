@@ -6,7 +6,7 @@
 	"sites":[
 		{
 			"key": "豆瓣",
-			"name": "⓶公众号[洪溪𝟮𝟬𝟴]维护",
+			"name": "线路由公众号[洪溪𝟮𝟬𝟴]维护",
 			"type": 3,
 			"api": "csp_Douban",
 			"searchable": 0,
@@ -433,14 +433,6 @@
 			"name": "酷狗音乐",
 			"type": 3,
 			"api": "csp_Kugou",
-			"searchable": 1,
-			"changeable": 0
-		},
-		{
-			"key": "Yinyuetai",
-			"name": "音悦台MTV",
-			"type": 3,
-			"api": "csp_Yinyuetai",
 			"searchable": 1,
 			"changeable": 0
 		},
