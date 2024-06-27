@@ -24,22 +24,27 @@
 			"ext": "https://gitlab.com/xmaec555/CCTV/-/raw/main/gg/ggp.json"
 		},
 		{"key":"fAn","name":"视频水印广告,请勿相信","type":3,"api":"csp_XPath","searchable":0,"quickSearch":0,"changeable":0},
-		{ "key": "Ikanbot", "name": "💥洪溪影线┃多线", "type": 3, "api": "csp_Ikanbot", "searchable": 1, "quickSearch": 1, "filterable": 1, "changeable": 1 , "ext":"https://v.aikanbot.com$$$proxy"},
-		{"key": "js_6V","name": "💥洪溪影线┃磁力","type": 3,"api": "https://gitlab.com/xmaec555/CCTV/-/raw/main/lib/drpy2.min.js","searchable": 1,"quickSearch": 1,"filterable": 1,"ext": "https://gitlab.com/xmaec555/CCTV/-/raw/main/js/6V.js"},
-		{"key":"PushShare","name":"💥洪溪影线┃网盘","type":3, "api":"csp_PushShare","searchable":1,"quickSearch":1, "changeable":1, "filterable":0, "timeout":60, "ext":"./lib/tokenm.json$$$./lib/pushshare.txt$$$db$$$1",
+		{
+			"key":"Youtube",
+			"name":"Youtube（测试）",
+			"type":3,
+			"api": "csp_Youtube",
+			"searchable": 1,
+			"quickSearch": 0,
+			"changeable": 0,
+			"ext":{
+				"json":"./lib/youtube.json",
+				"type":"直播#新闻#剧集#电影#综艺#纪录片#音乐#体育#动物#风光#放松#4K#HDR#movie#music#documentary#bbc documentary#national geographic documentary",
+				"proxy":"proxy",
+				"keywords":"排行榜,HOT,TRENDS,热门话题,热门趋势,热门综艺,热门电影,热门电视剧,歌仔红",
+				"codecs":""
+			},
 			"style": {
-				"type": "list",
-				"ratio": 1.1
+				"type": "rect",
+				"ratio": 1.5
 			}
 		},
-		{
-			"key": "直播转点播",
-			"name": "港台电视直播",
-			"type": 3,
-			"searchable": 0,
-			"api": "./lib/live2vod.js",
-			"ext": "./lib/tw.json"
-		},
+		{ "key": "Ikanbot", "name": "💥洪溪影线┃多线", "type": 3, "api": "csp_Ikanbot", "searchable": 1, "quickSearch": 1, "filterable": 1, "changeable": 1 , "ext":"https://v.aikanbot.com$$$proxy"},
         {"key":"光速资源","name":"追光电影院","type":1,"api":"http://api.guangsuapi.com/api.php/provide/vod/","searchable":1,"changeable":1,"categories":["动作片","喜剧片","爱情片","科幻片","剧情片","恐怖片","战争片","动漫电影","大陆剧","欧美剧","港澳剧","韩剧","日剧","台湾剧","泰剧","综艺","动漫","记录片"]},
 		{
 			"key": "賤賤",
@@ -438,26 +443,6 @@
 			"api": "csp_Yinyuetai",
 			"searchable": 1,
 			"changeable": 0
-		},
-		{
-			"key":"Youtube",
-			"name":"Youtube",
-			"type":3,
-			"api": "csp_Youtube",
-			"searchable": 1,
-			"quickSearch": 0,
-			"changeable": 0,
-			"ext":{
-				"json":"./lib/youtube.json",
-				"type":"直播#新闻#剧集#电影#综艺#纪录片#音乐#体育#动物#风光#放松#4K#HDR#movie#music#documentary#bbc documentary#national geographic documentary",
-				"proxy":"proxy",
-				"keywords":"排行榜,HOT,TRENDS,热门话题,热门趋势,热门综艺,热门电影,热门电视剧,小姐姐",
-				"codecs":""
-			},
-			"style": {
-				"type": "rect",
-				"ratio": 1.5
-			}
 		},
 		{"key":"Wo4k","name":"玩偶4K|磁力","type":3,"api":"csp_Wo4k","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://www.wo4k.net/$$$proxy$$$1$$$./lib/wogg.json"},
 		{"key":"Gaoqing","name":"中国高清|磁力","type":3,"api":"csp_Gaoqing","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://gaoqing.la/$$$proxy$$$1"},
