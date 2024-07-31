@@ -9,4 +9,5 @@
 
 # 机顶盒TG群：https://t.me/xmhxyx
 
-在线接口使用PG本地包，特别感谢PG大佬！
+# 鸣谢：
+PG大佬  
