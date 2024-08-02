@@ -2,6 +2,8 @@
 
 接口内置机场订阅，免翻观看YOUTUBE   本着公开分享，有某些人以扒tokenm内容洋洋得意，实在小人也！
 
+机顶盒批发静态网页  https://hx208.top/ind.html   
+
 在线接口  https://hx208.top   
 
 直播接口：https://hx208.top/tv.json
