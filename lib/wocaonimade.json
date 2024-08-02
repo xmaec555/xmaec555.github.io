@@ -64,7 +64,7 @@
 "singbox_subscribe_url":"https://hx208.top/CSV/s.json",
 "singbox_clash2singbox_url":"./clash2singbox.gz",
 "singbox_template_url":"./singbox.json",
-"pan115_cookie":"",
+"pan115_cookie":"UID=102210603_A1_1722630660; CID=c0acbcefa4468a75bd828f08115597f2; SEID=322cb336560550d6a37537e00191a6298c408bf419cef39ab165501d18d324512985045b6e145d494e0810e091eefa50fcfb02554f5688711f87",
 "pan115_thread_limit":0,
 "pan115_vip_thread_limit":0,
 "pan115_is_vip":false,
