@@ -2,7 +2,7 @@
 
 接口内置机场订阅，免翻观看YOUTUBE   会内置机场订阅和各大网盘CK就不怕你扒走，所以你别得意！
 
-在线接口  https://hx208.top   PG在线演示 
+在线接口  https://hx208.top   
 
 直播接口：https://hx208.top/tv.json
 
