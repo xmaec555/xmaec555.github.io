@@ -3,7 +3,7 @@
 
 接口内置机场订阅，免翻观看YOUTUBE  
 
-在线接口  https://hx208.top   
+在线接口  https://hx208.top   PG在线演示 
 
 直播接口：https://hx208.top/tv.json
 
