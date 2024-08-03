@@ -63,7 +63,7 @@
 "singbox_subscribe_url":"https://hx208.top/CSV/s.json",
 "singbox_clash2singbox_url":"./clash2singbox.gz",
 "singbox_template_url":"./singbox.json",
-"pan115_cookie":"USERSESSIONID=523fbdef23683ba998c3e7f99697ba64e44cbe64f67790a32ff385de0080e4ee; UID=102210603_A1_1722643053; CID=5b1da7d35601aa8900586d7667b39333; SEID=c82632eff0a82d041959671f382d19208237a01703b43d426e556282c89d14db3c84cc7b9a04054ff9e7d4c9adcd18c554a354e8ff33a9dd8c8762d7; PHPSESSID=m89jcuubpdavkbk7b5lbarjvsq; 115_lang=zh; acw_tc=784e2c9417226430561916350e0bb40980bf6c6635761b307921083089a5b8",
+"pan115_cookie":"UID=102210603_A1_1722643053; CID=5b1da7d35601aa8900586d7667b39333; SEID=c82632eff0a82d041959671f382d19208237a01703b43d426e556282c89d14db3c84cc7b9a04054ff9e7d4c9adcd18c554a354e8ff33a9dd8c8762d7",
 "pan115_thread_limit":0,
 "pan115_vip_thread_limit":0,
 "pan115_is_vip":false,
