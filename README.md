@@ -3,15 +3,9 @@
 ##### 你如果是我们机顶盒用户，请在TG群提供设备IP和ID，会给你专用VIP免费接口！
 ##### VIP免费接口：提供 UC、115、迅雷、夸克、阿里、移动、pikpak等会员网盘、高速机场！
 
-- 机顶盒批发静态网页  https://hx208.top/ind.html   
+- 进入获取在接接口：  https://hx208.top/ind.html   
 
-- 在线接口  https://hx208.top   (提供 UC、115、迅雷、夸克、阿里、移动、pikpak等免费网盘、免费机场)
-
-- 多线接口：https://hx208.top/h.json   (不定期添加)
-
-- 直播接口：https://hx208.top/tv.json
-
-- 永久接口地址：https://xmaec555.github.io
+- 免费在线接口 ：提供 UC、115、迅雷、夸克、阿里、移动、pikpak等免费网盘、免费机场！
 
 ## 机顶盒TG群：https://t.me/xmhxyx 
 ## 网盘影视分享频道： https://t.me/hx208top
