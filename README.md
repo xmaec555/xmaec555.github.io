@@ -5,7 +5,7 @@
 
 - 机顶盒批发静态网页  https://hx208.top/ind.html   
 
-- 在线接口  https://hx208.top   
+- 在线接口  https://hx208.top   (提供 UC、115、迅雷、夸克、阿里、移动、pikpak等免费网盘、免费机场)
 
 - 多线接口：https://hx208.top/h.json   (不定期添加)
 
