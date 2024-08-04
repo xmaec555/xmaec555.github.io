@@ -3,13 +3,13 @@
 
 # 本接口为演示接口，内置机场订阅，免翻观看YOUTUBE  ！
 
-机顶盒批发静态网页  https://hx208.top/ind.html   
+-机顶盒批发静态网页  https://hx208.top/ind.html   
 
-在线接口  https://hx208.top   
+-在线接口  https://hx208.top   
 
-多线接口：https://hx208.top/h.json   (不定期添加)
+-多线接口：https://hx208.top/h.json   (不定期添加)
 
-直播接口：https://hx208.top/tv.json
+-直播接口：https://hx208.top/tv.json
 
 永久接口地址：https://xmaec555.github.io
 
