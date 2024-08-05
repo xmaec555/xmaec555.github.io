@@ -7,6 +7,8 @@
 
 - 免费在线接口 ：提供 UC、115、迅雷、夸克、阿里、移动、pikpak等免费网盘、免费机场！
   
+- 本站永久网址：https://xmaec555.github.io
+  
 - 免费图床  https://img.hx208.top
 
 ## 机顶盒TG群：https://t.me/xmhxyx 
