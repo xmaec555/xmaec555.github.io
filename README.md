@@ -11,7 +11,7 @@
   
 - 免费图床  https://img.hx208.top
 
-## 机顶盒TG群：https://t.me/xmhxyx 
+## 机顶盒TG群：https://t.me/aizldjlq 
 ## 网盘影视分享频道： https://t.me/hx208top
 
 ### 本接口为演示接口， 内置机场订阅，免翻观看YOUTUBE  ！
