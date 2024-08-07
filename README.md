@@ -14,7 +14,7 @@
 ## 机顶盒TG群：https://t.me/aizldjlq 
 ## 网盘影视分享频道： https://t.me/hx208top  
 
-复制下面下面频道添加到TG搜索选项
+复制下面频道添加到配置中心-网盘其它置-TG频道列表里
 ```url
 https://t.me/hx208top
 ```
