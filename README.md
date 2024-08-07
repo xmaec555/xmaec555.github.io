@@ -12,7 +12,11 @@
 - 免费图床  https://img.hx208.top
 
 ## 机顶盒TG群：https://t.me/aizldjlq 
-## 网盘影视分享频道： https://t.me/hx208top
+## 网盘影视分享频道： https://t.me/hx208top  
+
+```url
+https://t.me/hx208top
+```
 
 ### 本公开接口是PG本地包在线接口演示，再次感谢PG大佬   ！
  
