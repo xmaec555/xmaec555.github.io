@@ -9,7 +9,7 @@
    ]
   },
    {
-    "name": "扫码加入TG群",
+    "name": "交流TG群",
     "list": [
       {
         "url": "https://85.hx208.top/img/tgq.jpg",
@@ -18,11 +18,11 @@
     ]
   },
   {
-    "name": "扫码加入TG频道",
+    "name": "网盘影视频道",
     "list": [
       {
-        "url": "https://85.hx208.top/img/tgq.jpg",
-        "icon": "https://85.hx208.top/img/tgq.jpg"
+        "url": "https://85.hx208.top/img/tgpd.jpg",
+        "icon": "https://85.hx208.top/img/tgpd.jpg"
       }
     ]
   }
