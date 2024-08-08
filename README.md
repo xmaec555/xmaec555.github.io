@@ -24,6 +24,7 @@ https://t.me/hx208top
  - 声明：我们不卖接口、只批发机顶盒，所有接口都是免费使用的！
    
  - 免费图床测试
+   <img src="https://img.hx208.top/file/6d5b0682cec9061c533f1.jpg" />
    <img src="https://img.hx208.top/file/6916ccfaf2eff5d082623.png" />
    <img src="https://img.hx208.top/file/c5807119559a30f5abef1.jpg" />
    <img src="https://img.hx208.top/file/ebefe68fcb096e053d119.png" />
