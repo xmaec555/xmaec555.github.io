@@ -1,6 +1,6 @@
 [
   {
-    "name": "推薦",
+    "name": "扫码加入TG群",
     "list": [
       {
         "url": "https://85.hx208.top/img/tgq.jpg",
@@ -9,23 +9,12 @@
    ]
   },
   {
-    "name": "扫码加入TG群",
-    "list": [
-      {
-        "url": "https://85.hx208.top/img/tgq.jpg",
-        "icon": "https://85.hx208.top/img/tgq.jpg"
-      }
-    ]
-  },
-    {
     "name": "扫码加入TG频道",
     "list": [
       {
         "url": "https://85.hx208.top/img/tgq.jpg",
         "icon": "https://85.hx208.top/img/tgq.jpg"
       }
-    ]
-  }
     ]
   }
 ]
