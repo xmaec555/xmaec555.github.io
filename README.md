@@ -7,7 +7,7 @@
 
 -  小人太多了，公开在线接口不再提供： UC、115、迅雷、夸克、阿里、移动、pikpak等网盘TOKEN、只不定时提供机场订阅！
   
-- 本站永久网址: <a href="https://xmaec555.github.io/">https://xmaec555.github.io</a>
+- 本站永久网址: <a href="https://xmaec555.github.io" target="_blank">https://xmaec555.github.io)</a>
   
 - 免费图床  https://img.hx208.top
 
