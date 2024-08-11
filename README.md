@@ -11,7 +11,7 @@
   
 - 免费图床  https://img.hx208.top
 
-## 机顶盒TG群：https://t.me/aizldjlq 
+## TG群组：https://t.me/aizldjlq 
 ## TG频道：https://t.me/hongxitv
 ## 网盘影视频道只用于本接口的TG搜索,请不要加入会员！
 
