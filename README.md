@@ -12,11 +12,11 @@
 - 免费图床  https://img.hx208.top
 
 ## 机顶盒TG群：https://t.me/aizldjlq 
-## 网盘影视频道为私人频道，只用于本接口的TG搜索！
+## 网盘影视频道只用于本接口的TG搜索,请不要加入会员！
 
 复制下面频道网址添加到配置中心-网盘其它置-TG频道列表里
 ```url
-https://t.me/+j1eZTpgVgmgxNzkx
+https://t.me/yunpan208
 ```
 
 ### 115网盘影视汇总  https://85.hx208.top/wpzy.md
