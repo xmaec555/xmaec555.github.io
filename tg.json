@@ -3,8 +3,8 @@
     "name": "扫码加入TG群",
     "list": [
       {
-        "url": "https://85.hx208.top/img/tgq.jpg",
-        "icon": "https://85.hx208.top/img/tgq.jpg"
+        "url": "https://85.hx208.top/img/wx.jpg",
+        "icon": "https://85.hx208.top/img/wx.jpg"
       }
    ]
   },
@@ -12,8 +12,8 @@
     "name": "微信（备注：机顶盒）",
     "list": [
       {
-        "url": "https://img.hx208.top/file/6d5b0682cec9061c533f1.jpg",
-        "icon": "https://img.hx208.top/file/6d5b0682cec9061c533f1.jpg"
+        "url": "https://85.hx208.top/img/wx.jpg",
+        "icon": "https://85.hx208.top/img/wx.jpg"
       }
     ]
   },
@@ -27,7 +27,7 @@
     ]
   },
   {
-    "name": "网盘影视TG频道",
+    "name": "TG发布频道",
     "list": [
       {
         "url": "https://85.hx208.top/img/tgpd.jpg",
