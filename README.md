@@ -10,7 +10,7 @@
 - 本站永久网址: <a href="https://xmaec555.github.io" target="_blank">https://xmaec555.github.io</a>
   
 - 免费图床  https://img.hx208.top
-- 免费不限量机场订阅： https://bpb.network.lat/sub/89b3cbba-e6ac-485a-9481-976a0415eab9
+- 免费不限量机场订阅： https://v.xmaec.dynv6.net/fdbd310c-d6e6-459e-8742-8b9b223966e0
 
 ## TG群组：https://t.me/aizldjlq 
 ## TG频道：https://t.me/hongxitv
