@@ -10,7 +10,7 @@ CCTV1,http://27.11.55.54:8004/udp/225.0.4.74:7980
 CCTV1,http://124.64.67.6:4000/rtp/239.3.1.129:8008
 CCTV1,http://211.158.154.21:8009/udp/225.0.4.74:7980
 CCTV1,http://115.193.188.191:8888/udp/233.50.201.226:5140
-央视频道,#genre#
+洪溪TV盒（央视）,#genre#
 CCTV1,http://14.117.233.187:9000/rtp/239.77.0.119:5146
 CCTV1,http://ha.fengying138.top:8888/udp/239.76.246.151:1234
 CCTV1,http://115.193.188.191:8888/udp/233.50.200.143:5140
@@ -8155,7 +8155,7 @@ CCTV08,http://124.128.73.58:9901/tsfile/live/0008_1.m3u8?key=txiptv&playlive=1&a
 CCTV-HD央视台球,http://117.13.23.186:8888/udp/225.1.2.170:5002
 CCTV06,http://124.128.73.58:9901/tsfile/live/0006_1.m3u8?key=txiptv&playlive=1&authid=0
 
-☘️福建频道,#genre#
+洪溪TV盒（福建）,#genre#
 三明公共频道,http://stream.smntv.cn/smtv2/sd/live.m3u8?zfud
 三明新闻综合,http://fjnhdb.chinashadt.com:2036/live/stream:nh2.stream/playlist.m3u8?zfud
 三明新闻综合,http://stream.smntv.cn/smtv1/sd/live.m3u8
@@ -8605,7 +8605,7 @@ CCTV06,http://124.128.73.58:9901/tsfile/live/0006_1.m3u8?key=txiptv&playlive=1&a
 福建｜建宁综合,https://p2.weizan.cn/2144741973/075444991326676404/live.m3u8?zfud
 福建｜漳州新闻,http://31182.hlsplay.aodianyun.com/lms_31182/tv_channel_175.m3u8
 福建｜漳州新闻,http://31182.hlsplay.aodianyun.com/lms_31182/tv_channel_175.m3u8?zfud
-台湾直播（YT）,#genre#
+洪溪TV盒（YT）,#genre#
 中天新聞, http://127.0.0.1:9978/proxy?do=yt&proxy=proxy&url=https://www.youtube.com/watch?v=oIgbl7t0S_w
 中天新聞, http://127.0.0.1:9978/proxy?do=yt&proxy=proxy&url=https://www.youtube.com/live/oIgbl7t0S_w?feature=share
 民視新聞, http://127.0.0.1:9978/proxy?do=yt&proxy=proxy&url=https://www.youtube.com/watch?v=ylYJSBUgaMA
@@ -8624,7 +8624,7 @@ live三立, http://127.0.0.1:9978/proxy?do=yt&proxy=proxy&url=https://www.youtub
 三立iNEWS, http://127.0.0.1:9978/proxy?do=yt&proxy=proxy&url=https://www.youtube.com/watch?v=CKjSm5ZeehE
 華視新聞, http://127.0.0.1:9978/proxy?do=yt&proxy=127.0.0.1:10172|127.0.0.1:10074&url=https://www.youtube.com/watch?v=wM0g8EoUZ_E
 台灣地震監視, http://127.0.0.1:9978/proxy?do=yt&proxy=proxy&url=https://www.youtube.com/watch?v=Owke6Quk7T0
-港澳台,#genre#
+洪溪TV盒（港台）,#genre#
 凤凰香港,https://epg.pw/stream/5f16dc7fc8aaaed3205516c63e4a8c24bca9dbba1181684244729cf574505b0e.m3u8
 凤凰香港,http://116.162.6.192/1.v.smtcdns.net/qctv.fengshows.cn/live/0701phk72.m3u8
 凤凰香港,p3p://108.181.20.159:31588/5fe0b82c000cac9774c17f262e43314d
