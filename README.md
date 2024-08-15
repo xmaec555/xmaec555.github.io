@@ -5,6 +5,8 @@
 
 - 获取公开接口： <a href="https://85.hx208.top " target="_blank">欢迎使用本站接口</a>    （接口最后更新：20240815）
 
+- 免责声明: 本接口来自PG包仅供学习或测试设备，禁止中国大陆用户使用，不得用于商业用途，否则后果自负！
+
 -  总有小人盗用TOKEN导致网盘被封，因此公开在线接口不再提供： UC、115、迅雷、夸克、阿里、移动、pikpak等网盘TOKEN。免翻可以观看YOUTUBE！
   
 - 本站永久网址: <a href="https://xmaec555.github.io" target="_blank">https://xmaec555.github.io</a>
