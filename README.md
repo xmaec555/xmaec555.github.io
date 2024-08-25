@@ -16,6 +16,7 @@
 
 ## TG群组：https://t.me/aizldjlq 
 ## TG频道：https://t.me/hongxitv
+## IG:  https://www.instagram.com/margaretdp75/
 ## 网盘影视频道只用于本接口的TG搜索,不用订阅！
 
 复制下面频道网址添加到本接口：  配置中心-网盘相关配置-配置TG搜索频道列表
