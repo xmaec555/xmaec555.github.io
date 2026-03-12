@@ -93,7 +93,7 @@
 const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
 const countData = {1:{},2:{}};
 const minMax = {1:{min:0,max:0},2:{min:0,max:0}};
-let group1Text = ""; // 只缓存第一组次数分组数字
+let group1FullText = "";
 
 const padZero = n => n.toString().padStart(2, '0');
 const getZodiac = n => zodiacList[(n-1)%12];
@@ -114,7 +114,7 @@ function clearAll(no){
         const el = document.getElementById(`${id}${no}`);
         id === 'numInput' ? el.value = '' : el.innerHTML = '';
     });
-    if(no === 1) group1Text = "";
+    if(no === 1) group1FullText = "";
     showInputInfo(no);
 }
 
@@ -157,13 +157,13 @@ function calculate(no){
     all.forEach(n=>{ const c=countMap[n]; group[c]??=[]; group[c].push(n); });
     const sortedGroups = Object.keys(group).map(Number).sort((a,b)=>a-b);
 
-    // 只保存第一组完整数字串（最冷→最热，保留格式）
+    // 保存第一组完整格式文本（最冷→最热）
     if(no === 1){
-        let tmp = [];
+        let allLines = [];
         sortedGroups.forEach(cnt => {
-            tmp.push(...group[cnt]);
+            allLines.push(group[cnt].map(padZero).join(' '));
         });
-        group1Text = tmp.map(padZero).join(' ');
+        group1FullText = allLines.join(' ').replace(/\s+/g, ' ');
     }
 
     const zodiac = {};
@@ -190,9 +190,8 @@ function renderBase(no,total,unique,max,min){
 
 function renderGroup(no,sorted,group,maxCnt,minCnt){
     let html = `<div class="result-title"><span>📦 次数分组（最冷→最热）</span>`;
-    // ✅ 只在第一组显示复制按钮
-    if(no === 1){
-        html += `<button class="copy-btn" onclick="copyGroup1()">复制</button><span id="g1tip" class="copy-tip"></span>`;
+    if(no === 1) {
+        html += ` <button class="copy-btn" onclick="copyGroup1()">复制</button><span id="g1Tip" class="copy-tip"></span>`;
     }
     html += `</div>`;
 
@@ -211,9 +210,9 @@ function renderGroup(no,sorted,group,maxCnt,minCnt){
     document.getElementById(`groupResult${no}`).innerHTML=html;
 }
 
-// ✅ 第一组专用：复制最冷→最热全部数字
+// 复制第一组完整次数分组（最冷→最热，原格式）
 function copyGroup1(){
-    copyText(group1Text, "g1tip");
+    copyText(group1FullText, "g1Tip");
 }
 
 function renderZodiac(no,zodiac){
