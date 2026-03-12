@@ -192,6 +192,7 @@
     }
 
     let fullGroupText = "";
+    let fullZodiacText = "";
 
     function calculate() {
         const input = document.getElementById('numInput').value.trim();
@@ -276,7 +277,6 @@
         document.getElementById('groupResult').innerHTML = html;
     }
 
-    // 已修改：删除顶部一键复制，只保留打乱后数字复制
     function renderRandom(totalOnce, before, after, check) {
         let html = `<div class="result-title">
             <span>🔀 出现1次数字随机打乱</span>
@@ -295,7 +295,18 @@
 
     function renderZodiac(zodiacCount) {
         const sortedZodiac = Object.entries(zodiacCount).sort((a, b) => b[1] - a[1]);
-        let html = `<div class="result-title">🐉 生肖出现次数</div>`;
+        let allText = [];
+        sortedZodiac.forEach(([z, cnt]) => {
+            allText.push(`${z}：${cnt}次`);
+        });
+        fullZodiacText = allText.join("\n");
+        
+        let html = `<div class="result-title">
+            <span>🐉 生肖出现次数</span>
+            <button class="copy-btn" onclick="copyText(fullZodiacText,'zAllTip')">一键复制</button>
+            <span id="zAllTip" class="copy-tip"></span>
+        </div>`;
+        
         sortedZodiac.forEach(([z, cnt]) => {
             html += `<span class="zodiac-item">${z}：${cnt}次</span>`;
         });
