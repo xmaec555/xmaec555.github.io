@@ -66,7 +66,7 @@
             background-color: #2980b9;
         }
         button.clear {
-            background-color: #e74c3d;
+            background-color: #e74c3c;
         }
         button.clear:hover {
             background-color: #c0392b;
@@ -93,11 +93,13 @@
             font-weight: bold;
         }
         .zodiac-item {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
             margin: 5px 10px 5px 0;
             padding: 4px 8px;
             background: #ecf0f1;
             border-radius: 4px;
+            gap: 6px;
         }
         .group-item {
             border: 1px solid #ddd;
@@ -145,22 +147,30 @@
         <button class="clear" onclick="clearAll()">清空</button>
     </div>
 
+    <!-- 基础统计 -->
     <div class="result-section" id="baseResult"></div>
+
+    <!-- 按出现次数分组（每组可复制）-->
     <div class="result-section" id="groupResult"></div>
+
+    <!-- 生肖统计 -->
     <div class="result-section" id="zodiacResult"></div>
 </div>
 
 <script>
+    // ====================== 按你要求：01=马 02=蛇 正确设置 ======================
     const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
     
     function getZodiac(num) {
         return zodiacList[(num - 1) % 12];
     }
 
+    // 数字补0：1→01，9→09，10→10
     function padZero(num) {
         return num.toString().padStart(2, '0');
     }
 
+    // 清空
     function clearAll() {
         document.getElementById('numInput').value = '';
         document.getElementById('baseResult').innerHTML = '';
@@ -168,6 +178,7 @@
         document.getElementById('zodiacResult').innerHTML = '';
     }
 
+    // 复制
     function copyText(text, tipId) {
         navigator.clipboard.writeText(text).then(() => {
             document.getElementById(tipId).innerText = "已复制！";
@@ -176,22 +187,28 @@
     }
 
     let fullGroupText = "";
+    let fullZodiacText = "";
 
+    // 主统计
     function calculate() {
         const input = document.getElementById('numInput').value.trim();
         const inputNums = input.match(/\d+/g) || [];
         const inputArr = inputNums.map(Number).filter(n => n >= 1 && n <= 49);
 
+        // 固定 1~49
         const allNumbers = Array.from({ length: 49 }, (_, i) => i + 1);
         
+        // 统计次数（未出现=0）
         const countMap = {};
         allNumbers.forEach(n => countMap[n] = 0);
         inputArr.forEach(n => countMap[n]++);
 
+        // 基础统计
         const totalCount = inputArr.length;
         const uniqueCount = [...new Set(inputArr)].length;
         const maxCount = Math.max(...Object.values(countMap));
 
+        // 按次数分组（包含0次）
         const group = {};
         for (let n of allNumbers) {
             const c = countMap[n];
@@ -200,17 +217,21 @@
         }
         const sortedCounts = Object.keys(group).map(Number).sort((a, b) => a - b);
 
+        // 生肖统计：统计每个生肖出现的次数
         const zodiacCount = {};
+        zodiacList.forEach(z => zodiacCount[z] = 0);
         inputArr.forEach(n => {
             const z = getZodiac(n);
-            zodiacCount[z] = (zodiacCount[z] || 0) + 1;
+            zodiacCount[z]++;
         });
 
+        // 渲染
         renderBase(totalCount, uniqueCount, maxCount);
         renderGroup(sortedCounts, group);
         renderZodiac(zodiacCount);
     }
 
+    // 基础统计
     function renderBase(total, unique, max) {
         document.getElementById('baseResult').innerHTML = `
         <div class="result-title">📊 基础统计结果</div>
@@ -222,6 +243,7 @@
         `;
     }
 
+    // 分组+每组复制 + 补0 + 显示本组数量
     function renderGroup(sorted, group) {
         let allText = [];
         let html = `<div class="result-title">
@@ -248,12 +270,31 @@
         document.getElementById('groupResult').innerHTML = html;
     }
 
-    // 生肖统计标题
+    // 生肖统计：按次数从多到少排序 + 一键复制
     function renderZodiac(zodiacCount) {
-        let html = `<div class="result-title">🐉 生肖出现次数</div>`;
-        for (let [z, c] of Object.entries(zodiacCount)) {
-            html += `<span class="zodiac-item">${z}：${c}次</span>`;
-        }
+        // 按出现次数 降序 排列
+        const sortedZodiac = Object.entries(zodiacCount)
+            .sort((a, b) => b[1] - a[1]);
+        
+        let allText = [];
+        let html = `<div class="result-title">
+            <span>🐉 生肖出现次数</span>
+            <button class="copy-btn" onclick="copyText(fullZodiacText,'zAllTip')">一键复制全部</button>
+            <span id="zAllTip" class="copy-tip"></span>
+        </div>`;
+
+        sortedZodiac.forEach(([z, cnt], i) => {
+            const line = `${z}：${cnt}次`;
+            allText.push(line);
+            html += `
+            <div class="zodiac-item">
+                <div>${line}</div>
+                <button class="copy-btn" onclick="copyText('${z}','zName${i}')">复制</button>
+                <span id="zName${i}" class="copy-tip"></span>
+            </div>`;
+        });
+
+        fullZodiacText = allText.join("\n");
         document.getElementById('zodiacResult').innerHTML = html;
     }
 </script>
