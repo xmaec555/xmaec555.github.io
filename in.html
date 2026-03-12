@@ -151,11 +151,16 @@
 </div>
 
 <script>
-    // ====================== 按你要求：01=马 02=蛇 已正确设置 ======================
+    // ====================== 按你要求：01=马 02=蛇 正确设置 ======================
     const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
     
     function getZodiac(num) {
         return zodiacList[(num - 1) % 12];
+    }
+
+    // 数字补0：1→01，9→09，10→10
+    function padZero(num) {
+        return num.toString().padStart(2, '0');
     }
 
     // 清空
@@ -225,15 +230,18 @@
         `;
     }
 
-    // 分组+每组复制
+    // 分组+每组复制 + 补0 + 显示本组数量
     function renderGroup(sorted, group) {
         let html = `<div class="result-title">📦 按出现次数分组（含未出现数字）</div>`;
         sorted.forEach((cnt, i) => {
-            const list = group[cnt].join(' ');
-            const text = `出现${cnt}次：${list}`;
+            const nums = group[cnt];
+            const list = nums.map(n => padZero(n)).join(' ');
+            const totalNum = nums.length;
+            const text = `出现${cnt}次（共${totalNum}个数）：${list}`;
+            
             html += `
             <div class="group-item">
-                <div>出现 <span class="highlight">${cnt}</span> 次：${list}</div>
+                <div>出现 <span class="highlight">${cnt}</span> 次（共${totalNum}个数）：${list}</div>
                 <div>
                     <button class="copy-btn" onclick="copyText('${text}','gtip${i}')">复制</button>
                     <span id="gtip${i}" class="copy-tip"></span>
