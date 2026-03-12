@@ -3,15 +3,15 @@
 ##### 你如果是我们用户，每台盒子都按设备ID和IP内置加密VIP接口！（如果误删线路接口，找代理商咨询）
 ##### VIP接口：提供 UC、115、迅雷、夸克、阿里、移动、pikpak等会员网盘、高速机场！（接口免费使用）
 
-- 获取公开接口和机场订阅： <a href="https://www.hxyx.us.kg" target="_blank">欢迎使用本站接口</a>    （接口最后更新：20241126）
+- 获取公开接口和机场订阅： <a href="https://m.hxyx.cc.cd" target="_blank">欢迎使用本站接口</a>    （接口最后更新：20241126）
 
 - 免责声明: 本接口来自PG包仅供学习或测试设备，禁止中国大陆用户使用，不得用于商业用途，否则后果自负！
 
 -  总有小人盗用TOKEN导致网盘被封，因此公开在线接口不再提供： UC、115、迅雷、夸克、阿里、移动、pikpak等网盘TOKEN。免翻可以观看YOUTUBE！
   
-- 本站永久网址: <a href="https://xmaec555.github.io" target="_blank">https://xmaec555.github.io</a>
+- 本站永久网址: <a href="https://m.hxyx.cc.cd" target="_blank">https://xmaec555.github.io</a>
   
-- 免费图床  https://img.hx208.top
+- 免费图床 https://m.hxyx.cc.cd
 - 免费不限量机场订阅： https://v.xmaec.dynv6.net/fdbd310c-d6e6-459e-8742-8b9b223966e0
 
 ## TG群组：https://t.me/aizldjlq 
