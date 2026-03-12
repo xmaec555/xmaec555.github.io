@@ -99,20 +99,6 @@
             background: #ecf0f1;
             border-radius: 4px;
         }
-        .num-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 10px 0;
-            font-size: 15px;
-        }
-        .num-table th, .num-table td {
-            border: 1px solid #ddd;
-            padding: 8px 12px;
-            text-align: center;
-        }
-        .num-table th {
-            background-color: #f8f9fa;
-        }
         .group-item {
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -165,8 +151,9 @@
 </div>
 
 <script>
-    // ====================== 已修正：2026马年生肖 01=马 正确顺序 ======================
-    const zodiacList = ['马', '蛇', '龙', '兔', '虎', '牛', '鼠', '猪', '狗', '鸡', '猴', '羊'];
+    // ====================== 按你要求：01=马 02=蛇 已正确设置 ======================
+    const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
+    
     function getZodiac(num) {
         return zodiacList[(num - 1) % 12];
     }
