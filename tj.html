@@ -316,7 +316,9 @@
             if (!group[c]) group[c] = [];
             group[c].push(n);
         }
-        const sortedCounts = Object.keys(group).map(Number).sort((a, b) => b - a);
+        
+        // 最冷到最热：从小到大排序
+        const sortedCounts = Object.keys(group).map(Number).sort((a, b) => a - b);
 
         const zodiacCount = {};
         zodiacList.forEach(z => zodiacCount[z] = 0);
@@ -346,7 +348,7 @@
     function renderGroup(sorted, group, maxCnt, minCnt, no) {
         let allText = [];
         let html = `<div class="result-title">
-            <span>📦 按出现次数分组 </span>
+            <span>📦 按出现次数分组（最冷→最热）</span>
             <button class="copy-btn" onclick="copyText(fullGroupText${no},'allTip${no}')">复制全部</button>
             <span id="allTip${no}" class="copy-tip"></span>
         </div>`;
