@@ -1,109 +1,229 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>蚂蚁澳彩数据打乱工具</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:微软雅黑,Microsoft YaHei,sans-serif}
-body{background:#f4f6f8;padding:20px}
-.container{max-width:900px;margin:0 auto;background:#fff;border-radius:10px;padding:25px;box-shadow:0 2px 12px rgba(0,0,0,0.08)}
-h2{text-align:center;color:#333;margin-bottom:20px;font-size:22px}
-textarea{width:100%;height:140px;padding:12px;border:1px solid #ddd;border-radius:6px;resize:vertical;font-size:14px;margin-bottom:15px}
-.btns{display:flex;gap:10px;margin-bottom:20px}
-button{flex:1;padding:12px;border:none;border-radius:6px;background:#409eff;color:#fff;font-size:15px;cursor:pointer}
-button.copy{background:#67c23a}
-button:hover{opacity:.9}
-.result{background:#edf7ff;border:1px solid #d1e7fe;border-radius:6px;padding:15px;margin-bottom:15px}
-.result-title{font-weight:bold;margin-bottom:8px}
-.result-num{color:#f56c6c}
-.result-content{line-height:1.6;word-break:break-all}
-.check{background:#fff9e6;border:1px solid #ffeeba;border-radius:6px;padding:15px}
-.check-title{font-weight:bold;color:#cc8800;margin-bottom:10px}
-.check-item{margin:6px 0;line-height:1.5;font-size:14px;word-break:break-all}
-.check-status{font-weight:bold;padding:5px 10px;border-radius:4px;display:inline-block;margin-top:5px}
-.status-ok{background:#e6f7e6;color:#008000}
-.status-no{background:#ffe6e6;color:#cc0000}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字统计与生肖对应工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            padding: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+        .input-box {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            resize: vertical;
+            font-size: 16px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button.clear {
+            background-color: #e74c3c;
+        }
+        button.clear:hover {
+            background-color: #c0392b;
+        }
+        .result-section {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        .result-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #eee;
+        }
+        .result-item {
+            margin: 8px 0;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        .highlight {
+            color: #e67e22;
+            font-weight: bold;
+        }
+        .zodiac-item {
+            display: inline-block;
+            margin: 5px 10px 5px 0;
+            padding: 4px 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <h2>蚂蚁澳彩数据打乱工具</h2>
-  <textarea id="input" placeholder="请粘贴数字，空格分隔"></textarea>
-  <div class="btns">
-    <button onclick="shuffleData()">一键打乱</button>
-    <button class="copy" onclick="copyResult()">复制结果</button>
-    <button onclick="clearAll()">清空</button>
-  </div>
-  <div class="result">
-    <div class="result-title">打乱后总数：<span class="result-num" id="total">0</span> 个</div>
-    <div class="result-content" id="result">打乱结果将显示在这里</div>
-  </div>
-  <div class="check">
-    <div class="check-title">打乱前后复核对比</div>
-    <div class="check-item"><b>打乱前：</b><span id="before">-</span></div>
-    <div class="check-item"><b>打乱后：</b><span id="after">-</span></div>
-    <div><b>复核结果：</b><span id="status" class="check-status">未校验</span></div>
-  </div>
-</div>
-<script>
-let resultText = "";
-let originList = [];
+    <div class="container">
+        <h1>数字统计 & 生肖对应查询工具</h1>
+        
+        <div class="input-box">
+            <label>请输入数字（支持空格/换行/逗号分隔，自动提取纯数字）：</label>
+            <textarea id="numInput" placeholder="示例：01,02,03 04 05\n06,07"></textarea>
+        </div>
 
-function shuffle(arr) {
-  let list = [...arr];
-  for (let i = list.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [list[i], list[j]] = [list[j], list[i]];
-  }
-  return list;
-}
+        <div class="btn-group">
+            <button onclick="calculate()">一键统计</button>
+            <button class="clear" onclick="clearAll()">清空内容</button>
+        </div>
 
-function shuffleData() {
-  let val = document.getElementById("input").value.trim();
-  if (!val) { alert("请输入数字"); return; }
-  originList = val.split(/\s+/).filter(v => v);
-  let shuffled = shuffle(originList);
-  resultText = shuffled.join(" ");
-  document.getElementById("total").textContent = shuffled.length;
-  document.getElementById("result").textContent = resultText;
-  document.getElementById("before").textContent = originList.join(" ");
-  document.getElementById("after").textContent = resultText;
-  check();
-}
+        <!-- 基础统计结果 -->
+        <div class="result-section" id="baseResult"></div>
 
-function check() {
-  let s1 = [...originList].sort().join(",");
-  let s2 = resultText.split(" ").sort().join(",");
-  let st = document.getElementById("status");
-  if (s1 === s2) {
-    st.className = "check-status status-ok";
-    st.textContent = "✅ 完全一致";
-  } else {
-    st.className = "check-status status-no";
-    st.textContent = "❌ 不一致";
-  }
-}
+        <!-- 按出现次数分组结果 -->
+        <div class="result-section" id="groupResult"></div>
 
-function copyResult() {
-  if (!resultText) { alert("请先生成打乱结果"); return; }
-  navigator.clipboard.writeText(resultText).then(() => {
-    alert("复制成功");
-  });
-}
+        <!-- 生肖统计结果 -->
+        <div class="result-section" id="zodiacResult"></div>
+    </div>
 
-function clearAll() {
-  document.getElementById("input").value = "";
-  document.getElementById("result").textContent = "打乱结果将显示在这里";
-  document.getElementById("total").textContent = "0";
-  document.getElementById("before").textContent = "-";
-  document.getElementById("after").textContent = "-";
-  let st = document.getElementById("status");
-  st.className = "check-status";
-  st.textContent = "未校验";
-  resultText = "";
-  originList = [];
-}
-</script>
+    <script>
+        // 核心：生肖对应规则 01=马，按顺序循环12生肖
+        const zodiacList = ['马', '羊', '猴', '鸡', '狗', '猪', '鼠', '牛', '虎', '兔', '龙', '蛇'];
+        
+        // 根据数字获取对应生肖
+        function getZodiac(num) {
+            const index = (num - 1) % 12;
+            return zodiacList[index];
+        }
+
+        // 清空所有内容
+        function clearAll() {
+            document.getElementById('numInput').value = '';
+            document.getElementById('baseResult').innerHTML = '';
+            document.getElementById('groupResult').innerHTML = '';
+            document.getElementById('zodiacResult').innerHTML = '';
+        }
+
+        // 主统计函数
+        function calculate() {
+            // 1. 获取输入内容，提取所有纯数字（支持01、02这类格式）
+            const input = document.getElementById('numInput').value.trim();
+            if (!input) {
+                alert('请输入数字！');
+                return;
+            }
+
+            // 正则提取所有数字（包含0开头的数字）
+            const numArr = input.match(/\d+/g) || [];
+            // 转换为数字类型，保留原值格式
+            const numbers = numArr.map(item => parseInt(item, 10));
+
+            // 2. 基础统计
+            const totalCount = numbers.length; // 总数字数量
+            const uniqueNums = [...new Set(numbers)]; // 不重复数字
+            const uniqueCount = uniqueNums.length; // 不重复数字数量
+
+            // 3. 统计每个数字出现次数
+            const countMap = {};
+            numbers.forEach(num => {
+                countMap[num] = (countMap[num] || 0) + 1;
+            });
+
+            // 最大出现次数
+            const maxCount = Math.max(...Object.values(countMap));
+
+            // 4. 按出现次数分组（次数少 → 次数多）
+            const groupMap = {};
+            for (const [num, count] of Object.entries(countMap)) {
+                if (!groupMap[count]) groupMap[count] = [];
+                groupMap[count].push(Number(num));
+            }
+            // 排序：按次数升序
+            const sortedCounts = Object.keys(groupMap).map(Number).sort((a, b) => a - b);
+
+            // 5. 生肖统计
+            const zodiacCount = {};
+            numbers.forEach(num => {
+                const zodiac = getZodiac(num);
+                zodiacCount[zodiac] = (zodiacCount[zodiac] || 0) + 1;
+            });
+
+            // 6. 渲染结果到页面
+            renderBaseResult(totalCount, uniqueCount, maxCount);
+            renderGroupResult(sortedCounts, groupMap);
+            renderZodiacResult(zodiacCount);
+        }
+
+        // 渲染基础统计
+        function renderBaseResult(total, unique, max) {
+            const dom = `
+                <div class="result-title">📊 基础统计结果</div>
+                <div class="result-item">总数字数量：<span class="highlight">${total}</span> 个</div>
+                <div class="result-item">不重复数字数量：<span class="highlight">${unique}</span> 个</div>
+                <div class="result-item">数字最大出现次数：<span class="highlight">${max}</span> 次</div>
+            `;
+            document.getElementById('baseResult').innerHTML = dom;
+        }
+
+        // 渲染按次数分组
+        function renderGroupResult(sortedCounts, groupMap) {
+            let html = `<div class="result-title">📦 按出现次数分组（升序排列）</div>`;
+            sortedCounts.forEach(count => {
+                const nums = groupMap[count].sort((a, b) => a - b); // 同次数数字升序
+                html += `<div class="result-item">出现 <span class="highlight">${count}</span> 次的数字：${nums.join('、')}</div>`;
+            });
+            document.getElementById('groupResult').innerHTML = html;
+        }
+
+        // 渲染生肖统计
+        function renderZodiacResult(zodiacCount) {
+            let html = `<div class="result-title">🐉 生肖对应次数统计（01=马）</div>`;
+            for (const [zodiac, count] of Object.entries(zodiacCount)) {
+                html += `<span class="zodiac-item">${zodiac}：<span class="highlight">${count}</span> 次</span>`;
+            }
+            document.getElementById('zodiacResult').innerHTML = html;
+        }
+    </script>
 </body>
 </html>
