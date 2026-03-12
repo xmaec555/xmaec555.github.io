@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>蚂蚁澳彩盘口自动统计</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif}
+        body{background:#f5f7fa;padding:30px;max-width:1000px;margin:0 auto}
+        .container{background:white;padding:25px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+        h1{text-align:center;color:#2c3e50;margin-bottom:25px;font-size:24px}
+        .panel{margin-bottom:40px;padding-bottom:30px;border-bottom:1px dashed #ccc}
+        .panel:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+        .input-box{margin-bottom:20px}
+        label{display:block;margin-bottom:8px;font-weight:bold;color:#34495e}
+        textarea{width:100%;height:120px;padding:12px;border:1px solid #ddd;border-radius:6px;resize:vertical;font-size:16px}
+        .input-info{font-size:13px;color:#777;margin-top:5px}
+        .btn-group{display:flex;gap:10px;margin-bottom:25px;flex-wrap:wrap}
+        button{padding:10px 16px;border:none;border-radius:6px;background:#3498db;color:white;font-size:15px;cursor:pointer;transition:.2s}
+        button:hover{background:#2980b9}
+        button.clear{background:#e74c3c}
+        button.clear:hover{background:#c0392b}
+        button.sort{background:#f39c12}
+        button.uniq{background:#9b59b6}
+        button.compare{background:#e67e22;font-weight:bold}
+        .result-section{margin-top:20px;padding:15px;border:1px solid #eee;border-radius:8px}
+        .result-title{font-size:18px;font-weight:bold;color:#2c3e50;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
+        .highlight{color:#e67e22;font-weight:bold}
+        .hot{color:#e74c3c!important;font-weight:bold}
+        .cold{color:#3498db!important;font-weight:bold}
+        .zodiac-item{display:inline-flex;align-items:center;margin:5px 10px 5px 0;padding:4px 8px;background:#ecf0f0;border-radius:4px;gap:6px}
+        .group-item{border:1px solid #ddd;border-radius:8px;padding:12px 15px;margin:8px 0;display:flex;justify-content:space-between;align-items:center}
+        .copy-btn{padding:5px 12px;background:#2ecc71;color:#fff;border:none;border-radius:5px;cursor:pointer}
+        .copy-btn:hover{background:#27ae60}
+        .copy-tip{color:#2ecc71;font-size:13px;margin-left:5px}
+        .base-row{display:flex;gap:25px;font-size:15px;flex-wrap:wrap}
+        .compare-row{background:#fef8ec;border-left:4px solid #f39c12}
+        .final-row{background:#e8f5e9!important;border-left:4px solid #2ecc71!important;font-weight:bold}
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>蚂蚁澳彩盘口自动统计</h1>
+
+    <div class="panel">
+        <h2 style="color:#2c3e50;margin-bottom:15px">第一组统计</h2>
+        <div class="input-box">
+            <label>蚂蚁数据-澳彩专家（第一组）：</label>
+            <textarea id="numInput1" placeholder="示例：1 3 5 7 9 11" oninput="showInputInfo(1)"></textarea>
+            <div class="input-info" id="inputInfo1">已输入：0 个数字</div>
+        </div>
+        <div class="btn-group">
+            <button onclick="calculate(1)">一键统计</button>
+            <button class="uniq" onclick="uniqueNum(1)">一键去重</button>
+            <button class="sort" onclick="sortNum(1)">从小到大排序</button>
+            <button class="clear" onclick="clearAll(1)">清空</button>
+        </div>
+        <div class="result-section" id="baseResult1"></div>
+        <div class="result-section" id="groupResult1"></div>
+        <div class="result-section" id="zodiacResult1"></div>
+    </div>
+
+    <div class="panel">
+        <h2 style="color:#2c3e50;margin-bottom:15px">第二组统计</h2>
+        <div class="input-box">
+            <label>蚂蚁数据-澳彩专家（第二组）：</label>
+            <textarea id="numInput2" placeholder="示例：2 4 6 8 10 12" oninput="showInputInfo(2)"></textarea>
+            <div class="input-info" id="inputInfo2">已输入：0 个数字</div>
+        </div>
+        <div class="btn-group">
+            <button onclick="calculate(2)">一键统计</button>
+            <button class="uniq" onclick="uniqueNum(2)">一键去重</button>
+            <button class="sort" onclick="sortNum(2)">从小到大排序</button>
+            <button class="clear" onclick="clearAll(2)">清空</button>
+        </div>
+        <div class="result-section" id="baseResult2"></div>
+        <div class="result-section" id="groupResult2"></div>
+        <div class="result-section" id="zodiacResult2"></div>
+    </div>
+
+    <div class="panel">
+        <h2 style="color:#e67e22;margin-bottom:15px">🔍 交叉对比结果</h2>
+        <div class="btn-group">
+            <button class="compare" onclick="compareAll()">✅ 开始对比</button>
+            <button class="clear" onclick="clearCompare()">清空对比</button>
+        </div>
+        <div class="result-section" id="compareResult"></div>
+    </div>
+</div>
+
+<script>
+// 全局配置
+const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
+const countData = { 1: {}, 2: {} };
+const minMax = { 1: { min:0, max:0 }, 2: { min:0, max:0 } };
+
+// 工具函数（统一复用）
+const padZero = num => num.toString().padStart(2, '0');
+const getZodiac = num => zodiacList[(num - 1) % 12];
+const uniqueSort = arr => [...new Set(arr)].sort((a, b) => a - b);
+const formatNumbers = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
+const inRange = (val, min, max) => val >= min && val <= max;
+
+// 输入状态
+function showInputInfo(no) {
+    const val = document.getElementById(`numInput${no}`).value;
+    const count = (val.match(/\d+/g) || []).length;
+    document.getElementById(`inputInfo${no}`).innerText = `已输入：${count} 个数字`;
+}
+
+// 清空单组
+function clearAll(no) {
+    document.getElementById(`numInput${no}`).value = '';
+    document.getElementById(`baseResult${no}`).innerHTML = '';
+    document.getElementById(`groupResult${no}`).innerHTML = '';
+    document.getElementById(`zodiacResult${no}`).innerHTML = '';
+    showInputInfo(no);
+}
+
+// 复制功能
+function copyText(text, tipId) {
+    navigator.clipboard.writeText(text).then(() => {
+        const tip = document.getElementById(tipId);
+        tip.innerText = '✅ 复制成功';
+        setTimeout(() => tip.innerText = '', 1500);
+    }).catch(() => alert('复制失败'));
+}
+
+// 去重 & 排序
+function uniqueNum(no) {
+    const el = document.getElementById(`numInput${no}`);
+    el.value = [...new Set(el.value.match(/\d+/g) || [])].join(' ');
+    showInputInfo(no);
+}
+function sortNum(no) {
+    const el = document.getElementById(`numInput${no}`);
+    const arr = (el.value.match(/\d+/g) || []).sort((a, b) => a - b);
+    el.value = arr.join(' ');
+}
+
+// 核心统计
+function calculate(no) {
+    const input = document.getElementById(`numInput${no}`).value.trim();
+    const inputArr = (input.match(/\d+/g) || []).map(Number).filter(n => n >= 1 && n <= 49);
+    const allNumbers = Array.from({ length: 49 }, (_, i) => i + 1);
+
+    // 次数统计
+    const countMap = {};
+    allNumbers.forEach(n => countMap[n] = 0);
+    inputArr.forEach(n => countMap[n]++);
+    countData[no] = countMap;
+
+    // 最冷/最热
+    const values = Object.values(countMap);
+    minMax[no] = { min: Math.min(...values), max: Math.max(...values) };
+
+    // 分组（最冷 → 最热）
+    const group = {};
+    allNumbers.forEach(n => {
+        const c = countMap[n];
+        if (!group[c]) group[c] = [];
+        group[c].push(n);
+    });
+    const sortedCounts = Object.keys(group).map(Number).sort((a, b) => a - b);
+
+    // 生肖统计
+    const zodiacCount = {};
+    zodiacList.forEach(z => zodiacCount[z] = 0);
+    inputArr.forEach(n => zodiacCount[getZodiac(n)]++);
+
+    // 渲染
+    renderBase(no, inputArr.length, [...new Set(inputArr)].length, minMax[no].max, minMax[no].min);
+    renderGroup(no, sortedCounts, group, minMax[no].max, minMax[no].min);
+    renderZodiac(no, zodiacCount);
+    showInputInfo(no);
+}
+
+// 渲染基础信息
+function renderBase(no, total, unique, max, min) {
+    document.getElementById(`baseResult${no}`).innerHTML = `
+    <div class="result-title">📊 基础统计</div>
+    <div class="base-row">
+        <div>总数量：<span class="highlight">${total}</span></div>
+        <div>不重复：<span class="highlight">${unique}</span></div>
+        <div>最热：<span class="hot">${max} 次</span></div>
+        <div>最冷：<span class="cold">${min} 次</span></div>
+    </div>`;
+}
+
+// 渲染次数分组
+function renderGroup(no, sorted, group, maxCnt, minCnt) {
+    let html = `<div class="result-title"><span>📦 次数分组（最冷→最热）</span></div>`;
+    sorted.forEach((cnt, i) => {
+        const list = group[cnt].map(padZero).join(' ');
+        const mark = cnt === maxCnt ? '<span class="hot">【最热】</span>' : cnt === minCnt ? '<span class="cold">【最冷】</span>' : '';
+        html += `
+        <div class="group-item">
+            <div>${mark} 出现${cnt}次（共${group[cnt].length}个）：${list}</div>
+            <div><button class="copy-btn" onclick="copyText('${list}','g${no}_${i}')">复制</button><span id="g${no}_${i}" class="copy-tip"></span></div>
+        </div>`;
+    });
+    document.getElementById(`groupResult${no}`).innerHTML = html;
+}
+
+// 渲染生肖
+function renderZodiac(no, zodiacCount) {
+    const sorted = Object.entries(zodiacCount).sort((a, b) => b[1] - a[1]);
+    let html = `<div class="result-title"><span>🐉 生肖统计</span></div>`;
+    const max = sorted[0][1], min = sorted[sorted.length-1][1];
+    sorted.forEach(([z, cnt]) => {
+        const cls = cnt === max ? 'zodiac-item hot' : cnt === min ? 'zodiac-item cold' : 'zodiac-item';
+        html += `<div class="${cls}">${z}：${cnt}次</div>`;
+    });
+    document.getElementById(`zodiacResult${no}`).innerHTML = html;
+}
+
+// 交叉对比
+function clearCompare() {
+    document.getElementById('compareResult').innerHTML = '';
+}
+
+function compareAll() {
+    const c1 = countData[1], c2 = countData[2];
+    const min1 = minMax[1].min, min2 = minMax[2].min;
+    const max1 = minMax[1].max, max2 = minMax[2].max;
+    const all = Array.from({ length: 49 }, (_, i) => i + 1);
+
+    // 👉 按你最新要求的 5 组交叉规则
+    const r1 = all.filter(n => inRange(c1[n], 1, 2) && inRange(c2[n], min2, 1));
+    const r2 = all.filter(n => inRange(c1[n], 2, 5) && inRange(c2[n], 2, 4));
+    const r3 = all.filter(n => inRange(c1[n], 6, max1) && inRange(c2[n], 5, max2));
+    const r4 = all.filter(n => c1[n] === 7 && inRange(c2[n], 3, 4));
+    const r5 = all.filter(n => c1[n] === 4 && c2[n] === 6);
+
+    const s1 = formatNumbers(r1);
+    const s2 = formatNumbers(r2);
+    const s3 = formatNumbers(r3);
+    const s4 = formatNumbers(r4);
+    const s5 = formatNumbers(r5);
+
+    // 合并去重最终结果
+    const finalArr = uniqueSort([...r1, ...r2, ...r3, ...r4, ...r5]);
+    const finalStr = formatNumbers(finalArr);
+
+    document.getElementById('compareResult').innerHTML = `
+    <div class="result-title">🎯 五组交叉对比</div>
+    <div class="group-item compare-row">
+        <div>【1组1‑2次 & 2组最冷‑1次】：${s1}</div>
+        <div><button class="copy-btn" onclick="copyText('${s1}','c1')">复制</button><span id="c1" class="copy-tip"></span></div>
+    </div>
+    <div class="group-item compare-row">
+        <div>【1组2‑5次 & 2组2‑4次】：${s2}</div>
+        <div><button class="copy-btn" onclick="copyText('${s2}','c2')">复制</button><span id="c2" class="copy-tip"></span></div>
+    </div>
+    <div class="group-item compare-row">
+        <div>【1组6‑最热 & 2组5‑最热】：${s3}</div>
+        <div><button class="copy-btn" onclick="copyText('${s3}','c3')">复制</button><span id="c3" class="copy-tip"></span></div>
+    </div>
+    <div class="group-item compare-row">
+        <div>【1组7次 & 2组3‑4次】：${s4}</div>
+        <div><button class="copy-btn" onclick="copyText('${s4}','c4')">复制</button><span id="c4" class="copy-tip"></span></div>
+    </div>
+    <div class="group-item compare-row">
+        <div>【1组4次 & 2组6次】：${s5}</div>
+        <div><button class="copy-btn" onclick="copyText('${s5}','c5')">复制</button><span id="c5" class="copy-tip"></span></div>
+    </div>
+    <div class="group-item final-row">
+        <div>✅ 五组合并去重（共 ${finalArr.length} 个）：${finalStr}</div>
+        <div><button class="copy-btn" onclick="copyText('${finalStr}','cf')">复制</button><span id="cf" class="copy-tip"></span></div>
+    </div>`;
+}
+</script>
+</body>
+</html>
