@@ -66,7 +66,7 @@
             background-color: #2980b9;
         }
         button.clear {
-            background-color: #e74c3c;
+            background-color: #e74c3d;
         }
         button.clear:hover {
             background-color: #c0392b;
@@ -93,13 +93,11 @@
             font-weight: bold;
         }
         .zodiac-item {
-            display: inline-flex;
-            align-items: center;
+            display: inline-block;
             margin: 5px 10px 5px 0;
             padding: 4px 8px;
             background: #ecf0f1;
             border-radius: 4px;
-            gap: 6px;
         }
         .group-item {
             border: 1px solid #ddd;
@@ -112,13 +110,12 @@
             background: #fff;
         }
         .copy-btn {
-            padding: 3px 8px;
+            padding: 5px 12px;
             background: #2ecc71;
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 12px;
         }
         .copy-btn:hover {
             background: #27ae60;
@@ -154,7 +151,6 @@
 </div>
 
 <script>
-    // 正确生肖：01=马 02=蛇 03=龙 04=兔 05=虎 06=牛 07=鼠 08=猪 09=狗 10=鸡 11=猴 12=羊
     const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
     
     function getZodiac(num) {
@@ -204,17 +200,15 @@
         }
         const sortedCounts = Object.keys(group).map(Number).sort((a, b) => a - b);
 
-        // 生成每个生肖对应的 1-49 数字
-        const zodiacNumbers = {};
-        zodiacList.forEach(z => zodiacNumbers[z] = []);
-        allNumbers.forEach(n => {
+        const zodiacCount = {};
+        inputArr.forEach(n => {
             const z = getZodiac(n);
-            zodiacNumbers[z].push(padZero(n));
+            zodiacCount[z] = (zodiacCount[z] || 0) + 1;
         });
 
-        renderBase(totalCount, uniqueCount, max);
+        renderBase(totalCount, uniqueCount, maxCount);
         renderGroup(sortedCounts, group);
-        renderZodiac(zodiacNumbers);
+        renderZodiac(zodiacCount);
     }
 
     function renderBase(total, unique, max) {
@@ -254,18 +248,12 @@
         document.getElementById('groupResult').innerHTML = html;
     }
 
-    // 每个生肖 + 独立复制键
-    function renderZodiac(zodiacNumbers) {
+    // 生肖统计标题
+    function renderZodiac(zodiacCount) {
         let html = `<div class="result-title">🐉 生肖出现次数</div>`;
-        zodiacList.forEach((z, i) => {
-            const numList = zodiacNumbers[z].join(' ');
-            html += `
-            <div class="zodiac-item">
-                <span>${z}</span>
-                <button class="copy-btn" onclick="copyText('${numList}','z${i}')">复制</button>
-                <span id="z${i}" class="copy-tip"></span>
-            </div>`;
-        });
+        for (let [z, c] of Object.entries(zodiacCount)) {
+            html += `<span class="zodiac-item">${z}：${c}次</span>`;
+        }
         document.getElementById('zodiacResult').innerHTML = html;
     }
 </script>
