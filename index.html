@@ -12,7 +12,7 @@
             font-family: "Microsoft YaHei", sans-serif;
         }
         body {
-            max-width: 800px;
+            max-width: 900px;
             margin: 30px auto;
             padding: 0 20px;
             background: #f5f7fa;
@@ -68,6 +68,7 @@
             background: #f0f7ff;
             border-radius: 6px;
             border: 1px solid #d9ecff;
+            margin-bottom: 15px;
         }
         .result-title {
             font-weight: bold;
@@ -99,19 +100,58 @@
         .copy-num-btn:hover {
             background: #529b2e;
         }
+
+        /* 新增：复核对比样式 */
+        .check-box {
+            padding: 15px;
+            background: #fcfbf0;
+            border-radius: 6px;
+            border: 1px solid #faecd8;
+        }
+        .check-title {
+            font-weight: bold;
+            color: #d48800;
+            margin-bottom: 10px;
+        }
+        .check-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .check-item {
+            line-height: 1.5;
+            word-break: break-all;
+            font-size: 13px;
+        }
+        .check-result {
+            font-weight: bold;
+            padding: 6px 10px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .check-success {
+            background: #e6f7e6;
+            color: #008000;
+        }
+        .check-error {
+            background: #ffe6e6;
+            color: #cc0000;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>数字随机打乱 + 统计 + 复制</h2>
+        <h2>数字随机打乱 + 统计 + 复制 + 复核对比</h2>
         <textarea id="input" placeholder="请粘贴你的数字（空格/换行分隔都可以）"></textarea>
         
         <div class="btn-group">
             <button onclick="shuffleNum()">一键打乱并统计</button>
             <button class="copy-btn" onclick="copyResult()">复制打乱结果</button>
-            <button onclick="clearAll()">清空</button>
+            <button onclick="clearAll()">清空重置</button>
         </div>
 
+        <!-- 结果区域 -->
         <div class="result-box">
             <div class="result-title">
                 <span>统计总数：<span id="resultNum">0</span> 个</span>
@@ -119,11 +159,25 @@
             </div>
             <div id="resultText">打乱结果将显示在这里...</div>
         </div>
+
+        <!-- 新增：转换前后复核对比 -->
+        <div class="check-box">
+            <div class="check-title">✅ 转换前后数字复核对比</div>
+            <div class="check-row">
+                <div class="check-item"><b>原始数字：</b><span id="originalText">-</span></div>
+                <div class="check-item"><b>打乱后：</b><span id="shuffledText">-</span></div>
+            </div>
+            <div>
+                <b>复核结果：</b>
+                <span id="checkStatus" class="check-result">未校验</span>
+            </div>
+        </div>
     </div>
 
     <script>
         let currentResult = "";
         let totalNum = 0;
+        let originalNums = [];
 
         // 打乱数组
         function shuffleArray(arr) {
@@ -135,20 +189,32 @@
             return newArr;
         }
 
-        // 打乱 + 统计
+        // 主功能：打乱 + 统计 + 复核
         function shuffleNum() {
             let input = document.getElementById('input').value.trim();
             if (!input) {
                 alert('请先粘贴数字！');
                 return;
             }
-            let numArr = input.split(/\s+/).filter(item => item);
-            let resultArr = shuffleArray(numArr);
-            
+
+            // 处理原始数字
+            originalNums = input.split(/\s+/).filter(item => item);
+            let resultArr = shuffleArray(originalNums);
+
+            // 赋值
             currentResult = resultArr.join(' ');
             totalNum = resultArr.length;
+
+            // 显示结果
             document.getElementById('resultNum').textContent = totalNum;
             document.getElementById('resultText').textContent = currentResult;
+
+            // 显示复核对比
+            document.getElementById('originalText').textContent = originalNums.join(' ');
+            document.getElementById('shuffledText').textContent = currentResult;
+
+            // 自动校验
+            doCheck();
         }
 
         // 复制打乱结果
@@ -164,7 +230,7 @@
             });
         }
 
-        // 复制统计总数
+        // 复制总数
         function copyTotalNum() {
             if (totalNum === 0) {
                 alert('请先统计数字！');
@@ -177,13 +243,42 @@
             });
         }
 
+        // 复核校验
+        function doCheck() {
+            let statusEl = document.getElementById('checkStatus');
+            
+            if (originalNums.length === 0 || !currentResult) {
+                statusEl.className = 'check-result';
+                statusEl.textContent = '未校验';
+                return;
+            }
+
+            let sortedOriginal = [...originalNums].sort().join(',');
+            let sortedShuffled = currentResult.split(' ').sort().join(',');
+
+            if (sortedOriginal === sortedShuffled) {
+                statusEl.className = 'check-result check-success';
+                statusEl.textContent = '✅ 前后数字完全一致（无丢失、无重复）';
+            } else {
+                statusEl.className = 'check-result check-error';
+                statusEl.textContent = '❌ 数字不一致，请检查输入！';
+            }
+        }
+
         // 清空
         function clearAll() {
             document.getElementById('input').value = '';
             document.getElementById('resultNum').textContent = '0';
             document.getElementById('resultText').textContent = '打乱结果将显示在这里...';
+            
+            document.getElementById('originalText').textContent = '-';
+            document.getElementById('shuffledText').textContent = '-';
+            document.getElementById('checkStatus').className = 'check-result';
+            document.getElementById('checkStatus').textContent = '未校验';
+
             currentResult = "";
             totalNum = 0;
+            originalNums = [];
         }
     </script>
 </body>
