@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>蚂蚁澳彩数据打乱工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+            background: #f5f7fa;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            resize: vertical;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        button {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: #409eff;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #337ecc;
+        }
+        button.copy-btn {
+            background: #67c23a;
+        }
+        button.copy-btn:hover {
+            background: #529b2e;
+        }
+        .result-box {
+            padding: 15px;
+            background: #f0f7ff;
+            border-radius: 6px;
+            border: 1px solid #d9ecff;
+            margin-bottom: 15px;
+        }
+        .result-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        #resultNum {
+            color: #f56c6c;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+        #resultText {
+            line-height: 1.6;
+            color: #333;
+            word-break: break-all;
+        }
+
+        .check-box {
+            padding: 15px;
+            background: #fcfbf0;
+            border-radius: 6px;
+            border: 1px solid #faecd8;
+            margin-bottom: 20px;
+        }
+        .check-title {
+            font-weight: bold;
+            color: #d48800;
+            margin-bottom: 10px;
+        }
+        .check-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .check-item {
+            line-height: 1.5;
+            word-break: break-all;
+            font-size: 13px;
+        }
+        .check-result {
+            font-weight: bold;
+            padding: 6px 10px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .check-success {
+            background: #e6f7e6;
+            color: #008000;
+        }
+        .check-error {
+            background: #ffe6e6;
+            color: #cc0000;
+        }
+
+        .bottom-link {
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        .bottom-link a {
+            color: #409eff;
+            font-weight: bold;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        .bottom-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* 登录遮罩 */
+        .login-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        .login-box {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            width: 320px;
+            text-align: center;
+        }
+        .login-box h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .login-box button {
+            width: 100%;
+            margin-top: 10px;
+            background: #409eff;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 登录弹窗 -->
+<div class="login-mask" id="loginMask">
+    <div class="login-box">
+        <h3>请登录使用</h3>
+        <input type="text" id="user" placeholder="请输入账号">
+        <input type="password" id="pwd" placeholder="请输入密码">
+        <button onclick="login()">登录</button>
+    </div>
+</div>
+
+<div class="container" id="mainContainer" style="display:none;">
+    <h2>蚂蚁澳彩数据打乱工具</h2>
+    <textarea id="input" placeholder="请粘贴你的数字（空格/换行分隔都可以）"></textarea>
+    
+    <div class="btn-group">
+        <button onclick="shuffleNum()">一键打乱并统计</button>
+        <button class="copy-btn" onclick="copyResult()">复制打乱结果</button>
+        <button onclick="clearAll()">清空重置</button>
+    </div>
+
+    <div class="result-box">
+        <div class="result-title">打乱后总数：<span id="resultNum">0</span> 个</div>
+        <div id="resultText">打乱结果将显示在这里...</div>
+    </div>
+
+    <div class="check-box">
+        <div class="check-title">✅ 打乱前后数字复核对比</div>
+        <div class="check-row">
+            <div class="check-item"><b>打乱前：</b><span id="originalText">-</span></div>
+            <div class="check-item"><b>打乱后：</b><span id="shuffledText">-</span></div>
+        </div>
+        <div>
+            <b>复核结果：</b>
+            <span id="checkStatus" class="check-result">未校验</span>
+        </div>
+    </div>
+
+    <div class="bottom-link">
+        <a href="https://t.me/+RjaMJ26EAPw0ZTc1" target="_blank">蚂蚁澳彩频道-先验证后付费</a>
+        <br>
+        <a href="https://m.hxyx.cc.cd/kj.html" target="_blank">新澳实时开奖直播</a>
+    </div>
+</div>
+
+<script>
+    // ================= 账号密码配置 =================
+    const ALLOW_USER = "mayi2036";
+    const ALLOW_PWD  = "666666";  // 已改成你要的密码
+    // =================================================
+
+    let currentResult = "";
+    let originalNums = [];
+
+    // 登录
+    function login() {
+        const user = document.getElementById('user').value.trim();
+        const pwd  = document.getElementById('pwd').value.trim();
+        if (user === ALLOW_USER && pwd === ALLOW_PWD) {
+            document.getElementById('loginMask').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'block';
+        } else {
+            alert('账号或密码错误！');
+        }
+    }
+
+    // 随机打乱
+    function shuffleArray(arr) {
+        let newArr = [...arr];
+        for (let i = newArr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+        }
+        return newArr;
+    }
+
+    // 打乱+统计
+    function shuffleNum() {
+        const input = document.getElementById('input').value.trim();
+        if (!input) {
+            alert('请先粘贴数字！');
+            return;
+        }
+        originalNums = input.split(/\s+/).filter(item => item && item.trim());
+        if (originalNums.length === 0) {
+            alert('未检测到有效数字！');
+            return;
+        }
+        const resultArr = shuffleArray(originalNums);
+        currentResult = resultArr.join(' ');
+
+        document.getElementById('resultNum').textContent = resultArr.length;
+        document.getElementById('resultText').textContent = currentResult;
+        document.getElementById('originalText').textContent = originalNums.join(' ');
+        document.getElementById('shuffledText').textContent = currentResult;
+        doCheck();
+    }
+
+    // 复制
+    async function copyResult() {
+        if (!currentResult) {
+            alert('请先生成打乱结果！');
+            return;
+        }
+        try {
+            await navigator.clipboard.writeText(currentResult);
+            alert('复制成功！');
+        } catch (err) {
+            const textArea = document.createElement('textarea');
+            textArea.value = currentResult;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert('复制成功！');
+        }
+    }
+
+    // 复核
+    function doCheck() {
+        const statusEl = document.getElementById('checkStatus');
+        const sortedOriginal = [...originalNums].sort().join(',');
+        const sortedShuffled = currentResult.split(' ').filter(Boolean).sort().join(',');
+        if (sortedOriginal === sortedShuffled) {
+            statusEl.className = 'check-result check-success';
+            statusEl.textContent = '✅ 完全一致（无丢失、无重复）';
+        } else {
+            statusEl.className = 'check-result check-error';
+            statusEl.textContent = '❌ 不一致，请检查！';
+        }
+    }
+
+    // 清空
+    function clearAll() {
+        document.getElementById('input').value = '';
+        document.getElementById('resultNum').textContent = '0';
+        document.getElementById('resultText').textContent = '打乱结果将显示在这里...';
+        document.getElementById('originalText').textContent = '-';
+        document.getElementById('shuffledText').textContent = '-';
+        const statusEl = document.getElementById('checkStatus');
+        statusEl.className = 'check-result';
+        statusEl.textContent = '未校验';
+        currentResult = "";
+        originalNums = [];
+    }
+</script>
+</body>
+</html>
