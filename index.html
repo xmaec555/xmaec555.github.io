@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字随机打乱工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+            background: #f5f7fa;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            resize: vertical;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: #409eff;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #337ecc;
+        }
+        .result-box {
+            padding: 15px;
+            background: #f0f7ff;
+            border-radius: 6px;
+            border: 1px solid #d9ecff;
+        }
+        .result-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        #resultNum {
+            color: #f56c6c;
+            font-weight: bold;
+        }
+        #resultText {
+            line-height: 1.6;
+            color: #333;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>数字随机打乱 + 统计数量</h2>
+        <textarea id="input" placeholder="请粘贴你的数字（空格/换行分隔都可以），例如：01 02 03 04..."></textarea>
+        <div class="btn-group">
+            <button onclick="shuffleNum()">一键打乱并统计</button>
+            <button onclick="clearAll()">清空内容</button>
+        </div>
+        <div class="result-box">
+            <div class="result-title">统计总数：<span id="resultNum">0</span> 个</div>
+            <div id="resultText">打乱结果将显示在这里...</div>
+        </div>
+    </div>
+
+    <script>
+        // 打乱数组（Fisher-Yates 算法）
+        function shuffleArray(arr) {
+            let newArr = [...arr];
+            for (let i = newArr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+            }
+            return newArr;
+        }
+
+        // 主功能：打乱+统计
+        function shuffleNum() {
+            let input = document.getElementById('input').value.trim();
+            if (!input) {
+                alert('请先粘贴数字！');
+                return;
+            }
+            // 分割数字（支持空格、换行、多个空格）
+            let numArr = input.split(/\s+/).filter(item => item);
+            // 去重（可选，保留你原始所有数字）
+            // numArr = [...new Set(numArr)];
+            // 打乱
+            let resultArr = shuffleArray(numArr);
+            // 显示结果
+            document.getElementById('resultNum').textContent = resultArr.length;
+            document.getElementById('resultText').textContent = resultArr.join('、');
+        }
+
+        // 清空
+        function clearAll() {
+            document.getElementById('input').value = '';
+            document.getElementById('resultNum').textContent = '0';
+            document.getElementById('resultText').textContent = '打乱结果将显示在这里...';
+        }
+    </script>
+</body>
+</html>
