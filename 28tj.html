@@ -89,82 +89,87 @@
 </div>
 
 <script>
-// ==================== 配置 & 工具函数 ====================
+// ==================== 配置 & 工具 ====================
 const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
-const countData = { 1: {}, 2: {} };
-const minMax = { 1: { min: 0, max: 0 }, 2: { min: 0, max: 0 } };
+const countData = {1:{},2:{}};
+const minMax = {1:{min:0,max:0},2:{min:0,max:0}};
+let group1Lines = ""; // 逐行原格式文本
 
 const padZero = n => n.toString().padStart(2, '0');
-const getZodiac = n => zodiacList[(n - 1) % 12];
-const uniqueSort = arr => [...new Set(arr)].sort((a, b) => a - b);
-const formatNum = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
-const inRange = (v, min, max) => v >= min && v <= max;
-const getNumbers = val => (val.match(/\d+/g) || []).map(Number).filter(n => n >= 1 && n <= 49);
+const getZodiac = n => zodiacList[(n-1)%12];
+const uniqueSort = arr => [...new Set(arr)].sort((a,b)=>a-b);
+const format = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
+const inRange = (v,min,max) => v >= min && v <= max;
 
 // ==================== 输入操作 ====================
-function showInputInfo(no) {
-    const value = document.getElementById(`numInput${no}`).value;
-    const count = getNumbers(value).length;
-    document.getElementById(`inputInfo${no}`).textContent = `已输入：${count} 个数字`;
+function showInputInfo(no){
+    const v = document.getElementById(`numInput${no}`).value;
+    const cnt = (v.match(/\d+/g)||[]).length;
+    document.getElementById(`inputInfo${no}`).innerText = `已输入：${cnt} 个数字`;
 }
 
-function clearAll(no) {
-    const ids = ['numInput', 'baseResult', 'groupResult', 'zodiacResult'];
+function clearAll(no){
+    const ids = ['numInput','baseResult','groupResult','zodiacResult'];
     ids.forEach(id => {
         const el = document.getElementById(`${id}${no}`);
         id === 'numInput' ? el.value = '' : el.innerHTML = '';
     });
+    if(no === 1) group1Lines = "";
     showInputInfo(no);
 }
 
-function copyText(text, tipId) {
-    navigator.clipboard.writeText(text).then(() => {
-        const tip = document.getElementById(tipId);
-        tip.textContent = "✅ 复制成功";
-        setTimeout(() => tip.textContent = "", 1500);
-    }).catch(() => alert("复制失败，请手动复制"));
+function copyText(text,tipId){
+    navigator.clipboard.writeText(text).then(()=>{
+        const t = document.getElementById(tipId);
+        t.innerText = "✅ 复制成功";
+        setTimeout(()=>t.innerText='',1500);
+    }).catch(()=>alert("复制失败，请手动复制"));
 }
 
-function uniqueNum(no) {
+function uniqueNum(no){
     const el = document.getElementById(`numInput${no}`);
-    el.value = [...new Set(getNumbers(el.value))].join(' ');
+    el.value = [...new Set(el.value.match(/\d+/g)||[])].join(' ');
     showInputInfo(no);
 }
 
-function sortNum(no) {
+function sortNum(no){
     const el = document.getElementById(`numInput${no}`);
-    el.value = getNumbers(el.value).sort((a, b) => a - b).join(' ');
+    el.value = (el.value.match(/\d+/g)||[]).sort((a,b)=>a-b).join(' ');
 }
 
 // ==================== 统计核心 ====================
-function calculate(no) {
-    const inputArr = getNumbers(document.getElementById(`numInput${no}`).value);
-    const allNumbers = Array.from({ length: 49 }, (_, i) => i + 1);
+function calculate(no){
+    const input = document.getElementById(`numInput${no}`).value.trim();
+    const inputArr = (input.match(/\d+/g)||[])
+                        .map(Number)
+                        .filter(n=>!isNaN(n) && n>=1 && n<=49);
     
-    // 统计次数
+    const all = Array.from({length:49},(_,i)=>i+1);
     const countMap = {};
-    allNumbers.forEach(n => countMap[n] = 0);
-    inputArr.forEach(n => countMap[n]++);
+    all.forEach(n=>countMap[n]=0);
+    inputArr.forEach(n=>countMap[n]++);
     countData[no] = countMap;
 
-    // 最大最小次数
-    const values = Object.values(countMap);
-    minMax[no] = { min: Math.min(...values), max: Math.max(...values) };
+    const vals = Object.values(countMap);
+    minMax[no] = { min: Math.min(...vals), max: Math.max(...vals) };
 
-    // 按次数分组
     const group = {};
-    allNumbers.forEach(n => {
-        const c = countMap[n];
-        (group[c] || (group[c] = [])).push(n);
-    });
-    const sortedGroups = Object.keys(group).map(Number).sort((a, b) => a - b);
+    all.forEach(n=>{ const c=countMap[n]; group[c]??=[]; group[c].push(n); });
+    const sortedGroups = Object.keys(group).map(Number).sort((a,b)=>a-b);
 
-    // 生肖统计
+    // ✅ 第一组：保存逐行原格式（每行一组数字）
+    if(no === 1){
+        let lines = [];
+        sortedGroups.forEach(cnt => {
+            lines.push(group[cnt].map(padZero).join(' '));
+        });
+        group1Lines = lines.join('\n'); // 换行分隔，原格式
+    }
+
     const zodiac = {};
-    zodiacList.forEach(z => zodiac[z] = 0);
-    inputArr.forEach(n => zodiac[getZodiac(n)]++);
+    zodiacList.forEach(z=>zodiac[z]=0);
+    inputArr.forEach(n=>zodiac[getZodiac(n)]++);
 
-    // 渲染
     renderBase(no, inputArr.length, new Set(inputArr).size, minMax[no].max, minMax[no].min);
     renderGroup(no, sortedGroups, group, minMax[no].max, minMax[no].min);
     renderZodiac(no, zodiac);
@@ -172,8 +177,8 @@ function calculate(no) {
 }
 
 // ==================== 渲染模块 ====================
-function renderBase(no, total, unique, max, min) {
-    document.getElementById(`baseResult${no}`).innerHTML = `
+function renderBase(no,total,unique,max,min){
+    document.getElementById(`baseResult${no}`).innerHTML=`
     <div class="result-title">📊 基础统计</div>
     <div class="base-row">
         <div>总数量：<span class="highlight">${total}</span></div>
@@ -183,13 +188,18 @@ function renderBase(no, total, unique, max, min) {
     </div>`;
 }
 
-function renderGroup(no, sorted, group, maxCnt, minCnt) {
-    let html = `<div class="result-title"><span>📦 次数分组（最冷→最热）</span></div>`;
-    sorted.forEach((cnt, i) => {
-        const list = group[cnt].map(padZero).join(' ');
-        const mark = cnt === maxCnt ? '<span class="hot">【最热】</span>' 
-                : cnt === minCnt ? '<span class="cold">【最冷】</span>' : '';
-        html += `
+function renderGroup(no,sorted,group,maxCnt,minCnt){
+    let html = `<div class="result-title"><span>📦 次数分组（最冷→最热）</span>`;
+    // ✅ 只在第一组加【逐行复制】按钮
+    if(no === 1) {
+        html += ` <button class="copy-btn" onclick="copyGroup1Lines()">逐行复制</button><span id="g1Tip" class="copy-tip"></span>`;
+    }
+    html += `</div>`;
+
+    sorted.forEach((cnt,i)=>{
+        const list=group[cnt].map(padZero).join(' ');
+        const mark = cnt===maxCnt ? '<span class="hot">【最热】</span>' : cnt===minCnt ? '<span class="cold">【最冷】</span>':'';
+        html+=`
         <div class="group-item">
             <div>${mark} 出现${cnt}次（共${group[cnt].length}个）：${list}</div>
             <div>
@@ -198,27 +208,32 @@ function renderGroup(no, sorted, group, maxCnt, minCnt) {
             </div>
         </div>`;
     });
-    document.getElementById(`groupResult${no}`).innerHTML = html;
+    document.getElementById(`groupResult${no}`).innerHTML=html;
 }
 
-function renderZodiac(no, zodiac) {
-    const sorted = Object.entries(zodiac).sort((a, b) => b[1] - a[1]);
-    const max = sorted[0][1], min = sorted.at(-1)[1];
-    let html = `<div class="result-title"><span>🐉 生肖统计</span></div>`;
-    sorted.forEach(([z, c]) => {
-        const cls = c === max ? 'zodiac-item hot' : c === min ? 'zodiac-item cold' : 'zodiac-item';
-        html += `<div class="${cls}">${z}：${c}次</div>`;
+// ✅ 逐行原格式复制（完全按界面每行次数分组）
+function copyGroup1Lines(){
+    copyText(group1Lines, "g1Tip");
+}
+
+function renderZodiac(no,zodiac){
+    const sorted=Object.entries(zodiac).sort((a,b)=>b[1]-a[1]);
+    const max=sorted[0][1],min=sorted.at(-1)[1];
+    let html=`<div class="result-title"><span>🐉 生肖统计</span></div>`;
+    sorted.forEach(([z,c])=>{
+        const cls=c===max?'zodiac-item hot':c===min?'zodiac-item cold':'zodiac-item';
+        html+=`<div class="${cls}">${z}：${c}次</div>`;
     });
-    document.getElementById(`zodiacResult${no}`).innerHTML = html;
+    document.getElementById(`zodiacResult${no}`).innerHTML=html;
 }
 
 // ==================== 交叉对比 ====================
-function clearCompare() {
+function clearCompare(){
     document.getElementById('compareResult').innerHTML = '';
 }
 
-function compareAll() {
-    if (!Object.keys(countData[1]).length || !Object.keys(countData[2]).length) {
+function compareAll(){
+    if(!Object.keys(countData[1]).length || !Object.keys(countData[2]).length){
         alert('请先对两组数据分别点击【一键统计】后再对比！');
         return;
     }
@@ -226,25 +241,25 @@ function compareAll() {
     const c1 = countData[1], c2 = countData[2];
     const min1 = minMax[1].min, min2 = minMax[2].min;
     const max1 = minMax[1].max, max2 = minMax[2].max;
-    const all = Array.from({ length: 49 }, (_, i) => i + 1);
+    const all = Array.from({length:49},(_,i)=>i+1);
 
-    const r1 = all.filter(n => inRange(c1[n], 1, 2) && inRange(c2[n], min2, 1));
-    const r2 = all.filter(n => inRange(c1[n], 2, 5) && inRange(c2[n], 2, 4));
-    const r3 = all.filter(n => inRange(c1[n], 6, max1) && inRange(c2[n], 5, max2));
-    const r4 = all.filter(n => c1[n] === 7 && inRange(c2[n], 3, 4));
-    const r5 = all.filter(n => c1[n] === 4 && c2[n] === 6);
+    const r1 = all.filter(n=>inRange(c1[n],1,2) && inRange(c2[n],min2,1));
+    const r2 = all.filter(n=>inRange(c1[n],2,5) && inRange(c2[n],2,4));
+    const r3 = all.filter(n=>inRange(c1[n],6,max1) && inRange(c2[n],5,max2));
+    const r4 = all.filter(n=>c1[n]===7 && inRange(c2[n],3,4));
+    const r5 = all.filter(n=>c1[n]===4 && c2[n]===6);
 
-    const [s1, s2, s3, s4, s5] = [r1, r2, r3, r4, r5].map(formatNum);
-    const final = uniqueSort([...r1, ...r2, ...r3, ...r4, ...r5]);
+    const [s1,s2,s3,s4,s5] = [r1,r2,r3,r4,r5].map(format);
+    const final = uniqueSort([...r1,...r2,...r3,...r4,...r5]);
 
-    document.getElementById('compareResult').innerHTML = `
+    document.getElementById('compareResult').innerHTML=`
     <div class="result-title">🎯 五组交叉对比</div>
     <div class="group-item compare-row"><div>【1组1‑2次 & 2组最冷‑1次】：${s1}</div><div><button class="copy-btn" onclick="copyText('${s1}','c1')">复制</button><span id="c1" class="copy-tip"></span></div></div>
     <div class="group-item compare-row"><div>【1组2‑5次 & 2组2‑4次】：${s2}</div><div><button class="copy-btn" onclick="copyText('${s2}','c2')">复制</button><span id="c2" class="copy-tip"></span></div></div>
     <div class="group-item compare-row"><div>【1组6‑最热 & 2组5‑最热】：${s3}</div><div><button class="copy-btn" onclick="copyText('${s3}','c3')">复制</button><span id="c3" class="copy-tip"></span></div></div>
     <div class="group-item compare-row"><div>【1组7次 & 2组3‑4次】：${s4}</div><div><button class="copy-btn" onclick="copyText('${s4}','c4')">复制</button><span id="c4" class="copy-tip"></span></div></div>
     <div class="group-item compare-row"><div>【1组4次 & 2组6次】：${s5}</div><div><button class="copy-btn" onclick="copyText('${s5}','c5')">复制</button><span id="c5" class="copy-tip"></span></div></div>
-    <div class="group-item final-row"><div>✅ 五组合并去重（共 ${final.length} 个）：${formatNum(final)}</div><div><button class="copy-btn" onclick="copyText('${formatNum(final)}','cf')">复制</button><span id="cf" class="copy-tip"></span></div></div>`;
+    <div class="group-item final-row"><div>✅ 五组合并去重（共 ${final.length} 个）：${format(final)}</div><div><button class="copy-btn" onclick="copyText('${format(final)}','cf')">复制</button><span id="cf" class="copy-tip"></span></div></div>`;
 }
 </script>
 </body>
