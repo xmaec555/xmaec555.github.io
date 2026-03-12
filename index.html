@@ -73,9 +73,6 @@
         .result-title {
             font-weight: bold;
             color: #333;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             margin-bottom: 8px;
         }
         #resultNum {
@@ -88,20 +85,8 @@
             color: #333;
             word-break: break-all;
         }
-        .copy-num-btn {
-            padding: 4px 10px;
-            font-size: 12px;
-            background: #67c23a;
-            border: none;
-            border-radius: 4px;
-            color: white;
-            cursor: pointer;
-        }
-        .copy-num-btn:hover {
-            background: #529b2e;
-        }
 
-        /* 新增：复核对比样式 */
+        /* 复核对比样式 */
         .check-box {
             padding: 15px;
             background: #fcfbf0;
@@ -142,7 +127,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>数字随机打乱 + 统计 + 复制 + 复核对比</h2>
+        <h2>数字随机打乱工具</h2>
         <textarea id="input" placeholder="请粘贴你的数字（空格/换行分隔都可以）"></textarea>
         
         <div class="btn-group">
@@ -151,20 +136,17 @@
             <button onclick="clearAll()">清空重置</button>
         </div>
 
-        <!-- 结果区域 -->
+        <!-- 打乱后结果 -->
         <div class="result-box">
-            <div class="result-title">
-                <span>统计总数：<span id="resultNum">0</span> 个</span>
-                <button class="copy-num-btn" onclick="copyTotalNum()">复制总数</button>
-            </div>
+            <div class="result-title">打乱后总数：<span id="resultNum">0</span> 个</div>
             <div id="resultText">打乱结果将显示在这里...</div>
         </div>
 
-        <!-- 新增：转换前后复核对比 -->
+        <!-- 复核对比 -->
         <div class="check-box">
-            <div class="check-title">✅ 转换前后数字复核对比</div>
+            <div class="check-title">✅ 打乱前后数字复核对比</div>
             <div class="check-row">
-                <div class="check-item"><b>原始数字：</b><span id="originalText">-</span></div>
+                <div class="check-item"><b>打乱前：</b><span id="originalText">-</span></div>
                 <div class="check-item"><b>打乱后：</b><span id="shuffledText">-</span></div>
             </div>
             <div>
@@ -189,7 +171,7 @@
             return newArr;
         }
 
-        // 主功能：打乱 + 统计 + 复核
+        // 打乱 + 统计
         function shuffleNum() {
             let input = document.getElementById('input').value.trim();
             if (!input) {
@@ -197,11 +179,9 @@
                 return;
             }
 
-            // 处理原始数字
             originalNums = input.split(/\s+/).filter(item => item);
             let resultArr = shuffleArray(originalNums);
 
-            // 赋值
             currentResult = resultArr.join(' ');
             totalNum = resultArr.length;
 
@@ -209,11 +189,10 @@
             document.getElementById('resultNum').textContent = totalNum;
             document.getElementById('resultText').textContent = currentResult;
 
-            // 显示复核对比
+            // 显示复核
             document.getElementById('originalText').textContent = originalNums.join(' ');
             document.getElementById('shuffledText').textContent = currentResult;
 
-            // 自动校验
             doCheck();
         }
 
@@ -224,22 +203,9 @@
                 return;
             }
             navigator.clipboard.writeText(currentResult).then(() => {
-                alert('复制结果成功！');
+                alert('复制成功！');
             }).catch(err => {
-                alert('复制失败：' + err);
-            });
-        }
-
-        // 复制总数
-        function copyTotalNum() {
-            if (totalNum === 0) {
-                alert('请先统计数字！');
-                return;
-            }
-            navigator.clipboard.writeText(totalNum.toString()).then(() => {
-                alert('复制总数成功：' + totalNum);
-            }).catch(err => {
-                alert('复制失败：' + err);
+                alert('复制失败');
             });
         }
 
@@ -247,21 +213,15 @@
         function doCheck() {
             let statusEl = document.getElementById('checkStatus');
             
-            if (originalNums.length === 0 || !currentResult) {
-                statusEl.className = 'check-result';
-                statusEl.textContent = '未校验';
-                return;
-            }
-
             let sortedOriginal = [...originalNums].sort().join(',');
             let sortedShuffled = currentResult.split(' ').sort().join(',');
 
             if (sortedOriginal === sortedShuffled) {
                 statusEl.className = 'check-result check-success';
-                statusEl.textContent = '✅ 前后数字完全一致（无丢失、无重复）';
+                statusEl.textContent = '✅ 完全一致（无丢失、无重复）';
             } else {
                 statusEl.className = 'check-result check-error';
-                statusEl.textContent = '❌ 数字不一致，请检查输入！';
+                statusEl.textContent = '❌ 不一致，请检查！';
             }
         }
 
