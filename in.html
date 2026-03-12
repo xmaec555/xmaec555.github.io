@@ -101,6 +101,43 @@
             background: #ecf0f1;
             border-radius: 4px;
         }
+
+        /* 数字详情表格样式 */
+        .num-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 15px;
+        }
+        .num-table th, .num-table td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: center;
+        }
+        .num-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        .num-table tr:hover {
+            background-color: #f5f7fa;
+        }
+        .copy-btn {
+            padding: 4px 10px;
+            font-size: 13px;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .copy-btn:hover {
+            background: #27ae60;
+        }
+        .copy-tip {
+            color: #2ecc71;
+            font-size: 13px;
+            margin-left: 5px;
+        }
     </style>
 </head>
 <body>
@@ -117,86 +154,95 @@
             <button class="clear" onclick="clearAll()">清空内容</button>
         </div>
 
-        <!-- 基础统计结果 -->
+        <!-- 基础统计 -->
         <div class="result-section" id="baseResult"></div>
 
-        <!-- 按出现次数分组结果 -->
+        <!-- 每个数字出现次数（表格 + 复制） -->
+        <div class="result-section" id="detailResult"></div>
+
+        <!-- 按出现次数分组 -->
         <div class="result-section" id="groupResult"></div>
 
-        <!-- 生肖统计结果 -->
+        <!-- 生肖统计 -->
         <div class="result-section" id="zodiacResult"></div>
     </div>
 
     <script>
-        // 核心：生肖对应规则 01=马，按顺序循环12生肖
+        // 生肖规则：01=马
         const zodiacList = ['马', '羊', '猴', '鸡', '狗', '猪', '鼠', '牛', '虎', '兔', '龙', '蛇'];
         
-        // 根据数字获取对应生肖
         function getZodiac(num) {
             const index = (num - 1) % 12;
             return zodiacList[index];
         }
 
-        // 清空所有内容
+        // 清空
         function clearAll() {
             document.getElementById('numInput').value = '';
             document.getElementById('baseResult').innerHTML = '';
+            document.getElementById('detailResult').innerHTML = '';
             document.getElementById('groupResult').innerHTML = '';
             document.getElementById('zodiacResult').innerHTML = '';
         }
 
-        // 主统计函数
+        // 复制功能
+        function copyText(text, tipId) {
+            navigator.clipboard.writeText(text).then(() => {
+                document.getElementById(tipId).innerText = "已复制！";
+                setTimeout(() => {
+                    document.getElementById(tipId).innerText = "";
+                }, 1500);
+            });
+        }
+
+        // 主统计
         function calculate() {
-            // 1. 获取输入内容，提取所有纯数字（支持01、02这类格式）
             const input = document.getElementById('numInput').value.trim();
             if (!input) {
                 alert('请输入数字！');
                 return;
             }
 
-            // 正则提取所有数字（包含0开头的数字）
             const numArr = input.match(/\d+/g) || [];
-            // 转换为数字类型，保留原值格式
             const numbers = numArr.map(item => parseInt(item, 10));
 
-            // 2. 基础统计
-            const totalCount = numbers.length; // 总数字数量
-            const uniqueNums = [...new Set(numbers)]; // 不重复数字
-            const uniqueCount = uniqueNums.length; // 不重复数字数量
+            // 基础统计
+            const totalCount = numbers.length;
+            const uniqueNums = [...new Set(numbers)].sort((a,b)=>a-b);
+            const uniqueCount = uniqueNums.length;
 
-            // 3. 统计每个数字出现次数
+            // 统计每个数字出现次数
             const countMap = {};
             numbers.forEach(num => {
                 countMap[num] = (countMap[num] || 0) + 1;
             });
 
-            // 最大出现次数
             const maxCount = Math.max(...Object.values(countMap));
 
-            // 4. 按出现次数分组（次数少 → 次数多）
+            // 按次数分组（升序）
             const groupMap = {};
             for (const [num, count] of Object.entries(countMap)) {
                 if (!groupMap[count]) groupMap[count] = [];
                 groupMap[count].push(Number(num));
             }
-            // 排序：按次数升序
-            const sortedCounts = Object.keys(groupMap).map(Number).sort((a, b) => a - b);
+            const sortedCounts = Object.keys(groupMap).map(Number).sort((a,b)=>a-b);
 
-            // 5. 生肖统计
+            // 生肖统计
             const zodiacCount = {};
             numbers.forEach(num => {
                 const zodiac = getZodiac(num);
                 zodiacCount[zodiac] = (zodiacCount[zodiac] || 0) + 1;
             });
 
-            // 6. 渲染结果到页面
-            renderBaseResult(totalCount, uniqueCount, maxCount);
-            renderGroupResult(sortedCounts, groupMap);
-            renderZodiacResult(zodiacCount);
+            // 渲染
+            renderBase(totalCount, uniqueCount, maxCount);
+            renderDetail(uniqueNums, countMap);
+            renderGroup(sortedCounts, groupMap);
+            renderZodiac(zodiacCount);
         }
 
-        // 渲染基础统计
-        function renderBaseResult(total, unique, max) {
+        // 基础统计
+        function renderBase(total, unique, max) {
             const dom = `
                 <div class="result-title">📊 基础统计结果</div>
                 <div class="result-item">总数字数量：<span class="highlight">${total}</span> 个</div>
@@ -206,21 +252,53 @@
             document.getElementById('baseResult').innerHTML = dom;
         }
 
-        // 渲染按次数分组
-        function renderGroupResult(sortedCounts, groupMap) {
-            let html = `<div class="result-title">📦 按出现次数分组（升序排列）</div>`;
+        // 每个数字出现次数 + 复制
+        function renderDetail(nums, countMap) {
+            let html = `<div class="result-title">📋 每个数字出现次数（带复制）</div>`;
+            html += `
+            <table class="num-table">
+                <tr>
+                    <th>数字</th>
+                    <th>出现次数</th>
+                    <th>生肖</th>
+                    <th>复制</th>
+                </tr>
+            `;
+            nums.forEach((num, idx) => {
+                const count = countMap[num];
+                const zodiac = getZodiac(num);
+                const tipId = `tip${idx}`;
+                html += `
+                <tr>
+                    <td>${num}</td>
+                    <td><span class="highlight">${count}</span></td>
+                    <td>${zodiac}</td>
+                    <td>
+                        <button class="copy-btn" onclick="copyText('${num} 出现 ${count} 次（生肖：${zodiac}）','${tipId}')">复制</button>
+                        <span id="${tipId}" class="copy-tip"></span>
+                    </td>
+                </tr>
+                `;
+            });
+            html += `</table>`;
+            document.getElementById('detailResult').innerHTML = html;
+        }
+
+        // 按次数分组
+        function renderGroup(sortedCounts, groupMap) {
+            let html = `<div class="result-title">📦 按出现次数分组（升序）</div>`;
             sortedCounts.forEach(count => {
-                const nums = groupMap[count].sort((a, b) => a - b); // 同次数数字升序
-                html += `<div class="result-item">出现 <span class="highlight">${count}</span> 次的数字：${nums.join('、')}</div>`;
+                const nums = groupMap[count].sort((a,b)=>a-b);
+                html += `<div class="result-item">出现 <span class="highlight">${count}</span> 次：${nums.join('、')}</div>`;
             });
             document.getElementById('groupResult').innerHTML = html;
         }
 
-        // 渲染生肖统计
-        function renderZodiacResult(zodiacCount) {
-            let html = `<div class="result-title">🐉 生肖对应次数统计（01=马）</div>`;
+        // 生肖统计
+        function renderZodiac(zodiacCount) {
+            let html = `<div class="result-title">🐉 生肖统计（01=马）</div>`;
             for (const [zodiac, count] of Object.entries(zodiacCount)) {
-                html += `<span class="zodiac-item">${zodiac}：<span class="highlight">${count}</span> 次</span>`;
+                html += `<span class="zodiac-item">${zodiac}：${count} 次</span>`;
             }
             document.getElementById('zodiacResult').innerHTML = html;
         }
