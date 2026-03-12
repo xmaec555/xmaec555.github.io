@@ -93,7 +93,7 @@
 const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
 const countData = {1:{},2:{}};
 const minMax = {1:{min:0,max:0},2:{min:0,max:0}};
-const groupCache = {1:[], 2:[]}; // 缓存次数分组数字
+const groupFullText = {1: "", 2: ""}; // 缓存：最冷→最热 完整数字串
 
 const padZero = n => n.toString().padStart(2, '0');
 const getZodiac = n => zodiacList[(n-1)%12];
@@ -114,7 +114,7 @@ function clearAll(no){
         const el = document.getElementById(`${id}${no}`);
         id === 'numInput' ? el.value = '' : el.innerHTML = '';
     });
-    groupCache[no] = [];
+    groupFullText[no] = "";
     showInputInfo(no);
 }
 
@@ -151,24 +151,19 @@ function calculate(no){
     countData[no] = countMap;
 
     const vals = Object.values(countMap);
-    minMax[no] = {
-        min: Math.min(...vals),
-        max: Math.max(...vals)
-    };
+    minMax[no] = { min: Math.min(...vals), max: Math.max(...vals) };
 
     const group = {};
-    all.forEach(n=>{
-        const c = countMap[n];
-        if(!group[c]) group[c] = [];
-        group[c].push(n);
-    });
+    all.forEach(n=>{ const c=countMap[n]; group[c]??=[]; group[c].push(n); });
     const sortedGroups = Object.keys(group).map(Number).sort((a,b)=>a-b);
 
-    // 缓存每组按最冷→最热排序的所有数字
-    groupCache[no] = [];
+    // ✅ 关键：按 最冷→最热 拼接所有数字（保留界面原格式）
+    let fullText = "";
     sortedGroups.forEach(cnt => {
-        groupCache[no] = groupCache[no].concat(group[cnt]);
+        const line = group[cnt].map(padZero).join(' ');
+        fullText += line + " ";
     });
+    groupFullText[no] = fullText.trim().replace(/\s+/g, ' ');
 
     const zodiac = {};
     zodiacList.forEach(z=>zodiac[z]=0);
@@ -211,10 +206,9 @@ function renderGroup(no,sorted,group,maxCnt,minCnt){
     document.getElementById(`groupResult${no}`).innerHTML=html;
 }
 
-// ✅ 正确：复制全部 = 按最冷→最热顺序，复制所有分组数字（保留格式）
+// ✅ 最终正确：复制次数分组 最冷→最热 全部数字（与界面完全一致）
 function copyAllGroup(no){
-    const text = format(groupCache[no]);
-    copyText(text, `groupAllTip${no}`);
+    copyText(groupFullText[no], `groupAllTip${no}`);
 }
 
 function renderZodiac(no,zodiac){
@@ -234,7 +228,7 @@ function clearCompare(){
 }
 
 function compareAll(){
-    if(Object.keys(countData[1]).length === 0 || Object.keys(countData[2]).length === 0){
+    if(!Object.keys(countData[1]).length || !Object.keys(countData[2]).length){
         alert('请先对两组数据分别点击【一键统计】后再对比！');
         return;
     }
