@@ -217,7 +217,7 @@
         }
         const sortedCounts = Object.keys(group).map(Number).sort((a, b) => a - b);
 
-        // 生肖统计：统计每个生肖出现的次数
+        // 生肖统计：按出现次数降序
         const zodiacCount = {};
         zodiacList.forEach(z => zodiacCount[z] = 0);
         inputArr.forEach(n => {
@@ -231,7 +231,7 @@
         renderZodiac(zodiacCount);
     }
 
-    // 基础统计
+    // 基础统计 —— 已改成横排
     function renderBase(total, unique, max) {
         document.getElementById('baseResult').innerHTML = `
         <div class="result-title">📊 基础统计结果</div>
@@ -270,28 +270,21 @@
         document.getElementById('groupResult').innerHTML = html;
     }
 
-    // 生肖统计：按次数从多到少排序 + 一键复制
+    // ====================== 只保留一键复制，删除其他所有复制按钮 ======================
     function renderZodiac(zodiacCount) {
-        // 按出现次数 降序 排列
-        const sortedZodiac = Object.entries(zodiacCount)
-            .sort((a, b) => b[1] - a[1]);
-        
+        // 按次数降序
+        const sortedZodiac = Object.entries(zodiacCount).sort((a, b) => b[1] - a[1]);
         let allText = [];
         let html = `<div class="result-title">
             <span>🐉 生肖出现次数</span>
-            <button class="copy-btn" onclick="copyText(fullZodiacText,'zAllTip')">一键复制全部</button>
+            <button class="copy-btn" onclick="copyText(fullZodiacText,'zAllTip')">一键复制</button>
             <span id="zAllTip" class="copy-tip"></span>
         </div>`;
 
-        sortedZodiac.forEach(([z, cnt], i) => {
+        sortedZodiac.forEach(([z, cnt]) => {
             const line = `${z}：${cnt}次`;
             allText.push(line);
-            html += `
-            <div class="zodiac-item">
-                <div>${line}</div>
-                <button class="copy-btn" onclick="copyText('${z}','zName${i}')">复制</button>
-                <span id="zName${i}" class="copy-tip"></span>
-            </div>`;
+            html += `<span class="zodiac-item">${line}</span>`;
         });
 
         fullZodiacText = allText.join("\n");
