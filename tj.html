@@ -171,6 +171,12 @@
             background: #fef8ec;
             border-left: 4px solid #f39c12;
         }
+        .final-row {
+            background: #e8f5e9 !important;
+            border-left: 4px solid #2ecc71 !important;
+            font-weight:bold;
+            font-size:15px;
+        }
     </style>
 </head>
 <body>
@@ -408,12 +414,6 @@
         return val >= min && val <= max;
     }
 
-    function uniqueSort(arr) {
-        const uniqueArr = [...new Set(arr)];
-        uniqueArr.sort((a, b) => a - b);
-        return uniqueArr;
-    }
-
     function compareAll(){
         let c1 = countData[1];
         let c2 = countData[2];
@@ -424,42 +424,48 @@
 
         let all = Array.from({length:49},(_,i)=>i+1);
 
-        // 规则1：第一组 最冷~2次  第二组 最冷~1次
+        // 三组交叉结果
         let res1 = all.filter(n => inRange(c1[n], min1, 2) && inRange(c2[n], min2, 1));
-        // 规则2：第一组 2~6次     第二组 2~5次
         let res2 = all.filter(n => inRange(c1[n], 2, 6) && inRange(c2[n], 2, 5));
-        // 规则3：第一组 6~最热    第二组 4~最热
         let res3 = all.filter(n => inRange(c1[n], 6, max1) && inRange(c2[n], 4, max2));
 
-        // 去重 + 排序
-        res1 = uniqueSort(res1);
-        res2 = uniqueSort(res2);
-        res3 = uniqueSort(res3);
-
+        // 格式化每组
         function format(arr){
-            return arr.map(padZero).join(' ') || "无";
+            let u = [...new Set(arr)].sort((a,b)=>a-b);
+            return u.map(padZero).join(' ') || "无";
         }
 
         let str1 = format(res1);
         let str2 = format(res2);
         let str3 = format(res3);
 
+        // ====================== 三组合并去重（最终结果） ======================
+        let allMerge = [...res1, ...res2, ...res3];
+        let allUnique = [...new Set(allMerge)].sort((a,b)=>a-b);
+        let strFinal = format(allUnique);
+
         let html = `
-        <div class="result-title">🎯 三组交叉对比相同数字（已去重）</div>
+        <div class="result-title">🎯 三组交叉对比相同数字</div>
 
         <div class="group-item compare-row">
-            <div>【第一组 最冷~2次】&【第二组 最冷~1次】交集：共 ${res1.length} 个 → ${str1}</div>
+            <div>【第一组 最冷~2次】&【第二组 最冷~1次】：${str1}</div>
             <div><button class="copy-btn" onclick="copyText('${str1}','cmp1')">复制</button><span id="cmp1" class="copy-tip"></span></div>
         </div>
 
         <div class="group-item compare-row">
-            <div>【第一组 2~6次】&【第二组 2~5次】交集：共 ${res2.length} 个 → ${str2}</div>
+            <div>【第一组 2~6次】&【第二组 2~5次】：${str2}</div>
             <div><button class="copy-btn" onclick="copyText('${str2}','cmp2')">复制</button><span id="cmp2" class="copy-tip"></span></div>
         </div>
 
         <div class="group-item compare-row">
-            <div>【第一组 6~最热】&【第二组 4~最热】交集：共 ${res3.length} 个 → ${str3}</div>
+            <div>【第一组 6~最热】&【第二组 4~最热】：${str3}</div>
             <div><button class="copy-btn" onclick="copyText('${str3}','cmp3')">复制</button><span id="cmp3" class="copy-tip"></span></div>
+        </div>
+
+        <!-- 新加：三组合并去重最终结果 -->
+        <div class="group-item final-row">
+            <div>✅ 三组合并去重最终结果（共 ${allUnique.length} 个）：${strFinal}</div>
+            <div><button class="copy-btn" onclick="copyText('${strFinal}','final')">复制</button><span id="final" class="copy-tip"></span></div>
         </div>
         `;
 
