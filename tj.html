@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>蚂蚁澳彩统计工具 - 双组+交叉对比</title>
+    <title>蚂蚁澳彩盘口自动统计</title>
     <style>
         * {
             margin: 0;
@@ -181,7 +181,7 @@
 </head>
 <body>
 <div class="container">
-    <h1>蚂蚁澳彩统计工具 - 双组+交叉对比</h1>
+    <h1>蚂蚁澳彩盘口自动统计</h1>
 
     <!-- ========== 第一组 ========== -->
     <div class="panel">
@@ -445,26 +445,26 @@
         let strFinal = format(allUnique);
 
         let html = `
-        <div class="result-title">🎯 三组交叉对比相同数字</div>
+        <div class="result-title">🎯 三组交叉对比</div>
 
         <div class="group-item compare-row">
-            <div>【第一组 最冷~2次】&【第二组 最冷~1次】：${str1}</div>
+            <div>【第一组冷门码】：${str1}</div>
             <div><button class="copy-btn" onclick="copyText('${str1}','cmp1')">复制</button><span id="cmp1" class="copy-tip"></span></div>
         </div>
 
         <div class="group-item compare-row">
-            <div>【第一组 2~6次】&【第二组 2~5次】：${str2}</div>
+            <div>【第二组中热码】：${str2}</div>
             <div><button class="copy-btn" onclick="copyText('${str2}','cmp2')">复制</button><span id="cmp2" class="copy-tip"></span></div>
         </div>
 
         <div class="group-item compare-row">
-            <div>【第一组 6~最热】&【第二组 4~最热】：${str3}</div>
+            <div>【第三组热门】：${str3}</div>
             <div><button class="copy-btn" onclick="copyText('${str3}','cmp3')">复制</button><span id="cmp3" class="copy-tip"></span></div>
         </div>
 
         <!-- 新加：三组合并去重最终结果 -->
         <div class="group-item final-row">
-            <div>✅ 三组合并去重最终结果（共 ${allUnique.length} 个）：${strFinal}</div>
+            <div>✅ 去重结果（共 ${allUnique.length} 个）：${strFinal}</div>
             <div><button class="copy-btn" onclick="copyText('${strFinal}','final')">复制</button><span id="final" class="copy-tip"></span></div>
         </div>
         `;
