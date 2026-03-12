@@ -93,7 +93,7 @@
 const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
 const countData = {1:{},2:{}};
 const minMax = {1:{min:0,max:0},2:{min:0,max:0}};
-let group1FullText = "";
+let group1Lines = ""; // 逐行原格式文本
 
 const padZero = n => n.toString().padStart(2, '0');
 const getZodiac = n => zodiacList[(n-1)%12];
@@ -114,7 +114,7 @@ function clearAll(no){
         const el = document.getElementById(`${id}${no}`);
         id === 'numInput' ? el.value = '' : el.innerHTML = '';
     });
-    if(no === 1) group1FullText = "";
+    if(no === 1) group1Lines = "";
     showInputInfo(no);
 }
 
@@ -157,13 +157,13 @@ function calculate(no){
     all.forEach(n=>{ const c=countMap[n]; group[c]??=[]; group[c].push(n); });
     const sortedGroups = Object.keys(group).map(Number).sort((a,b)=>a-b);
 
-    // 保存第一组完整格式文本（最冷→最热）
+    // ✅ 第一组：保存逐行原格式（每行一组数字）
     if(no === 1){
-        let allLines = [];
+        let lines = [];
         sortedGroups.forEach(cnt => {
-            allLines.push(group[cnt].map(padZero).join(' '));
+            lines.push(group[cnt].map(padZero).join(' '));
         });
-        group1FullText = allLines.join(' ').replace(/\s+/g, ' ');
+        group1Lines = lines.join('\n'); // 换行分隔，原格式
     }
 
     const zodiac = {};
@@ -190,8 +190,9 @@ function renderBase(no,total,unique,max,min){
 
 function renderGroup(no,sorted,group,maxCnt,minCnt){
     let html = `<div class="result-title"><span>📦 次数分组（最冷→最热）</span>`;
+    // ✅ 只在第一组加【逐行复制】按钮
     if(no === 1) {
-        html += ` <button class="copy-btn" onclick="copyGroup1()">复制</button><span id="g1Tip" class="copy-tip"></span>`;
+        html += ` <button class="copy-btn" onclick="copyGroup1Lines()">逐行复制</button><span id="g1Tip" class="copy-tip"></span>`;
     }
     html += `</div>`;
 
@@ -210,9 +211,9 @@ function renderGroup(no,sorted,group,maxCnt,minCnt){
     document.getElementById(`groupResult${no}`).innerHTML=html;
 }
 
-// 复制第一组完整次数分组（最冷→最热，原格式）
-function copyGroup1(){
-    copyText(group1FullText, "g1Tip");
+// ✅ 逐行原格式复制（完全按界面每行次数分组）
+function copyGroup1Lines(){
+    copyText(group1Lines, "g1Tip");
 }
 
 function renderZodiac(no,zodiac){
