@@ -93,7 +93,7 @@
 const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
 const countData = {1:{},2:{}};
 const minMax = {1:{min:0,max:0},2:{min:0,max:0}};
-const appearedNumbers = {1:[], 2:[]}; // 保存出现过的数字
+const groupCache = {1:[], 2:[]}; // 缓存次数分组数字
 
 const padZero = n => n.toString().padStart(2, '0');
 const getZodiac = n => zodiacList[(n-1)%12];
@@ -112,10 +112,9 @@ function clearAll(no){
     const ids = ['numInput','baseResult','groupResult','zodiacResult'];
     ids.forEach(id => {
         const el = document.getElementById(`${id}${no}`);
-        if(id === 'numInput') el.value = '';
-        else el.innerHTML = '';
+        id === 'numInput' ? el.value = '' : el.innerHTML = '';
     });
-    appearedNumbers[no] = [];
+    groupCache[no] = [];
     showInputInfo(no);
 }
 
@@ -129,15 +128,13 @@ function copyText(text,tipId){
 
 function uniqueNum(no){
     const el = document.getElementById(`numInput${no}`);
-    const nums = el.value.match(/\d+/g)||[];
-    el.value = [...new Set(nums)].join(' ');
+    el.value = [...new Set(el.value.match(/\d+/g)||[])].join(' ');
     showInputInfo(no);
 }
 
 function sortNum(no){
     const el = document.getElementById(`numInput${no}`);
-    const nums = el.value.match(/\d+/g)||[];
-    el.value = nums.sort((a,b)=>a-b).join(' ');
+    el.value = (el.value.match(/\d+/g)||[]).sort((a,b)=>a-b).join(' ');
 }
 
 // ==================== 统计核心 ====================
@@ -147,9 +144,6 @@ function calculate(no){
                         .map(Number)
                         .filter(n=>!isNaN(n) && n>=1 && n<=49);
     
-    // 保存出现过的数字（去重排序）
-    appearedNumbers[no] = uniqueSort(inputArr);
-
     const all = Array.from({length:49},(_,i)=>i+1);
     const countMap = {};
     all.forEach(n=>countMap[n]=0);
@@ -169,6 +163,12 @@ function calculate(no){
         group[c].push(n);
     });
     const sortedGroups = Object.keys(group).map(Number).sort((a,b)=>a-b);
+
+    // 缓存每组按最冷→最热排序的所有数字
+    groupCache[no] = [];
+    sortedGroups.forEach(cnt => {
+        groupCache[no] = groupCache[no].concat(group[cnt]);
+    });
 
     const zodiac = {};
     zodiacList.forEach(z=>zodiac[z]=0);
@@ -211,9 +211,9 @@ function renderGroup(no,sorted,group,maxCnt,minCnt){
     document.getElementById(`groupResult${no}`).innerHTML=html;
 }
 
-// ✅ 修复：复制全部 = 只复制本组出现过的数字（去重+排序）
+// ✅ 正确：复制全部 = 按最冷→最热顺序，复制所有分组数字（保留格式）
 function copyAllGroup(no){
-    const text = format(appearedNumbers[no]);
+    const text = format(groupCache[no]);
     copyText(text, `groupAllTip${no}`);
 }
 
