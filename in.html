@@ -12,7 +12,7 @@
             font-family: "Microsoft YaHei", sans-serif;
         }
         body {
-            background-color: #f5f7fa;
+            background-color: #f5f7f9;
             padding: 30px;
             max-width: 1000px;
             margin: 0 auto;
@@ -66,7 +66,7 @@
             background-color: #2980b9;
         }
         button.clear {
-            background-color: #e74c3d;
+            background-color: #e74c3c;
         }
         button.clear:hover {
             background-color: #c0392b;
@@ -87,6 +87,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .highlight {
             color: #e67e22;
@@ -201,14 +203,25 @@
         const sortedCounts = Object.keys(group).map(Number).sort((a, b) => a - b);
 
         const zodiacCount = {};
-        inputArr.forEach(n => {
+        const zodiacNumbers = {};
+        const notOccurNumbers = allNumbers.filter(n => countMap[n] === 0);
+        const occurredNumbers = allNumbers.filter(n => countMap[n] > 0);
+        
+        allNumbers.forEach(n => {
             const z = getZodiac(n);
-            zodiacCount[z] = (zodiacCount[z] || 0) + 1;
+            zodiacCount[z] = (zodiacCount[z] || 0) + (countMap[n] > 0 ? 1 : 0);
+            if (!zodiacNumbers[z]) zodiacNumbers[z] = [];
+            zodiacNumbers[z].push(padZero(n));
         });
+
+        const occurredZodiacs = Object.keys(zodiacCount).filter(z => zodiacCount[z] > 0);
+        const occurredZodiacText = occurredZodiacs.join(' ');
+        const occurredNumText = occurredNumbers.map(n => padZero(n)).join(' ');
+        const notOccurNumText = notOccurNumbers.map(n => padZero(n)).join(' ');
 
         renderBase(totalCount, uniqueCount, maxCount);
         renderGroup(sortedCounts, group);
-        renderZodiac(zodiacCount);
+        renderZodiac(occurredZodiacText, occurredNumText, notOccurNumText);
     }
 
     function renderBase(total, unique, max) {
@@ -248,11 +261,17 @@
         document.getElementById('groupResult').innerHTML = html;
     }
 
-    // 已修改：生肖统计标题
-    function renderZodiac(zodiacCount) {
-        let html = `<div class="result-title">🐉 生肖出现次数</div>`;
-        for (let [z, c] of Object.entries(zodiacCount)) {
-            html += `<span class="zodiac-item">${z}：${c}次</span>`;
+    function renderZodiac(occurredZodiacText, occurredNumText, notOccurNumText) {
+        let html = `<div class="result-title">
+            <span>🐉 生肖出现次数</span>
+            <div>
+                <button class="copy-btn" onclick="copyText('${occurredZodiacText}','ztip1')">复制生肖名称</button>
+                <button class="copy-btn" onclick="copyText('${occurredNumText}','ztip2')">复制出现数字</button>
+                <button class="copy-btn" onclick="copyText('${notOccurNumText}','ztip3')">复制未出现数字</button>
+            </div>
+        </div>`;
+        for (let z of zodiacList) {
+            html += `<span class="zodiac-item">${z}</span>`;
         }
         document.getElementById('zodiacResult').innerHTML = html;
     }
