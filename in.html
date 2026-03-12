@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>蚂蚁澳彩数据打乱工具</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:微软雅黑,Microsoft YaHei,sans-serif}
+body{background:#f4f6f8;padding:20px}
+.container{max-width:900px;margin:0 auto;background:#fff;border-radius:10px;padding:25px;box-shadow:0 2px 12px rgba(0,0,0,0.08)}
+h2{text-align:center;color:#333;margin-bottom:20px;font-size:22px}
+textarea{width:100%;height:140px;padding:12px;border:1px solid #ddd;border-radius:6px;resize:vertical;font-size:14px;margin-bottom:15px}
+.btns{display:flex;gap:10px;margin-bottom:20px}
+button{flex:1;padding:12px;border:none;border-radius:6px;background:#409eff;color:#fff;font-size:15px;cursor:pointer}
+button.copy{background:#67c23a}
+button:hover{opacity:.9}
+.result{background:#edf7ff;border:1px solid #d1e7fe;border-radius:6px;padding:15px;margin-bottom:15px}
+.result-title{font-weight:bold;margin-bottom:8px}
+.result-num{color:#f56c6c}
+.result-content{line-height:1.6;word-break:break-all}
+.check{background:#fff9e6;border:1px solid #ffeeba;border-radius:6px;padding:15px}
+.check-title{font-weight:bold;color:#cc8800;margin-bottom:10px}
+.check-item{margin:6px 0;line-height:1.5;font-size:14px;word-break:break-all}
+.check-status{font-weight:bold;padding:5px 10px;border-radius:4px;display:inline-block;margin-top:5px}
+.status-ok{background:#e6f7e6;color:#008000}
+.status-no{background:#ffe6e6;color:#cc0000}
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>蚂蚁澳彩数据打乱工具</h2>
+  <textarea id="input" placeholder="请粘贴数字，空格分隔"></textarea>
+  <div class="btns">
+    <button onclick="shuffleData()">一键打乱</button>
+    <button class="copy" onclick="copyResult()">复制结果</button>
+    <button onclick="clearAll()">清空</button>
+  </div>
+  <div class="result">
+    <div class="result-title">打乱后总数：<span class="result-num" id="total">0</span> 个</div>
+    <div class="result-content" id="result">打乱结果将显示在这里</div>
+  </div>
+  <div class="check">
+    <div class="check-title">打乱前后复核对比</div>
+    <div class="check-item"><b>打乱前：</b><span id="before">-</span></div>
+    <div class="check-item"><b>打乱后：</b><span id="after">-</span></div>
+    <div><b>复核结果：</b><span id="status" class="check-status">未校验</span></div>
+  </div>
+</div>
+<script>
+let resultText = "";
+let originList = [];
+
+function shuffle(arr) {
+  let list = [...arr];
+  for (let i = list.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [list[i], list[j]] = [list[j], list[i]];
+  }
+  return list;
+}
+
+function shuffleData() {
+  let val = document.getElementById("input").value.trim();
+  if (!val) { alert("请输入数字"); return; }
+  originList = val.split(/\s+/).filter(v => v);
+  let shuffled = shuffle(originList);
+  resultText = shuffled.join(" ");
+  document.getElementById("total").textContent = shuffled.length;
+  document.getElementById("result").textContent = resultText;
+  document.getElementById("before").textContent = originList.join(" ");
+  document.getElementById("after").textContent = resultText;
+  check();
+}
+
+function check() {
+  let s1 = [...originList].sort().join(",");
+  let s2 = resultText.split(" ").sort().join(",");
+  let st = document.getElementById("status");
+  if (s1 === s2) {
+    st.className = "check-status status-ok";
+    st.textContent = "✅ 完全一致";
+  } else {
+    st.className = "check-status status-no";
+    st.textContent = "❌ 不一致";
+  }
+}
+
+function copyResult() {
+  if (!resultText) { alert("请先生成打乱结果"); return; }
+  navigator.clipboard.writeText(resultText).then(() => {
+    alert("复制成功");
+  });
+}
+
+function clearAll() {
+  document.getElementById("input").value = "";
+  document.getElementById("result").textContent = "打乱结果将显示在这里";
+  document.getElementById("total").textContent = "0";
+  document.getElementById("before").textContent = "-";
+  document.getElementById("after").textContent = "-";
+  let st = document.getElementById("status");
+  st.className = "check-status";
+  st.textContent = "未校验";
+  resultText = "";
+  originList = [];
+}
+</script>
+</body>
+</html>
