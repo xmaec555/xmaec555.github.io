@@ -36,6 +36,24 @@
         .base-row{display:flex;gap:25px;font-size:15px;flex-wrap:wrap}
         .compare-row{background:#fef8ec;border-left:4px solid #f39c12}
         .final-row{background:#e8f5e9!important;border-left:4px solid #2ecc71!important;font-weight:bold}
+
+        /* 底部版权样式 */
+        .footer{
+            margin-top: 30px;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+        .footer a{
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 8px;
+        }
+        .footer a:hover{
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -86,6 +104,15 @@
         </div>
         <div class="result-section" id="compareResult"></div>
     </div>
+
+    <!-- 底部版权 + 友情链接 -->
+    <div class="footer">
+        © 2026 蚂蚁数据澳彩团队 版权所有
+        <br>
+        <a href="https://t.me/+RjaMJ26EAPw0ZTc1" target="_blank">澳彩频道</a>
+        <a href="https://m.hxyx.cc.cd/kj.html" target="_blank">开奖直播</a>
+        <a href="https://m.hxyx.cc.cd/6.html" target="_blank">打乱工具</a>
+    </div>
 </div>
 
 <script>
@@ -119,6 +146,8 @@ function clearAll(no){
             el.innerHTML = '';
         }
     });
+    countData[no] = {};
+    minMax[no] = {min:0, max:0};
     if(no === 1) group1Lines = "";
     if(no === 2) group2Lines = "";
     showInputInfo(no);
@@ -141,8 +170,8 @@ function uniqueNum(no){
 
 function sortNum(no){
     const el = document.getElementById(`numInput${no}`);
-    const nums = el.value.match(/\d+/g) || [];
-    el.value = nums.sort((a,b)=>a-b).join(' ');
+    const nums = (el.value.match(/\d+/g) || []).map(Number).sort((a,b)=>a-b);
+    el.value = nums.join(' ');
     showInputInfo(no);
 }
 
@@ -175,7 +204,6 @@ function calculate(no){
     });
     const sortedGroups = Object.keys(group).map(Number).sort((a,b)=>a-b);
 
-    // 保存两组逐行格式
     if(no === 1){
         let lines = [];
         sortedGroups.forEach(cnt => {
@@ -241,7 +269,6 @@ function renderGroup(no, sorted, group, maxCnt, minCnt){
     document.getElementById(`groupResult${no}`).innerHTML = html;
 }
 
-// 两组逐行复制函数
 function copyGroup1Lines(){
     copyText(group1Lines, "g1Tip");
 }
@@ -286,13 +313,13 @@ function compareAll(){
     const final = uniqueSort([...r1,...r2,...r3,...r4,...r5]);
 
     document.getElementById('compareResult').innerHTML = `
-    <div class="result-title">🎯 盘口数据交叉</div>
+    <div class="result-title">🎯 蚂蚁数据统计结果</div>
     <div class="group-item compare-row"><div>【1‑2 & 0‑1】：${s1}</div><div><button class="copy-btn" onclick="copyText('${s1}','c1')">复制</button><span id="c1" class="copy-tip"></span></div></div>
     <div class="group-item compare-row"><div>【2‑5 & 2‑4】：${s2}</div><div><button class="copy-btn" onclick="copyText('${s2}','c2')">复制</button><span id="c2" class="copy-tip"></span></div></div>
     <div class="group-item compare-row"><div>【6‑最热 & 5‑最热】：${s3}</div><div><button class="copy-btn" onclick="copyText('${s3}','c3')">复制</button><span id="c3" class="copy-tip"></span></div></div>
     <div class="group-item compare-row"><div>【7 & 3‑4】：${s4}</div><div><button class="copy-btn" onclick="copyText('${s4}','c4')">复制</button><span id="c4" class="copy-tip"></span></div></div>
     <div class="group-item compare-row"><div>【4 & 6】：${s5}</div><div><button class="copy-btn" onclick="copyText('${s5}','c5')">复制</button><span id="c5" class="copy-tip"></span></div></div>
-    <div class="group-item final-row"><div>✅ 中奖特码（共 ${final.length} 个）：${format(final)}</div><div><button class="copy-btn" onclick="copyText('${format(final)}','cf')">复制</button><span id="cf" class="copy-tip"></span></div></div>`;
+    <div class="group-item final-row"><div>✅ 推荐号码（共 ${final.length} 个）：${format(final)}</div><div><button class="copy-btn" onclick="copyText('${format(final)}','cf')">复制</button><span id="cf" class="copy-tip"></span></div></div>`;
 }
 </script>
 </body>
