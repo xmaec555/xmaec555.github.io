@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1-49数字统计工具（含未出现数字）</title>
+    <title>蚂蚁澳彩统计工具</title>
     <style>
         * {
             margin: 0;
@@ -66,7 +66,7 @@
             background-color: #2980b9;
         }
         button.clear {
-            background-color: #e74c3c;
+            background-color: #e74c3d;
         }
         button.clear:hover {
             background-color: #c0392b;
@@ -91,9 +91,6 @@
         .highlight {
             color: #e67e22;
             font-weight: bold;
-        }
-        .zero {
-            color: #7f8c8d;
         }
         .zodiac-item {
             display: inline-block;
@@ -137,7 +134,7 @@
 </head>
 <body>
 <div class="container">
-    <h1>1-49数字统计工具（含未出现数字）</h1>
+    <h1>蚂蚁澳彩统计工具</h1>
     <div class="input-box">
         <label>请输入数字（1-49，空格/逗号/换行分隔）：</label>
         <textarea id="numInput" placeholder="示例：1 3 5 7 9 11"></textarea>
@@ -251,8 +248,9 @@
         document.getElementById('groupResult').innerHTML = html;
     }
 
+    // 已修改：生肖统计标题
     function renderZodiac(zodiacCount) {
-        let html = `<div class="result-title">🐉 生肖统计（2026马年 01=马）</div>`;
+        let html = `<div class="result-title">🐉 生肖出现次数</div>`;
         for (let [z, c] of Object.entries(zodiacCount)) {
             html += `<span class="zodiac-item">${z}：${c}次</span>`;
         }
