@@ -125,6 +125,12 @@
             font-size: 13px;
             margin-left: 5px;
         }
+        /* 基础统计横排样式 */
+        .base-row {
+            display: flex;
+            gap: 25px;
+            font-size: 15px;
+        }
     </style>
 </head>
 <body>
@@ -220,13 +226,15 @@
         renderZodiac(zodiacCount);
     }
 
-    // 基础统计
+    // 基础统计 —— 已改成横排
     function renderBase(total, unique, max) {
         document.getElementById('baseResult').innerHTML = `
-        <div class="result-title">📊 基础统计</div>
-        <div>输入总数量：<span class="highlight">${total}</span></div>
-        <div>不重复数量：<span class="highlight">${unique}</span></div>
-        <div>最高出现次数：<span class="highlight">${max}</span></div>
+        <div class="result-title">📊 基础统计结果</div>
+        <div class="base-row">
+            <div>输入总数量：<span class="highlight">${total}</span></div>
+            <div>不重复数量：<span class="highlight">${unique}</span></div>
+            <div>最高出现次数：<span class="highlight">${max}</span></div>
+        </div>
         `;
     }
 
