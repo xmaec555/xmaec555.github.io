@@ -12,7 +12,7 @@
             font-family: "Microsoft YaHei", sans-serif;
         }
         body {
-            background-color: #f5f7f9;
+            background-color: #f5f7fa;
             padding: 30px;
             max-width: 1000px;
             margin: 0 auto;
@@ -87,19 +87,19 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
         }
         .highlight {
             color: #e67e22;
             font-weight: bold;
         }
         .zodiac-item {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
             margin: 5px 10px 5px 0;
             padding: 4px 8px;
             background: #ecf0f1;
             border-radius: 4px;
+            gap: 6px;
         }
         .group-item {
             border: 1px solid #ddd;
@@ -112,12 +112,13 @@
             background: #fff;
         }
         .copy-btn {
-            padding: 5px 12px;
+            padding: 3px 8px;
             background: #2ecc71;
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 12px;
         }
         .copy-btn:hover {
             background: #27ae60;
@@ -153,6 +154,7 @@
 </div>
 
 <script>
+    // 正确生肖：01=马 02=蛇 03=龙 04=兔 05=虎 06=牛 07=鼠 08=猪 09=狗 10=鸡 11=猴 12=羊
     const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
     
     function getZodiac(num) {
@@ -202,26 +204,17 @@
         }
         const sortedCounts = Object.keys(group).map(Number).sort((a, b) => a - b);
 
-        const zodiacCount = {};
+        // 生成每个生肖对应的 1-49 数字
         const zodiacNumbers = {};
-        const notOccurNumbers = allNumbers.filter(n => countMap[n] === 0);
-        const occurredNumbers = allNumbers.filter(n => countMap[n] > 0);
-        
+        zodiacList.forEach(z => zodiacNumbers[z] = []);
         allNumbers.forEach(n => {
             const z = getZodiac(n);
-            zodiacCount[z] = (zodiacCount[z] || 0) + (countMap[n] > 0 ? 1 : 0);
-            if (!zodiacNumbers[z]) zodiacNumbers[z] = [];
             zodiacNumbers[z].push(padZero(n));
         });
 
-        const occurredZodiacs = Object.keys(zodiacCount).filter(z => zodiacCount[z] > 0);
-        const occurredZodiacText = occurredZodiacs.join(' ');
-        const occurredNumText = occurredNumbers.map(n => padZero(n)).join(' ');
-        const notOccurNumText = notOccurNumbers.map(n => padZero(n)).join(' ');
-
-        renderBase(totalCount, uniqueCount, maxCount);
+        renderBase(totalCount, uniqueCount, max);
         renderGroup(sortedCounts, group);
-        renderZodiac(occurredZodiacText, occurredNumText, notOccurNumText);
+        renderZodiac(zodiacNumbers);
     }
 
     function renderBase(total, unique, max) {
@@ -261,18 +254,18 @@
         document.getElementById('groupResult').innerHTML = html;
     }
 
-    function renderZodiac(occurredZodiacText, occurredNumText, notOccurNumText) {
-        let html = `<div class="result-title">
-            <span>🐉 生肖出现次数</span>
-            <div>
-                <button class="copy-btn" onclick="copyText('${occurredZodiacText}','ztip1')">复制生肖名称</button>
-                <button class="copy-btn" onclick="copyText('${occurredNumText}','ztip2')">复制出现数字</button>
-                <button class="copy-btn" onclick="copyText('${notOccurNumText}','ztip3')">复制未出现数字</button>
-            </div>
-        </div>`;
-        for (let z of zodiacList) {
-            html += `<span class="zodiac-item">${z}</span>`;
-        }
+    // 每个生肖 + 独立复制键
+    function renderZodiac(zodiacNumbers) {
+        let html = `<div class="result-title">🐉 生肖出现次数</div>`;
+        zodiacList.forEach((z, i) => {
+            const numList = zodiacNumbers[z].join(' ');
+            html += `
+            <div class="zodiac-item">
+                <span>${z}</span>
+                <button class="copy-btn" onclick="copyText('${numList}','z${i}')">复制</button>
+                <span id="z${i}" class="copy-tip"></span>
+            </div>`;
+        });
         document.getElementById('zodiacResult').innerHTML = html;
     }
 </script>
