@@ -287,6 +287,7 @@
     }
 
     let countData = {1:{}, 2:{}};
+    let minMax = {1:{min:0,max:0}, 2:{min:0,max:0}};
 
     // 主统计
     function calculate(no) {
@@ -301,11 +302,13 @@
         inputArr.forEach(n => countMap[n]++);
 
         countData[no] = countMap;
+        minMax[no].min = Math.min(...Object.values(countMap));
+        minMax[no].max = Math.max(...Object.values(countMap));
 
         const totalCount = inputArr.length;
         const uniqueCount = [...new Set(inputArr)].length;
-        const maxCount = Math.max(...Object.values(countMap));
-        const minCount = Math.min(...Object.values(countMap));
+        const maxCount = minMax[no].max;
+        const minCount = minMax[no].min;
 
         const group = {};
         for (let n of allNumbers) {
@@ -399,47 +402,51 @@
         document.getElementById('compareResult').innerHTML = '';
     }
 
-    function getInRange(num, min, max, countMap){
-        let c = countMap[num];
-        return c >= min && c <= max;
+    function inRange(val, min, max){
+        return val >= min && val <= max;
     }
 
     function compareAll(){
         let c1 = countData[1];
         let c2 = countData[2];
+        let min1 = minMax[1].min;
+        let min2 = minMax[2].min;
+        let max1 = minMax[1].max;
+        let max2 = minMax[2].max;
+
         let all = Array.from({length:49},(_,i)=>i+1);
 
-        // 规则1：第一组0-2次  第二组0-1次
-        let r1 = all.filter(n=> getInRange(n,0,2,c1) && getInRange(n,0,1,c2));
-        // 规则2：第一组2-6次  第二组2-5次
-        let r2 = all.filter(n=> getInRange(n,2,6,c1) && getInRange(n,2,5,c2));
-        // 规则3：第一组6-9次  第二组4-9次
-        let r3 = all.filter(n=> getInRange(n,6,9,c1) && getInRange(n,4,9,c2));
+        // 规则1：第一组 最冷~2次  第二组 最冷~1次
+        let res1 = all.filter(n => inRange(c1[n], min1, 2) && inRange(c2[n], min2, 1));
+        // 规则2：第一组 2~6次     第二组 2~5次
+        let res2 = all.filter(n => inRange(c1[n], 2, 6) && inRange(c2[n], 2, 5));
+        // 规则3：第一组 6~最热    第二组 4~最热
+        let res3 = all.filter(n => inRange(c1[n], 6, max1) && inRange(c2[n], 4, max2));
 
-        function fmt(arr){
-            return arr.map(padZero).join(' ');
+        function format(arr){
+            return arr.map(padZero).join(' ') || "无";
         }
 
-        let s1 = fmt(r1);
-        let s2 = fmt(r2);
-        let s3 = fmt(r3);
+        let str1 = format(res1);
+        let str2 = format(res2);
+        let str3 = format(res3);
 
         let html = `
         <div class="result-title">🎯 三组交叉对比相同数字</div>
 
         <div class="group-item compare-row">
-            <div>【第一组 0~2次】&【第二组 0~1次】相同：${s1}</div>
-            <div><button class="copy-btn" onclick="copyText('${s1}','c1')">复制</button><span id="c1" class="copy-tip"></span></div>
+            <div>【第一组 最冷~2次】&【第二组 最冷~1次】交集：${str1}</div>
+            <div><button class="copy-btn" onclick="copyText('${str1}','cmp1')">复制</button><span id="cmp1" class="copy-tip"></span></div>
         </div>
 
         <div class="group-item compare-row">
-            <div>【第一组 2~6次】&【第二组 2~5次】相同：${s2}</div>
-            <div><button class="copy-btn" onclick="copyText('${s2}','c2')">复制</button><span id="c2" class="copy-tip"></span></div>
+            <div>【第一组 2~6次】&【第二组 2~5次】交集：${str2}</div>
+            <div><button class="copy-btn" onclick="copyText('${str2}','cmp2')">复制</button><span id="cmp2" class="copy-tip"></span></div>
         </div>
 
         <div class="group-item compare-row">
-            <div>【第一组 6~9次】&【第二组 4~9次】相同：${s3}</div>
-            <div><button class="copy-btn" onclick="copyText('${s3}','c3')">复制</button><span id="c3" class="copy-tip"></span></div>
+            <div>【第一组 6~最热】&【第二组 4~最热】交集：${str3}</div>
+            <div><button class="copy-btn" onclick="copyText('${str3}','cmp3')">复制</button><span id="cmp3" class="copy-tip"></span></div>
         </div>
         `;
 
