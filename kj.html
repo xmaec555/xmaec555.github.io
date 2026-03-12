@@ -82,6 +82,20 @@
         .loading {
             color: #999;
         }
+
+        /* 底部 */
+        .footer {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            font-size: 15px;
+        }
+        .footer a {
+            color: #1677ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -120,10 +134,14 @@
             <div class="data-value zodiac" id="zodiac">-</div>
         </div>
     </div>
+
+    <!-- 底部链接 -->
+    <div class="footer">
+        <a href="https://t.me/+RjaMJ26EAPw0ZTc1" target="_blank">蚂蚁澳彩数据频道</a>
+    </div>
 </div>
 
 <script>
-    // 加载开奖数据
     async function loadData() {
         const tip = document.getElementById('loadTip');
         try {
@@ -143,8 +161,6 @@
             tip.style.color = '#f56c6c';
         }
     }
-
-    // 页面加载完成后执行
     window.addEventListener('DOMContentLoaded', loadData);
 </script>
 
