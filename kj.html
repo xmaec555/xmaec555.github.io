@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>澳门实时开奖直播</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+        }
+        body {
+            background: #f5f7fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 22px;
+            font-size: 22px;
+        }
+        .video-box {
+            width: 100%;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        .video-box video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .tip {
+            text-align: center;
+            color: #666;
+            padding: 10px;
+            font-size: 14px;
+        }
+        .data-list {
+            border-top: 1px solid #f0f0f0;
+            padding-top: 15px;
+        }
+        .data-item {
+            display: flex;
+            padding: 12px 0;
+            border-bottom: 1px solid #f7f7f7;
+            font-size: 15px;
+        }
+        .data-label {
+            width: 110px;
+            font-weight: bold;
+            color: #555;
+        }
+        .data-value {
+            flex: 1;
+            color: #333;
+        }
+        .code {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e63946;
+            letter-spacing: 1.5px;
+        }
+        .wave {
+            color: #1677ff;
+        }
+        .zodiac {
+            color: #52c41a;
+        }
+        .loading {
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>澳门实时开奖直播</h2>
+
+    <div class="video-box">
+        <video id="videoPlayer" controls autoplay muted playsinline>
+            <source src="https://live-macaujc.com/live/livestream/new.flv" type="video/x-flv">
+            浏览器不支持直播播放
+        </video>
+    </div>
+
+    <div class="tip" id="loadTip">加载开奖数据中...</div>
+
+    <div class="data-list">
+        <div class="data-item">
+            <div class="data-label">期号：</div>
+            <div class="data-value" id="expect">-</div>
+        </div>
+        <div class="data-item">
+            <div class="data-label">开奖时间：</div>
+            <div class="data-value" id="openTime">-</div>
+        </div>
+        <div class="data-item">
+            <div class="data-label">开奖号码：</div>
+            <div class="data-value code" id="openCode">-</div>
+        </div>
+        <div class="data-item">
+            <div class="data-label">波色：</div>
+            <div class="data-value wave" id="wave">-</div>
+        </div>
+        <div class="data-item">
+            <div class="data-label">生肖：</div>
+            <div class="data-value zodiac" id="zodiac">-</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 加载开奖数据
+    async function loadData() {
+        const tip = document.getElementById('loadTip');
+        try {
+            const res = await fetch('https://macaumarksix.com/api/live2');
+            const data = await res.json();
+            const d = data[0] || {};
+
+            document.getElementById('expect').textContent = d.expect || '无';
+            document.getElementById('openTime').textContent = d.openTime || '无';
+            document.getElementById('openCode').textContent = d.openCode || '无';
+            document.getElementById('wave').textContent = d.wave || '无';
+            document.getElementById('zodiac').textContent = d.zodiac || '无';
+
+            tip.style.display = 'none';
+        } catch (err) {
+            tip.textContent = '数据加载失败，请刷新重试';
+            tip.style.color = '#f56c6c';
+        }
+    }
+
+    // 页面加载完成后执行
+    window.addEventListener('DOMContentLoaded', loadData);
+</script>
+
+</body>
+</html>
