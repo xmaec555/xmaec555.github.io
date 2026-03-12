@@ -84,6 +84,9 @@
             margin-bottom: 12px;
             padding-bottom: 6px;
             border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .highlight {
             color: #e67e22;
@@ -125,7 +128,6 @@
             font-size: 13px;
             margin-left: 5px;
         }
-        /* 基础统计横排样式 */
         .base-row {
             display: flex;
             gap: 25px;
@@ -146,30 +148,22 @@
         <button class="clear" onclick="clearAll()">清空</button>
     </div>
 
-    <!-- 基础统计 -->
     <div class="result-section" id="baseResult"></div>
-
-    <!-- 按出现次数分组（每组可复制）-->
     <div class="result-section" id="groupResult"></div>
-
-    <!-- 生肖统计 -->
     <div class="result-section" id="zodiacResult"></div>
 </div>
 
 <script>
-    // ====================== 按你要求：01=马 02=蛇 正确设置 ======================
     const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
     
     function getZodiac(num) {
         return zodiacList[(num - 1) % 12];
     }
 
-    // 数字补0：1→01，9→09，10→10
     function padZero(num) {
         return num.toString().padStart(2, '0');
     }
 
-    // 清空
     function clearAll() {
         document.getElementById('numInput').value = '';
         document.getElementById('baseResult').innerHTML = '';
@@ -177,7 +171,6 @@
         document.getElementById('zodiacResult').innerHTML = '';
     }
 
-    // 复制
     function copyText(text, tipId) {
         navigator.clipboard.writeText(text).then(() => {
             document.getElementById(tipId).innerText = "已复制！";
@@ -185,26 +178,23 @@
         });
     }
 
-    // 主统计
+    let fullGroupText = "";
+
     function calculate() {
         const input = document.getElementById('numInput').value.trim();
         const inputNums = input.match(/\d+/g) || [];
         const inputArr = inputNums.map(Number).filter(n => n >= 1 && n <= 49);
 
-        // 固定 1~49
         const allNumbers = Array.from({ length: 49 }, (_, i) => i + 1);
         
-        // 统计次数（未出现=0）
         const countMap = {};
         allNumbers.forEach(n => countMap[n] = 0);
         inputArr.forEach(n => countMap[n]++);
 
-        // 基础统计
         const totalCount = inputArr.length;
         const uniqueCount = [...new Set(inputArr)].length;
         const maxCount = Math.max(...Object.values(countMap));
 
-        // 按次数分组（包含0次）
         const group = {};
         for (let n of allNumbers) {
             const c = countMap[n];
@@ -213,20 +203,17 @@
         }
         const sortedCounts = Object.keys(group).map(Number).sort((a, b) => a - b);
 
-        // 生肖统计
         const zodiacCount = {};
         inputArr.forEach(n => {
             const z = getZodiac(n);
             zodiacCount[z] = (zodiacCount[z] || 0) + 1;
         });
 
-        // 渲染
         renderBase(totalCount, uniqueCount, maxCount);
         renderGroup(sortedCounts, group);
         renderZodiac(zodiacCount);
     }
 
-    // 基础统计 —— 已改成横排
     function renderBase(total, unique, max) {
         document.getElementById('baseResult').innerHTML = `
         <div class="result-title">📊 基础统计结果</div>
@@ -238,28 +225,32 @@
         `;
     }
 
-    // 分组+每组复制 + 补0 + 显示本组数量
     function renderGroup(sorted, group) {
-        let html = `<div class="result-title">📦 按出现次数分组（含未出现数字）</div>`;
+        let allText = [];
+        let html = `<div class="result-title">
+            <span>📦 按出现次数分组（含未出现数字）</span>
+            <button class="copy-btn" onclick="copyText(fullGroupText,'allTip')">一键复制全部</button>
+            <span id="allTip" class="copy-tip"></span>
+        </div>`;
         sorted.forEach((cnt, i) => {
             const nums = group[cnt];
             const list = nums.map(n => padZero(n)).join(' ');
             const totalNum = nums.length;
-            const text = `出现${cnt}次（共${totalNum}个数）：${list}`;
-            
+            const line = `出现${cnt}次（共${totalNum}个数）：${list}`;
+            allText.push(line);
             html += `
             <div class="group-item">
-                <div>出现 <span class="highlight">${cnt}</span> 次（共${totalNum}个数）：${list}</div>
+                <div>${line}</div>
                 <div>
-                    <button class="copy-btn" onclick="copyText('${text}','gtip${i}')">复制</button>
+                    <button class="copy-btn" onclick="copyText('${line}','gtip${i}')">复制</button>
                     <span id="gtip${i}" class="copy-tip"></span>
                 </div>
             </div>`;
         });
+        fullGroupText = allText.join("\n");
         document.getElementById('groupResult').innerHTML = html;
     }
 
-    // 生肖统计
     function renderZodiac(zodiacCount) {
         let html = `<div class="result-title">🐉 生肖统计（2026马年 01=马）</div>`;
         for (let [z, c] of Object.entries(zodiacCount)) {
