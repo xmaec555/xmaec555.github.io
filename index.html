@@ -57,6 +57,12 @@
         button:hover {
             background: #337ecc;
         }
+        button.copy-btn {
+            background: #67c23a;
+        }
+        button.copy-btn:hover {
+            background: #529b2e;
+        }
         .result-box {
             padding: 15px;
             background: #f0f7ff;
@@ -81,12 +87,15 @@
 </head>
 <body>
     <div class="container">
-        <h2>数字随机打乱 + 统计数量</h2>
-        <textarea id="input" placeholder="请粘贴你的数字（空格/换行分隔都可以），例如：01 02 03 04..."></textarea>
+        <h2>数字随机打乱 + 统计 + 复制</h2>
+        <textarea id="input" placeholder="请粘贴你的数字（空格/换行分隔都可以）"></textarea>
+        
         <div class="btn-group">
             <button onclick="shuffleNum()">一键打乱并统计</button>
-            <button onclick="clearAll()">清空内容</button>
+            <button class="copy-btn" onclick="copyResult()">复制结果</button>
+            <button onclick="clearAll()">清空</button>
         </div>
+
         <div class="result-box">
             <div class="result-title">统计总数：<span id="resultNum">0</span> 个</div>
             <div id="resultText">打乱结果将显示在这里...</div>
@@ -94,7 +103,9 @@
     </div>
 
     <script>
-        // 打乱数组（Fisher-Yates 算法）
+        let currentResult = "";
+
+        // 打乱数组
         function shuffleArray(arr) {
             let newArr = [...arr];
             for (let i = newArr.length - 1; i > 0; i--) {
@@ -104,22 +115,32 @@
             return newArr;
         }
 
-        // 主功能：打乱+统计
+        // 打乱 + 统计
         function shuffleNum() {
             let input = document.getElementById('input').value.trim();
             if (!input) {
                 alert('请先粘贴数字！');
                 return;
             }
-            // 分割数字（支持空格、换行、多个空格）
             let numArr = input.split(/\s+/).filter(item => item);
-            // 去重（可选，保留你原始所有数字）
-            // numArr = [...new Set(numArr)];
-            // 打乱
             let resultArr = shuffleArray(numArr);
-            // 显示结果
+            
+            currentResult = resultArr.join(' ');
             document.getElementById('resultNum').textContent = resultArr.length;
-            document.getElementById('resultText').textContent = resultArr.join('、');
+            document.getElementById('resultText').textContent = currentResult;
+        }
+
+        // 复制结果
+        function copyResult() {
+            if (!currentResult) {
+                alert('请先生成打乱结果！');
+                return;
+            }
+            navigator.clipboard.writeText(currentResult).then(() => {
+                alert('复制成功！');
+            }).catch(err => {
+                alert('复制失败：' + err);
+            });
         }
 
         // 清空
@@ -127,6 +148,7 @@
             document.getElementById('input').value = '';
             document.getElementById('resultNum').textContent = '0';
             document.getElementById('resultText').textContent = '打乱结果将显示在这里...';
+            currentResult = "";
         }
     </script>
 </body>
