@@ -89,6 +89,11 @@
             margin: 8px 0;
             font-size: 15px;
             line-height: 1.6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .highlight {
             color: #e67e22;
@@ -102,7 +107,7 @@
             border-radius: 4px;
         }
 
-        /* 数字详情表格样式 */
+        /* 数字详情表格 */
         .num-table {
             width: 100%;
             border-collapse: collapse;
@@ -138,6 +143,15 @@
             font-size: 13px;
             margin-left: 5px;
         }
+
+        /* 分组独立卡片样式 */
+        .group-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin: 10px 0;
+            background: #fdfefe;
+        }
     </style>
 </head>
 <body>
@@ -160,7 +174,7 @@
         <!-- 每个数字出现次数（表格 + 复制） -->
         <div class="result-section" id="detailResult"></div>
 
-        <!-- 按出现次数分组 -->
+        <!-- 按出现次数分组（分栏 + 每组复制） -->
         <div class="result-section" id="groupResult"></div>
 
         <!-- 生肖统计 -->
@@ -284,12 +298,25 @@
             document.getElementById('detailResult').innerHTML = html;
         }
 
-        // 按次数分组
+        // 按出现次数分组（分栏 + 每组复制）
         function renderGroup(sortedCounts, groupMap) {
-            let html = `<div class="result-title">📦 按出现次数分组（升序）</div>`;
-            sortedCounts.forEach(count => {
-                const nums = groupMap[count].sort((a,b)=>a-b);
-                html += `<div class="result-item">出现 <span class="highlight">${count}</span> 次：${nums.join('、')}</div>`;
+            let html = `<div class="result-title">📦 按出现次数分组（每组一栏 + 复制）</div>`;
+            sortedCounts.forEach((count, idx) => {
+                const nums = groupMap[count].sort((a,b)=>a-b).join('、');
+                const tipId = `groupTip${idx}`;
+                const copyTextContent = `出现${count}次的数字：${nums}`;
+                
+                html += `
+                <div class="group-card">
+                    <div class="result-item">
+                        <span>出现 <span class="highlight">${count}</span> 次的数字：${nums}</span>
+                        <div>
+                            <button class="copy-btn" onclick="copyText('${copyTextContent}','${tipId}')">复制本组</button>
+                            <span id="${tipId}" class="copy-tip"></span>
+                        </div>
+                    </div>
+                </div>
+                `;
             });
             document.getElementById('groupResult').innerHTML = html;
         }
