@@ -93,7 +93,7 @@
 const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
 const countData = {1:{},2:{}};
 const minMax = {1:{min:0,max:0},2:{min:0,max:0}};
-const groupFullText = {1: "", 2: ""}; // 缓存：最冷→最热 完整数字串
+let group1Text = ""; // 只缓存第一组次数分组数字
 
 const padZero = n => n.toString().padStart(2, '0');
 const getZodiac = n => zodiacList[(n-1)%12];
@@ -114,7 +114,7 @@ function clearAll(no){
         const el = document.getElementById(`${id}${no}`);
         id === 'numInput' ? el.value = '' : el.innerHTML = '';
     });
-    groupFullText[no] = "";
+    if(no === 1) group1Text = "";
     showInputInfo(no);
 }
 
@@ -157,13 +157,14 @@ function calculate(no){
     all.forEach(n=>{ const c=countMap[n]; group[c]??=[]; group[c].push(n); });
     const sortedGroups = Object.keys(group).map(Number).sort((a,b)=>a-b);
 
-    // ✅ 关键：按 最冷→最热 拼接所有数字（保留界面原格式）
-    let fullText = "";
-    sortedGroups.forEach(cnt => {
-        const line = group[cnt].map(padZero).join(' ');
-        fullText += line + " ";
-    });
-    groupFullText[no] = fullText.trim().replace(/\s+/g, ' ');
+    // 只保存第一组完整数字串（最冷→最热，保留格式）
+    if(no === 1){
+        let tmp = [];
+        sortedGroups.forEach(cnt => {
+            tmp.push(...group[cnt]);
+        });
+        group1Text = tmp.map(padZero).join(' ');
+    }
 
     const zodiac = {};
     zodiacList.forEach(z=>zodiac[z]=0);
@@ -188,9 +189,13 @@ function renderBase(no,total,unique,max,min){
 }
 
 function renderGroup(no,sorted,group,maxCnt,minCnt){
-    let html=`<div class="result-title"><span>📦 次数分组（最冷→最热）</span>
-                <button class="copy-btn" onclick="copyAllGroup(${no})">复制全部</button>
-              </div>`;
+    let html = `<div class="result-title"><span>📦 次数分组（最冷→最热）</span>`;
+    // ✅ 只在第一组显示复制按钮
+    if(no === 1){
+        html += `<button class="copy-btn" onclick="copyGroup1()">复制</button><span id="g1tip" class="copy-tip"></span>`;
+    }
+    html += `</div>`;
+
     sorted.forEach((cnt,i)=>{
         const list=group[cnt].map(padZero).join(' ');
         const mark = cnt===maxCnt ? '<span class="hot">【最热】</span>' : cnt===minCnt ? '<span class="cold">【最冷】</span>':'';
@@ -206,9 +211,9 @@ function renderGroup(no,sorted,group,maxCnt,minCnt){
     document.getElementById(`groupResult${no}`).innerHTML=html;
 }
 
-// ✅ 最终正确：复制次数分组 最冷→最热 全部数字（与界面完全一致）
-function copyAllGroup(no){
-    copyText(groupFullText[no], `groupAllTip${no}`);
+// ✅ 第一组专用：复制最冷→最热全部数字
+function copyGroup1(){
+    copyText(group1Text, "g1tip");
 }
 
 function renderZodiac(no,zodiac){
