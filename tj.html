@@ -47,18 +47,24 @@
             resize: vertical;
             font-size: 16px;
         }
+        .input-info {
+            font-size:13px;
+            color:#777;
+            margin-top:5px;
+        }
         .btn-group {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             margin-bottom: 25px;
+            flex-wrap:wrap;
         }
         button {
-            padding: 10px 20px;
+            padding: 10px 16px;
             border: none;
             border-radius: 6px;
             background-color: #3498db;
             color: white;
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
             transition: 0.2s;
         }
@@ -70,6 +76,12 @@
         }
         button.clear:hover {
             background-color: #c0392b;
+        }
+        button.sort {
+            background-color: #f39c12;
+        }
+        button.uniq {
+            background-color: #9b59b6;
         }
         .result-section {
             margin-top: 20px;
@@ -91,6 +103,14 @@
         .highlight {
             color: #e67e22;
             font-weight: bold;
+        }
+        .hot {
+            color:#e74c3c !important;
+            font-weight:bold;
+        }
+        .cold {
+            color:#3498db !important;
+            font-weight:bold;
         }
         .zodiac-item {
             display: inline-flex;
@@ -131,17 +151,30 @@
             display: flex;
             gap: 25px;
             font-size: 15px;
-        }
-        .random-row {
-            line-height: 1.8;
+            flex-wrap:wrap;
         }
     </style>
 </head>
 <body>
-<div class="result-section" id="baseResult"></div>
-<div class="result-section" id="groupResult"></div>
-<div class="result-section" id="randomResult"></div>
-<div class="result-section" id="zodiacResult"></div>
+<div class="container">
+    <h1>蚂蚁澳彩统计工具</h1>
+    <div class="input-box">
+        <label>蚂蚁数据-澳彩专家：</label>
+        <textarea id="numInput" placeholder="示例：1 3 5 7 9 11" oninput="showInputInfo()"></textarea>
+        <div class="input-info" id="inputInfo">已输入：0 个数字</div>
+    </div>
+
+    <div class="btn-group">
+        <button onclick="calculate()">一键统计</button>
+        <button class="uniq" onclick="uniqueNum()">一键去重</button>
+        <button class="sort" onclick="sortNum()">从小到大排序</button>
+        <button class="clear" onclick="clearAll()">清空</button>
+    </div>
+
+    <div class="result-section" id="baseResult"></div>
+    <div class="result-section" id="groupResult"></div>
+    <div class="result-section" id="zodiacResult"></div>
+</div>
 
 <script>
     const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
@@ -154,33 +187,55 @@
         return num.toString().padStart(2, '0');
     }
 
+    // 实时显示输入数量
+    function showInputInfo(){
+        let v = document.getElementById('numInput').value;
+        let nums = (v.match(/\d+/g) || []).length;
+        document.getElementById('inputInfo').innerText = `已输入：${nums} 个数字`;
+    }
+
+    // 清空
     function clearAll() {
         document.getElementById('numInput').value = '';
         document.getElementById('baseResult').innerHTML = '';
         document.getElementById('groupResult').innerHTML = '';
-        document.getElementById('randomResult').innerHTML = '';
         document.getElementById('zodiacResult').innerHTML = '';
+        showInputInfo();
     }
 
+    // 复制
     function copyText(text, tipId) {
         navigator.clipboard.writeText(text).then(() => {
-            document.getElementById(tipId).innerText = "已复制！";
-            setTimeout(() => document.getElementById(tipId).innerText = "", 1500);
+            let tip = document.getElementById(tipId);
+            tip.innerText = "✅ 复制成功";
+            setTimeout(() => tip.innerText = "", 1500);
+        }).catch(()=>{
+            alert("复制失败，请手动复制");
         });
     }
 
-    function shuffleArray(arr) {
-        let newArr = [...arr];
-        for (let i = newArr.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
-        }
-        return newArr;
+    // 去重
+    function uniqueNum(){
+        let input = document.getElementById('numInput').value;
+        let nums = input.match(/\d+/g) || [];
+        let unique = [...new Set(nums)];
+        document.getElementById('numInput').value = unique.join(' ');
+        showInputInfo();
+    }
+
+    // 排序
+    function sortNum(){
+        let input = document.getElementById('numInput').value;
+        let nums = input.match(/\d+/g) || [];
+        nums.sort((a,b)=>a-b);
+        document.getElementById('numInput').value = nums.join(' ');
+        showInputInfo();
     }
 
     let fullGroupText = "";
     let fullZodiacText = "";
 
+    // 主统计
     function calculate() {
         const input = document.getElementById('numInput').value.trim();
         const inputNums = input.match(/\d+/g) || [];
@@ -195,13 +250,7 @@
         const totalCount = inputArr.length;
         const uniqueCount = [...new Set(inputArr)].length;
         const maxCount = Math.max(...Object.values(countMap));
-
-        let count0 = 0, count1 = 0, count2 = 0;
-        allNumbers.forEach(n => {
-            if (countMap[n] === 0) count0++;
-            else if (countMap[n] === 1) count1++;
-            else count2++;
-        });
+        const minCount = Math.min(...Object.values(countMap));
 
         const group = {};
         for (let n of allNumbers) {
@@ -209,7 +258,7 @@
             if (!group[c]) group[c] = [];
             group[c].push(n);
         }
-        const sortedCounts = Object.keys(group).map(Number).sort((a, b) => a - b);
+        const sortedCounts = Object.keys(group).map(Number).sort((a, b) => b - a);
 
         const zodiacCount = {};
         zodiacList.forEach(z => zodiacCount[z] = 0);
@@ -218,78 +267,51 @@
             zodiacCount[z]++;
         });
 
-        const onceNumbers = allNumbers.filter(n => countMap[n] === 1);
-        const shuffledOnce = shuffleArray(onceNumbers);
-        const totalOnce = onceNumbers.length;
-        const beforeSort = onceNumbers.map(n => padZero(n)).join(' ');
-        const afterSort = shuffledOnce.map(n => padZero(n)).join(' ');
-        const checkResult = "一致";
-
-        renderBase(totalCount, uniqueCount, maxCount, count0, count1, count2);
-        renderGroup(sortedCounts, group);
-        renderRandom(totalOnce, beforeSort, afterSort, checkResult);
+        renderBase(totalCount, uniqueCount, maxCount, minCount);
+        renderGroup(sortedCounts, group, maxCount, minCount);
         renderZodiac(zodiacCount);
+        showInputInfo();
     }
 
-    function renderBase(total, unique, max, c0, c1, c2) {
+    function renderBase(total, unique, max, min) {
         document.getElementById('baseResult').innerHTML = `
         <div class="result-title">📊 基础统计结果</div>
         <div class="base-row">
             <div>输入总数量：<span class="highlight">${total}</span></div>
             <div>不重复数量：<span class="highlight">${unique}</span></div>
-            <div>最高出现次数：<span class="highlight">${max}</span></div>
-        </div>
-        <div class="base-row" style="margin-top:8px;">
-            <div>未出现数字：<span class="highlight">${c0}</span> 个</div>
-            <div>出现1次：<span class="highlight">${c1}</span> 个</div>
-            <div>出现2次及以上：<span class="highlight">${c2}</span> 个</div>
+            <div>最高出现：<span class="hot">${max} 次</span></div>
+            <div>最低出现：<span class="cold">${min} 次</span></div>
         </div>
         `;
     }
 
-    function renderGroup(sorted, group) {
+    function renderGroup(sorted, group, maxCnt, minCnt) {
         let allText = [];
         let html = `<div class="result-title">
-            <span>📦 按出现次数分组（含未出现数字）</span>
-            <button class="copy-btn" onclick="copyText(fullGroupText,'allTip')">一键复制全部</button>
+            <span>📦 按出现次数分组 </span>
+            <button class="copy-btn" onclick="copyText(fullGroupText,'allTip')">复制全部</button>
             <span id="allTip" class="copy-tip"></span>
         </div>`;
-        
         sorted.forEach((cnt, i) => {
             const nums = group[cnt];
             const list = nums.map(n => padZero(n)).join(' ');
             const totalNum = nums.length;
+            let mark = "";
+            if(cnt == maxCnt) mark = `<span class="hot">【最热】</span>`;
+            if(cnt == minCnt && cnt!=maxCnt) mark = `<span class="cold">【最冷】</span>`;
             const line = `出现${cnt}次（共${totalNum}个数）：${list}`;
             allText.push(line);
             html += `
             <div class="group-item">
-                <div>${line}</div>
+                <div>${mark} ${line}</div>
                 <div>
-                    <button class="copy-btn" onclick="copyText('${list}','g${i}')">复制</button>
-                    <span id="g${i}" class="copy-tip"></span>
+                    <button class="copy-btn" onclick="copyText('${list}','gtip${i}')">复制号码</button>
+                    <span id="gtip${i}" class="copy-tip"></span>
                 </div>
             </div>`;
         });
-        
         fullGroupText = allText.join("\n");
         document.getElementById('groupResult').innerHTML = html;
-    }
-
-    // ====================== 只在这里增加一行统计 ======================
-    function renderRandom(totalOnce, before, after, check) {
-        let html = `<div class="result-title">
-            <span>🔀 出现1次数字随机打乱</span>
-        </div>`;
-        html += `<div class="random-row">
-            <div>出现1次总数：<span class="highlight">${totalOnce}</span> 个</div>
-            <div>打乱前：${before}</div>
-            <div>打乱后：${after} 
-                <button class="copy-btn" onclick="copyText('${after}','randTip')">复制</button>
-                <span id="randTip" class="copy-tip"></span>
-            </div>
-            <div>复核结果：${check}</div>
-        </div>`;
-        document.getElementById('randomResult').innerHTML = html;
     }
 
     function renderZodiac(zodiacCount) {
@@ -300,12 +322,19 @@
             <button class="copy-btn" onclick="copyText(fullZodiacText,'zAllTip')">一键复制</button>
             <span id="zAllTip" class="copy-tip"></span>
         </div>`;
-        
+
+        let maxZ = sortedZodiac[0][1];
+        let minZ = sortedZodiac[sortedZodiac.length-1][1];
+
         sortedZodiac.forEach(([z, cnt]) => {
             const line = `${z}：${cnt}次`;
             allText.push(line);
-            html += `<span class="zodiac-item">${line}</span>`;
+            let cls = "zodiac-item";
+            if(cnt == maxZ) cls += " hot";
+            if(cnt == minZ && cnt!=maxZ) cls += " cold";
+            html += `<span class="${cls}">${line}</span>`;
         });
+
         fullZodiacText = allText.join("\n");
         document.getElementById('zodiacResult').innerHTML = html;
     }
