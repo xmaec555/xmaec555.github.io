@@ -192,7 +192,6 @@
     }
 
     let fullGroupText = "";
-    let randomText = "";
 
     function calculate() {
         const input = document.getElementById('numInput').value.trim();
@@ -226,7 +225,6 @@
 
         const onceNumbers = allNumbers.filter(n => countMap[n] === 1);
         const shuffledOnce = shuffleArray(onceNumbers);
-        const randomStr = shuffledOnce.map(n => padZero(n)).join(' ');
         const totalOnce = onceNumbers.length;
         const beforeSort = onceNumbers.map(n => padZero(n)).join(' ');
         const afterSort = shuffledOnce.map(n => padZero(n)).join(' ');
@@ -264,7 +262,6 @@
             const line = `出现${cnt}次（共${totalNum}个数）：${list}`;
             allText.push(line);
             
-            // 每个次数都增加复制按钮
             html += `
             <div class="group-item">
                 <div>${line}</div>
@@ -279,17 +276,18 @@
         document.getElementById('groupResult').innerHTML = html;
     }
 
+    // 已修改：删除顶部一键复制，只保留打乱后数字复制
     function renderRandom(totalOnce, before, after, check) {
-        randomText = `打乱总数：${totalOnce}\n打乱前：${before}\n打乱后：${after}\n复核结果：${check}`;
         let html = `<div class="result-title">
             <span>🔀 出现1次数字随机打乱</span>
-            <button class="copy-btn" onclick="copyText(randomText,'randTip')">一键复制</button>
-            <span id="randTip" class="copy-tip"></span>
         </div>`;
         html += `<div class="random-row">
             <div>打乱总数：${totalOnce}</div>
             <div>打乱前：${before}</div>
-            <div>打乱后：${after}</div>
+            <div>打乱后：${after} 
+                <button class="copy-btn" onclick="copyText('${after}','randTip')">复制</button>
+                <span id="randTip" class="copy-tip"></span>
+            </div>
             <div>复核结果：${check}</div>
         </div>`;
         document.getElementById('randomResult').innerHTML = html;
@@ -297,14 +295,9 @@
 
     function renderZodiac(zodiacCount) {
         const sortedZodiac = Object.entries(zodiacCount).sort((a, b) => b[1] - a[1]);
-        let allText = [];
-        let html = `<div class="result-title">
-            <span>🐉 生肖出现次数</span>
-        </div>`;
+        let html = `<div class="result-title">🐉 生肖出现次数</div>`;
         sortedZodiac.forEach(([z, cnt]) => {
-            const line = `${z}：${cnt}次`;
-            allText.push(line);
-            html += `<span class="zodiac-item">${line}</span>`;
+            html += `<span class="zodiac-item">${z}：${cnt}次</span>`;
         });
         document.getElementById('zodiacResult').innerHTML = html;
     }
