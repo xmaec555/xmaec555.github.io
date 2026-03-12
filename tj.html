@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>蚂蚁澳彩统计工具 - 双组版</title>
+    <title>蚂蚁澳彩统计工具 - 双组+交叉对比</title>
     <style>
         * {
             margin: 0;
@@ -93,6 +93,10 @@
         button.uniq {
             background-color: #9b59b6;
         }
+        button.compare {
+            background-color: #e67e22;
+            font-weight:bold;
+        }
         .result-section {
             margin-top: 20px;
             padding: 15px;
@@ -163,11 +167,15 @@
             font-size: 15px;
             flex-wrap:wrap;
         }
+        .compare-row {
+            background: #fef8ec;
+            border-left: 4px solid #f39c12;
+        }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>蚂蚁澳彩统计工具 - 双组统计</h1>
+    <h1>蚂蚁澳彩统计工具 - 双组+交叉对比</h1>
 
     <!-- ========== 第一组 ========== -->
     <div class="panel">
@@ -209,6 +217,16 @@
         <div class="result-section" id="baseResult2"></div>
         <div class="result-section" id="groupResult2"></div>
         <div class="result-section" id="zodiacResult2"></div>
+    </div>
+
+    <!-- ========== 交叉对比结果 ========== -->
+    <div class="panel">
+        <h2 style="color:#e67e22; margin-bottom:15px;">🔍 交叉对比结果</h2>
+        <div class="btn-group">
+            <button class="compare" onclick="compareAll()">✅ 开始对比</button>
+            <button class="clear" onclick="clearCompare()">清空对比</button>
+        </div>
+        <div class="result-section" id="compareResult"></div>
     </div>
 </div>
 
@@ -268,6 +286,8 @@
         showInputInfo(no);
     }
 
+    let countData = {1:{}, 2:{}};
+
     // 主统计
     function calculate(no) {
         const input = document.getElementById('numInput'+no).value.trim();
@@ -279,6 +299,8 @@
         const countMap = {};
         allNumbers.forEach(n => countMap[n] = 0);
         inputArr.forEach(n => countMap[n]++);
+
+        countData[no] = countMap;
 
         const totalCount = inputArr.length;
         const uniqueCount = [...new Set(inputArr)].length;
@@ -370,6 +392,58 @@
 
         window['fullZodiacText'+no] = allText.join("\n");
         document.getElementById('zodiacResult'+no).innerHTML = html;
+    }
+
+    // ====================== 交叉对比 ======================
+    function clearCompare(){
+        document.getElementById('compareResult').innerHTML = '';
+    }
+
+    function getInRange(num, min, max, countMap){
+        let c = countMap[num];
+        return c >= min && c <= max;
+    }
+
+    function compareAll(){
+        let c1 = countData[1];
+        let c2 = countData[2];
+        let all = Array.from({length:49},(_,i)=>i+1);
+
+        // 规则1：第一组0-2次  第二组0-1次
+        let r1 = all.filter(n=> getInRange(n,0,2,c1) && getInRange(n,0,1,c2));
+        // 规则2：第一组2-6次  第二组2-5次
+        let r2 = all.filter(n=> getInRange(n,2,6,c1) && getInRange(n,2,5,c2));
+        // 规则3：第一组6-9次  第二组4-9次
+        let r3 = all.filter(n=> getInRange(n,6,9,c1) && getInRange(n,4,9,c2));
+
+        function fmt(arr){
+            return arr.map(padZero).join(' ');
+        }
+
+        let s1 = fmt(r1);
+        let s2 = fmt(r2);
+        let s3 = fmt(r3);
+
+        let html = `
+        <div class="result-title">🎯 三组交叉对比相同数字</div>
+
+        <div class="group-item compare-row">
+            <div>【第一组 0~2次】&【第二组 0~1次】相同：${s1}</div>
+            <div><button class="copy-btn" onclick="copyText('${s1}','c1')">复制</button><span id="c1" class="copy-tip"></span></div>
+        </div>
+
+        <div class="group-item compare-row">
+            <div>【第一组 2~6次】&【第二组 2~5次】相同：${s2}</div>
+            <div><button class="copy-btn" onclick="copyText('${s2}','c2')">复制</button><span id="c2" class="copy-tip"></span></div>
+        </div>
+
+        <div class="group-item compare-row">
+            <div>【第一组 6~9次】&【第二组 4~9次】相同：${s3}</div>
+            <div><button class="copy-btn" onclick="copyText('${s3}','c3')">复制</button><span id="c3" class="copy-tip"></span></div>
+        </div>
+        `;
+
+        document.getElementById('compareResult').innerHTML = html;
     }
 </script>
 </body>
