@@ -156,97 +156,6 @@
         </div>
 
         <!-- 打乱后结果 -->
-        <div class="result-box {
-            padding: 15px;
-            background: #f0f7ff;
-            border-radius: 6px;
-            border: 1px solid #d9ecff;
-            margin-bottom: 15px;
-        }
-        .result-title {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 8px;
-        }
-        #resultNum {
-            color: #f56c6c;
-            font-weight: bold;
-            margin: 0 5px;
-        }
-        #resultText {
-            line-height: 1.6;
-            color: #333;
-            word-break: break-all;
-        }
-
-        /* 复核对比样式 */
-        .check-box {
-            padding: 15px;
-            background: #fcfbf0;
-            border-radius: 6px;
-            border: 1px solid #faecd8;
-            margin-bottom: 20px;
-        }
-        .check-title {
-            font-weight: bold;
-            color: #d48800;
-            margin-bottom: 10px;
-        }
-        .check-row {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-        .check-item {
-            line-height: 1.5;
-            word-break: break-all;
-            font-size: 13px;
-        }
-        .check-result {
-            font-weight: bold;
-            padding: 6px 10px;
-            border-radius: 4px;
-            display: inline-block;
-        }
-        .check-success {
-            background: #e6f7e6;
-            color: #008000;
-        }
-        .check-error {
-            background: #ffe6e6;
-            color: #cc0000;
-        }
-
-        /* 底部链接样式 */
-        .bottom-link {
-            text-align: center;
-            font-size: 14px;
-            line-height: 1.8;
-        }
-        .bottom-link a {
-            color: #409eff;
-            font-weight: bold;
-            text-decoration: none;
-            margin: 0 5px;
-        }
-        .bottom-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h2>蚂蚁澳彩数据打乱工具</h2>
-        <textarea id="input" placeholder="请粘贴你的数字（空格/换行分隔都可以）"></textarea>
-        
-        <div class="btn-group">
-            <button onclick="shuffleNum()">一键打乱并统计</button>
-            <button class="copy-btn" onclick="copyResult()">复制打乱结果</button>
-            <button onclick="clearAll()">清空重置</button>
-        </div>
-
-        <!-- 打乱后结果 -->
         <div class="result-box">
             <div class="result-title">打乱后总数：<span id="resultNum">0</span> 个</div>
             <div id="resultText">打乱结果将显示在这里...</div>
@@ -370,4 +279,3 @@
     </script>
 </body>
 </html>
-
