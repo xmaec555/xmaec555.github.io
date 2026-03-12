@@ -165,8 +165,8 @@
 </div>
 
 <script>
-    // 生肖：1=马
-    const zodiacList = ['马','羊','猴','鸡','狗','猪','鼠','牛','虎','兔','龙','蛇'];
+    // ====================== 已修正：2026马年生肖 01=马 正确顺序 ======================
+    const zodiacList = ['马', '蛇', '龙', '兔', '虎', '牛', '鼠', '猪', '狗', '鸡', '猴', '羊'];
     function getZodiac(num) {
         return zodiacList[(num - 1) % 12];
     }
@@ -258,7 +258,7 @@
 
     // 生肖统计
     function renderZodiac(zodiacCount) {
-        let html = `<div class="result-title">🐉 生肖统计（1=马）</div>`;
+        let html = `<div class="result-title">🐉 生肖统计（2026马年 01=马）</div>`;
         for (let [z, c] of Object.entries(zodiacCount)) {
             html += `<span class="zodiac-item">${z}：${c}次</span>`;
         }
