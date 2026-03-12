@@ -46,7 +46,7 @@
         <h2 style="color:#2c3e50;margin-bottom:15px">第一组统计</h2>
         <div class="input-box">
             <label>蚂蚁数据-澳彩专家（第一组）：</label>
-            <textarea id="numInput1" placeholder="蚂蚁电报号：@mayi2036" oninput="showInputInfo(1)"></textarea>
+            <textarea id="numInput1" placeholder="示例：1 3 5 7 9 11" oninput="showInputInfo(1)"></textarea>
             <div class="input-info" id="inputInfo1">已输入：0 个数字</div>
         </div>
         <div class="btn-group">
@@ -64,7 +64,7 @@
         <h2 style="color:#2c3e50;margin-bottom:15px">第二组统计</h2>
         <div class="input-box">
             <label>蚂蚁数据-澳彩专家（第二组）：</label>
-            <textarea id="numInput2" placeholder="蚂蚁飞机号：@mayi2036" oninput="showInputInfo(2)"></textarea>
+            <textarea id="numInput2" placeholder="示例：2 4 6 8 10 12" oninput="showInputInfo(2)"></textarea>
             <div class="input-info" id="inputInfo2">已输入：0 个数字</div>
         </div>
         <div class="btn-group">
@@ -94,6 +94,7 @@ const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡',
 const countData = {1:{},2:{}};
 const minMax = {1:{min:0,max:0},2:{min:0,max:0}};
 let group1Lines = "";
+let group2Lines = "";
 
 const padZero = n => n.toString().padStart(2, '0');
 const getZodiac = n => zodiacList[(n-1)%12];
@@ -119,6 +120,7 @@ function clearAll(no){
         }
     });
     if(no === 1) group1Lines = "";
+    if(no === 2) group2Lines = "";
     showInputInfo(no);
 }
 
@@ -173,12 +175,20 @@ function calculate(no){
     });
     const sortedGroups = Object.keys(group).map(Number).sort((a,b)=>a-b);
 
+    // 保存两组逐行格式
     if(no === 1){
         let lines = [];
         sortedGroups.forEach(cnt => {
             lines.push(group[cnt].map(padZero).join(' '));
         });
         group1Lines = lines.join('\n');
+    }
+    if(no === 2){
+        let lines = [];
+        sortedGroups.forEach(cnt => {
+            lines.push(group[cnt].map(padZero).join(' '));
+        });
+        group2Lines = lines.join('\n');
     }
 
     const zodiac = {};
@@ -208,6 +218,9 @@ function renderGroup(no, sorted, group, maxCnt, minCnt){
     if(no === 1) {
         html += ` <button class="copy-btn" onclick="copyGroup1Lines()">逐行复制</button><span id="g1Tip" class="copy-tip"></span>`;
     }
+    if(no === 2) {
+        html += ` <button class="copy-btn" onclick="copyGroup2Lines()">逐行复制</button><span id="g2Tip" class="copy-tip"></span>`;
+    }
     html += `</div>`;
 
     sorted.forEach((cnt, i) => {
@@ -228,14 +241,18 @@ function renderGroup(no, sorted, group, maxCnt, minCnt){
     document.getElementById(`groupResult${no}`).innerHTML = html;
 }
 
+// 两组逐行复制函数
 function copyGroup1Lines(){
     copyText(group1Lines, "g1Tip");
+}
+function copyGroup2Lines(){
+    copyText(group2Lines, "g2Tip");
 }
 
 function renderZodiac(no, zodiac){
     const sorted = Object.entries(zodiac).sort((a,b)=>b[1]-a[1]);
     const max = sorted[0][1], min = sorted.at(-1)[1];
-    let html = `<div class="result-title"><span>🐉 生肖出现次数</span></div>`;
+    let html = `<div class="result-title"><span>🐉 生肖统计</span></div>`;
     sorted.forEach(([z, c]) => {
         const cls = c === max ? 'zodiac-item hot' : c === min ? 'zodiac-item cold' : 'zodiac-item';
         html += `<div class="${cls}">${z}：${c}次</div>`;
@@ -275,7 +292,7 @@ function compareAll(){
     <div class="group-item compare-row"><div>【1组6‑最热 & 2组5‑最热】：${s3}</div><div><button class="copy-btn" onclick="copyText('${s3}','c3')">复制</button><span id="c3" class="copy-tip"></span></div></div>
     <div class="group-item compare-row"><div>【1组7次 & 2组3‑4次】：${s4}</div><div><button class="copy-btn" onclick="copyText('${s4}','c4')">复制</button><span id="c4" class="copy-tip"></span></div></div>
     <div class="group-item compare-row"><div>【1组4次 & 2组6次】：${s5}</div><div><button class="copy-btn" onclick="copyText('${s5}','c5')">复制</button><span id="c5" class="copy-tip"></span></div></div>
-    <div class="group-item final-row"><div>✅ 去重（共 ${final.length} 个）：${format(final)}</div><div><button class="copy-btn" onclick="copyText('${format(final)}','cf')">复制</button><span id="cf" class="copy-tip"></span></div></div>`;
+    <div class="group-item final-row"><div>✅ 五组合并去重（共 ${final.length} 个）：${format(final)}</div><div><button class="copy-btn" onclick="copyText('${format(final)}','cf')">复制</button><span id="cf" class="copy-tip"></span></div></div>`;
 }
 </script>
 </body>
