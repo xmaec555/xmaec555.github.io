@@ -88,7 +88,6 @@
             word-break: break-all;
         }
 
-        /* 复核对比样式 */
         .check-box {
             padding: 15px;
             background: #fcfbf0;
@@ -127,11 +126,12 @@
             color: #cc0000;
         }
 
-        /* 底部链接样式 */
         .bottom-link {
             text-align: center;
             font-size: 14px;
             line-height: 1.8;
+            margin-top: 10px;
+            color: #666;
         }
         .bottom-link a {
             color: #409eff;
@@ -145,137 +145,129 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>蚂蚁澳彩数据打乱工具</h2>
-        <textarea id="input" placeholder="请粘贴你的数字（空格/换行分隔都可以）"></textarea>
-        
-        <div class="btn-group">
-            <button onclick="shuffleNum()">一键打乱并统计</button>
-            <button class="copy-btn" onclick="copyResult()">复制打乱结果</button>
-            <button onclick="clearAll()">清空重置</button>
-        </div>
 
-        <!-- 打乱后结果 -->
-        <div class="result-box">
-            <div class="result-title">打乱后总数：<span id="resultNum">0</span> 个</div>
-            <div id="resultText">打乱结果将显示在这里...</div>
-        </div>
+<div class="container" id="mainContainer">
+    <h2>蚂蚁澳彩数据 - 打乱工具</h2>
+    <textarea id="input" placeholder="蚂蚁澳彩数据团队，保证纯盘口数据码）"></textarea>
+    
+    <div class="btn-group">
+        <button onclick="shuffleNum()">我要打乱</button>
+        <button class="copy-btn" onclick="copyResult()">复制结果</button>
+        <button onclick="clearAll()">清空重置</button>
+    </div>
 
-        <!-- 复核对比 -->
-        <div class="check-box">
-            <div class="check-title">✅ 打乱前后数字复核对比</div>
-            <div class="check-row">
-                <div class="check-item"><b>打乱前：</b><span id="originalText">-</span></div>
-                <div class="check-item"><b>打乱后：</b><span id="shuffledText">-</span></div>
-            </div>
-            <div>
-                <b>复核结果：</b>
-                <span id="checkStatus" class="check-result">未校验</span>
-            </div>
-        </div>
+    <div class="result-box">
+        <div class="result-title">打乱后总数：<span id="resultNum">0</span> 个</div>
+        <div id="resultText">打乱结果将显示在这里...</div>
+    </div>
 
-        <!-- 底部两个链接 -->
-        <div class="bottom-link">
-            <a href="https://t.me/+RjaMJ26EAPw0ZTc1" target="_blank">蚂蚁澳彩频道-先验证后付费</a>
-            <br>
-            <a href="https://m.hxyx.cc.cd/kj.html" target="_blank">新澳实时开奖直播</a>
+    <div class="check-box">
+        <div class="check-title">✅ 打乱前后数字复核对比</div>
+        <div class="check-row">
+            <div class="check-item"><b>打乱前：</b><span id="originalText">-</span></div>
+            <div class="check-item"><b>打乱后：</b><span id="shuffledText">-</span></div>
+        </div>
+        <div>
+            <b>复核结果：</b>
+            <span id="checkStatus" class="check-result">未校验</span>
         </div>
     </div>
 
-    <script>
-        let currentResult = "";
-        let originalNums = [];
+    <!-- 底部版权 + 友情链接 -->
+    <div class="bottom-link">
+        <p>© 2026 蚂蚁数据澳彩团队 - 版权所有</p>
+        <p>
+            友情链接：
+            <a href="https://t.me/+RjaMJ26EAPw0ZTc1" target="_blank">频道</a>
+            <a href="https://m.hxyx.cc.cd/kj.html" target="_blank">直播</a>
+            <a href="https://m.hxyx.cc.cd" target="_blank">收藏</a>
+        </p>
+    </div>
+</div>
 
-        // 打乱数组（Fisher-Yates 算法）
-        function shuffleArray(arr) {
-            let newArr = [...arr];
-            for (let i = newArr.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
-            }
-            return newArr;
+<script>
+    let currentResult = "";
+    let originalNums = [];
+
+    // 随机打乱
+    function shuffleArray(arr) {
+        let newArr = [...arr];
+        for (let i = newArr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
         }
+        return newArr;
+    }
 
-        // 打乱 + 统计
-        function shuffleNum() {
-            const input = document.getElementById('input').value.trim();
-            if (!input) {
-                alert('请先粘贴数字！');
-                return;
-            }
-
-            // 分割并过滤空值
-            originalNums = input.split(/\s+/).filter(item => item !== '');
-            
-            if (originalNums.length === 0) {
-                alert('未检测到有效数字！');
-                return;
-            }
-
-            const resultArr = shuffleArray(originalNums);
-            currentResult = resultArr.join(' ');
-
-            // 渲染结果
-            document.getElementById('resultNum').textContent = resultArr.length;
-            document.getElementById('resultText').textContent = currentResult;
-            document.getElementById('originalText').textContent = originalNums.join(' ');
-            document.getElementById('shuffledText').textContent = currentResult;
-
-            doCheck();
+    // 打乱+统计
+    function shuffleNum() {
+        const input = document.getElementById('input').value.trim();
+        if (!input) {
+            alert('请先粘贴数字！');
+            return;
         }
-
-        // 复制结果（兼容更好）
-        async function copyResult() {
-            if (!currentResult) {
-                alert('请先生成打乱结果！');
-                return;
-            }
-            try {
-                await navigator.clipboard.writeText(currentResult);
-                alert('复制成功！');
-            } catch (err) {
-                // 降级方案
-                const textArea = document.createElement('textarea');
-                textArea.value = currentResult;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                alert('复制成功！');
-            }
+        originalNums = input.split(/\s+/).filter(item => item && item.trim());
+        if (originalNums.length === 0) {
+            alert('未检测到有效数字！');
+            return;
         }
+        const resultArr = shuffleArray(originalNums);
+        currentResult = resultArr.join(' ');
 
-        // 复核校验
-        function doCheck() {
-            const statusEl = document.getElementById('checkStatus');
-            const sortedOriginal = [...originalNums].sort().join(',');
-            const sortedShuffled = currentResult.split(' ').filter(Boolean).sort().join(',');
+        document.getElementById('resultNum').textContent = resultArr.length;
+        document.getElementById('resultText').textContent = currentResult;
+        document.getElementById('originalText').textContent = originalNums.join(' ');
+        document.getElementById('shuffledText').textContent = currentResult;
+        doCheck();
+    }
 
-            if (sortedOriginal === sortedShuffled) {
-                statusEl.className = 'check-result check-success';
-                statusEl.textContent = '✅ 完全一致（无丢失、无重复）';
-            } else {
-                statusEl.className = 'check-result check-error';
-                statusEl.textContent = '❌ 不一致，请检查！';
-            }
+    // 复制
+    async function copyResult() {
+        if (!currentResult) {
+            alert('请先生成打乱结果！');
+            return;
         }
-
-        // 清空重置
-        function clearAll() {
-            document.getElementById('input').value = '';
-            document.getElementById('resultNum').textContent = '0';
-            document.getElementById('resultText').textContent = '打乱结果将显示在这里...';
-            
-            document.getElementById('originalText').textContent = '-';
-            document.getElementById('shuffledText').textContent = '-';
-            
-            const statusEl = document.getElementById('checkStatus');
-            statusEl.className = 'check-result';
-            statusEl.textContent = '未校验';
-
-            currentResult = "";
-            originalNums = [];
+        try {
+            await navigator.clipboard.writeText(currentResult);
+            alert('复制成功！');
+        } catch (err) {
+            const textArea = document.createElement('textarea');
+            textArea.value = currentResult;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert('复制成功！');
         }
-    </script>
+    }
+
+    // 复核
+    function doCheck() {
+        const statusEl = document.getElementById('checkStatus');
+        const sortedOriginal = [...originalNums].sort().join(',');
+        const sortedShuffled = currentResult.split(' ').filter(Boolean).sort().join(',');
+        if (sortedOriginal === sortedShuffled) {
+            statusEl.className = 'check-result check-success';
+            statusEl.textContent = '✅ 完全一致（无丢失、无重复）';
+        } else {
+            statusEl.className = 'check-result check-error';
+            statusEl.textContent = '❌ 不一致，请检查！';
+        }
+    }
+
+    // 清空
+    function clearAll() {
+        document.getElementById('input').value = '';
+        document.getElementById('resultNum').textContent = '0';
+        document.getElementById('resultText').textContent = '打乱结果将显示在这里...';
+        document.getElementById('originalText').textContent = '-';
+        document.getElementById('shuffledText').textContent = '-';
+        const statusEl = document.getElementById('checkStatus');
+        statusEl.className = 'check-result';
+        statusEl.textContent = '未校验';
+        currentResult = "";
+        originalNums = [];
+    }
+</script>
 </body>
 </html>
