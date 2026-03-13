@@ -265,7 +265,6 @@ const zodiacList = ['鼠','牛','虎','兔','龙','蛇','马','羊','猴','鸡',
 const $ = id => document.getElementById(id);
 const getZodiac = num => zodiacList[(num - 1) % 12];
 const padZero = num => num.toString().padStart(2, '0');
-let fullGroupText = "", fullZodiacText = "";
 
 function clearAll() {
     $('numInput').value = '';
@@ -274,19 +273,14 @@ function clearAll() {
     $('zodiacResult').innerHTML = '';
 }
 
-// 全兼容复制函数（新API + 传统降级方案，所有手机都能用）
 function copyText(text, tipId) {
     const tip = $(tipId);
     try {
-        // 优先使用现代API
         if (navigator.clipboard) {
             navigator.clipboard.writeText(text).then(() => {
                 showTip(tip, true);
-            }).catch(() => {
-                fallbackCopy(text, tip);
-            });
+            }).catch(() => fallbackCopy(text, tip));
         } else {
-            // 降级兼容
             fallbackCopy(text, tip);
         }
     } catch (e) {
@@ -294,7 +288,6 @@ function copyText(text, tipId) {
     }
 }
 
-// 传统复制兼容方案（解决老旧手机/微信浏览器复制失败）
 function fallbackCopy(text, tip) {
     const textArea = document.createElement("textarea");
     textArea.value = text;
@@ -303,7 +296,7 @@ function fallbackCopy(text, tip) {
     textArea.style.opacity = "0";
     document.body.appendChild(textArea);
     textArea.select();
-    textArea.setSelectionRange(0, textArea.value.length);
+    textArea.setSelectionRange(0, text.value.length);
     
     try {
         document.execCommand('copy');
@@ -311,14 +304,12 @@ function fallbackCopy(text, tip) {
     } catch (err) {
         showTip(tip, false);
     }
-    
     document.body.removeChild(textArea);
 }
 
-// 统一提示
 function showTip(tip, success) {
     if (success) {
-        tip.textContent = "✅ 已复制";
+        tip.textContent = "✅ 复制成功";
         tip.style.color = "#6cce6c";
     } else {
         tip.textContent = "❌ 复制失败";
@@ -348,7 +339,7 @@ function calculate() {
     const group = {};
     for (const n in countMap) {
         const c = countMap[n];
-        (group[c] || (group[c] = [])).push(+n);
+        if(c > 0) (group[c] || (group[c] = [])).push(+n);
     }
     const sortedCounts = Object.keys(group).map(Number).sort((a, b) => a - b);
 
@@ -374,13 +365,7 @@ function renderBase(total, unique, max) {
 
 function renderGroup(sorted, group) {
     const allText = [];
-    let html = `<div class="result-title">
-        <span>📦 按出现次数分组</span>
-        <div>
-            <button class="copy-btn" data-copy="${fullGroupText}" data-tip="allTip">复制全部</button>
-            <span id="allTip" class="copy-tip"></span>
-        </div>
-    </div>`;
+    let html = `<div class="result-title"><span>📦 按出现次数分组</span><div></div></div>`;
 
     sorted.forEach((cnt, i) => {
         const nums = group[cnt];
@@ -391,27 +376,25 @@ function renderGroup(sorted, group) {
             <div class="group-item">
                 <div>${line}</div>
                 <div>
-                    <button class="copy-btn" data-copy="${line}" data-tip="gtip${i}">复制</button>
+                    <button class="copy-btn" onclick="copyText('${line.replace(/'/g, "\\'")}', 'gtip${i}')">复制</button>
                     <span id="gtip${i}" class="copy-tip"></span>
                 </div>
             </div>`;
     });
 
-    fullGroupText = allText.join("\n");
+    const fullGroupText = allText.join("\n");
+    html = html.replace('</div></div>', `
+            <button class="copy-btn" onclick="copyText(\`${fullGroupText}\`, 'allTip')">复制全部</button>
+            <span id="allTip" class="copy-tip"></span>
+        </div></div>`);
+    
     $('groupResult').innerHTML = html;
-    bindCopyEvents();
 }
 
 function renderZodiac(zodiacCount) {
     const sortedZodiac = Object.entries(zodiacCount).sort((a, b) => b[1] - a[1]);
     const allText = [];
-    let html = `<div class="result-title">
-        <span>🐉 生肖出现次数</span>
-        <div>
-            <button class="copy-btn" data-copy="${fullZodiacText}" data-tip="zAllTip">一键复制</button>
-            <span id="zAllTip" class="copy-tip"></span>
-        </div>
-    </div>`;
+    let html = `<div class="result-title"><span>🐉 生肖出现次数</span><div></div></div>`;
 
     sortedZodiac.forEach(([z, cnt]) => {
         const line = `${z}：${cnt}次`;
@@ -419,20 +402,13 @@ function renderZodiac(zodiacCount) {
         html += `<span class="zodiac-item">${line}</span>`;
     });
 
-    fullZodiacText = allText.join("\n");
+    const fullZodiacText = allText.join("\n");
+    html = html.replace('</div></div>', `
+            <button class="copy-btn" onclick="copyText(\`${fullZodiacText}\`, 'zAllTip')">一键复制</button>
+            <span id="zAllTip" class="copy-tip"></span>
+        </div></div>`);
+    
     $('zodiacResult').innerHTML = html;
-    bindCopyEvents();
-}
-
-// 统一绑定复制按钮事件（修复动态拼接onclick失效问题）
-function bindCopyEvents() {
-    document.querySelectorAll('.copy-btn').forEach(btn => {
-        btn.onclick = function () {
-            const text = this.getAttribute('data-copy');
-            const tipId = this.getAttribute('data-tip');
-            copyText(text, tipId);
-        };
-    });
 }
 </script>
 </body>
