@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>蚂蚁澳彩双盘口统计</title>
+    <title>蚂蚁澳彩盘口35M统计</title>
     <style>
         * {
             margin: 0;
@@ -18,6 +18,7 @@
             padding-top: 60px;
         }
 
+        /* 顶部导航栏 */
         nav {
             position: fixed;
             top: 0;
@@ -49,6 +50,7 @@
             color: #ffffff;
         }
 
+        /* 容器统一 */
         .container {
             max-width: 900px;
             margin: 30px auto;
@@ -152,12 +154,11 @@
             font-weight: bold;
             color: #fff;
             margin-bottom: 12px;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
             border-bottom: 1px solid #444;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 10px;
         }
         .highlight {
             color: #ffaa00;
@@ -191,7 +192,7 @@
             align-items: center;
             background: #2a2a2a;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 10px;
         }
 
         /* ========== 统一复制按钮样式 ========== */
@@ -243,6 +244,11 @@
             border-left: 4px solid #4d7a43 !important;
             font-weight: bold;
         }
+        .error{
+            color:#ff6b6b;
+            font-weight:bold;
+            margin-top:10px
+        }
         .bottom-link {
             text-align: center;
             font-size: 14px;
@@ -259,24 +265,25 @@
 </head>
 <body>
 
+<!-- 导航栏 -->
 <nav>
     <div class="nav-links">
         <a href="https://m.hxyx.cc.cd/sy.html">首页</a>
         <a href="https://m.hxyx.cc.cd/i.html">统计</a>
-        <a href="https://m.hxyx.cc.cd/35tj.html">35M</a>
+        <a href="https://m.hxyx.cc.cd/28tj.html">28M</a>
         <a href="https://m.hxyx.cc.cd/gj.html">工具</a>
     </div>
 </nav>
 
 <div class="container">
     <div class="tool-box">
-        <h1>蚂蚁澳彩 - 双盘口统计</h1>
+        <h1>蚂蚁澳彩盘口35M统计</h1>
 
         <div class="panel">
             <h2>第一组统计</h2>
             <div class="input-box">
-                <label>蚂蚁数据-天子数据盘：</label>
-                <textarea id="numInput1" placeholder="请输入数字" oninput="showInputInfo(1)"></textarea>
+                <label>蚂蚁数据-澳彩专家（第一组）：</label>
+                <textarea id="numInput1" placeholder="示例：1 3 5 7 9 11" oninput="showInputInfo(1)"></textarea>
                 <div class="input-info" id="inputInfo1">已输入：0 个数字</div>
             </div>
             <div class="btn-group">
@@ -293,8 +300,8 @@
         <div class="panel">
             <h2>第二组统计</h2>
             <div class="input-box">
-                <label>蚂蚁数据-广东数据盘：</label>
-                <textarea id="numInput2" placeholder="请输入数字" oninput="showInputInfo(2)"></textarea>
+                <label>蚂蚁数据-澳彩专家（第二组）：</label>
+                <textarea id="numInput2" placeholder="示例：2 4 6 8 10 12" oninput="showInputInfo(2)"></textarea>
                 <div class="input-info" id="inputInfo2">已输入：0 个数字</div>
             </div>
             <div class="btn-group">
@@ -309,11 +316,12 @@
         </div>
 
         <div class="panel">
-            <h2 style="color:#ff9c41">🔍 盘口对比结果</h2>
+            <h2 style="color:#ff9c41">🔍 交叉对比结果</h2>
             <div class="btn-group">
                 <button class="compare" onclick="compareAll()">✅ 开始对比</button>
                 <button class="clear" onclick="clearCompare()">清空对比</button>
             </div>
+            <div id="compareTip"></div>
             <div class="result-section" id="compareResult"></div>
         </div>
 
@@ -329,160 +337,120 @@
 </div>
 
 <script>
+// 全局配置
 const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
-const countData = {1:{},2:{}};
-const minMax = {1:{min:0,max:0},2:{min:0,max:0}};
+const countData = { 1: {}, 2: {} };
+const minMax = { 1: { min:0, max:0 }, 2: { min:0, max:0 } };
+const hasCalculated = {1: false, 2: false};
 let group1Lines = "";
 let group2Lines = "";
 
-const padZero = n => n.toString().padStart(2, '0');
-const getZodiac = n => zodiacList[(n-1)%12];
-const uniqueSort = arr => [...new Set(arr)].sort((a,b)=>a-b);
-const format = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
-const inRange = (v, min, max) => v >= min && v <= max;
+// 工具函数
+const padZero = num => num.toString().padStart(2, '0');
+const getZodiac = num => zodiacList[(num - 1) % 12];
+const uniqueSort = arr => [...new Set(arr)].sort((a, b) => a - b);
+const formatNumbers = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
+const inRange = (val, min, max) => val >= min && val <= max;
 
-function showInputInfo(no){
-    const v = document.getElementById(`numInput${no}`).value;
-    const cnt = (v.match(/\d+/g) || []).length;
-    document.getElementById(`inputInfo${no}`).innerText = `已输入：${cnt} 个数字`;
+// 输入状态
+function showInputInfo(no) {
+    const val = document.getElementById(`numInput${no}`).value;
+    const count = (val.match(/\d+/g) || []).length;
+    document.getElementById(`inputInfo${no}`).innerText = `已输入：${count} 个数字`;
 }
 
-function clearAll(no){
-    const ids = ['numInput','baseResult','groupResult','zodiacResult'];
-    ids.forEach(id => {
-        const el = document.getElementById(`${id}${no}`);
-        if (id === 'numInput') {
-            el.value = '';
-        } else {
-            el.innerHTML = '';
-        }
-    });
-    countData[no] = {};
-    minMax[no] = {min:0, max:0};
+// 清空单组
+function clearAll(no) {
+    document.getElementById(`numInput${no}`).value = '';
+    document.getElementById(`baseResult${no}`).innerHTML = '';
+    document.getElementById(`groupResult${no}`).innerHTML = '';
+    document.getElementById(`zodiacResult${no}`).innerHTML = '';
+    hasCalculated[no] = false;
     if(no === 1) group1Lines = "";
     if(no === 2) group2Lines = "";
     showInputInfo(no);
 }
 
-function copyText(text, tipId){
+// 复制功能
+function copyText(text, tipId) {
     if(!text || text === '无'){
-        alert('暂无内容可复制');
+        alert('无内容可复制');
         return;
     }
-    const tip = document.getElementById(tipId);
-    try {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(text).then(() => {
-                showCopyTip(tip, true);
-            }).catch(() => {
-                fallbackCopy(text, tip);
-            });
-        } else {
-            fallbackCopy(text, tip);
-        }
-    } catch (e) {
-        fallbackCopy(text, tip);
-    }
+    navigator.clipboard.writeText(text).then(() => {
+        const tip = document.getElementById(tipId);
+        tip.innerText = '✅ 复制成功';
+        setTimeout(() => tip.innerText = '', 1500);
+    }).catch(() => alert('复制失败，请手动复制'));
 }
 
-function fallbackCopy(text, tip) {
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-    textArea.style.position = "fixed";
-    textArea.style.left = "-9999px";
-    textArea.style.opacity = "0";
-    document.body.appendChild(textArea);
-    textArea.select();
-    textArea.setSelectionRange(0, textArea.value.length);
-    try {
-        document.execCommand('copy');
-        showCopyTip(tip, true);
-    } catch (err) {
-        showCopyTip(tip, false);
-    }
-    document.body.removeChild(textArea);
-}
-
-function showCopyTip(tip, success) {
-    if (success) {
-        tip.innerText = "✅ 已复制";
-        tip.style.color = "#6cce6c";
-    } else {
-        tip.innerText = "❌ 失败";
-        tip.style.color = "#ff6b6b";
-    }
-    setTimeout(() => tip.innerText = '', 1500);
-}
-
-function uniqueNum(no){
+// 去重 & 排序
+function uniqueNum(no) {
     const el = document.getElementById(`numInput${no}`);
-    const nums = el.value.match(/\d+/g) || [];
-    el.value = [...new Set(nums)].join(' ');
+    const arr = (el.value.match(/\d+/g) || []).map(Number).filter(n => n >=1 && n <=49);
+    el.value = uniqueSort(arr).join(' ');
+    showInputInfo(no);
+}
+function sortNum(no) {
+    const el = document.getElementById(`numInput${no}`);
+    const arr = (el.value.match(/\d+/g) || []).map(Number).filter(n => n >=1 && n <=49).sort((a,b)=>a-b);
+    el.value = arr.join(' ');
     showInputInfo(no);
 }
 
-function sortNum(no){
-    const el = document.getElementById(`numInput${no}`);
-    const nums = (el.value.match(/\d+/g) || []).map(Number).sort((a,b)=>a-b);
-    el.value = nums.join(' ');
-    showInputInfo(no);
-}
-
-function calculate(no){
+// 核心统计
+function calculate(no) {
     const input = document.getElementById(`numInput${no}`).value.trim();
-    const inputArr = (input.match(/\d+/g) || [])
-                        .map(Number)
-                        .filter(n => !isNaN(n) && n >= 1 && n <= 49);
+    const inputArr = (input.match(/\d+/g) || []).map(Number).filter(n => n >= 1 && n <= 49);
     
     if(inputArr.length === 0){
-        alert("请输入1-49的数字再统计！");
+        alert('请输入1-49的数字再统计');
         return;
     }
 
-    const all = Array.from({length:49},(_,i)=>i+1);
+    const allNumbers = Array.from({ length: 49 }, (_, i) => i + 1);
+
     const countMap = {};
-    all.forEach(n => countMap[n] = 0);
+    allNumbers.forEach(n => countMap[n] = 0);
     inputArr.forEach(n => countMap[n]++);
     countData[no] = countMap;
 
-    const vals = Object.values(countMap);
-    minMax[no] = { min: Math.min(...vals), max: Math.max(...vals) };
+    const values = Object.values(countMap);
+    minMax[no] = { min: Math.min(...values), max: Math.max(...values) };
 
     const group = {};
-    all.forEach(n => {
+    allNumbers.forEach(n => {
         const c = countMap[n];
-        group[c] = group[c] || [];
+        if (!group[c]) group[c] = [];
         group[c].push(n);
     });
-    const sortedGroups = Object.keys(group).map(Number).sort((a,b)=>a-b);
+    const sortedCounts = Object.keys(group).map(Number).sort((a, b) => a - b);
 
+    // 生成复制全部内容
     if(no === 1){
         let lines = [];
-        sortedGroups.forEach(cnt => {
-            lines.push(group[cnt].map(padZero).join(' '));
-        });
+        sortedCounts.forEach(cnt => lines.push(group[cnt].map(padZero).join(' ')));
         group1Lines = lines.join('\n');
     }
     if(no === 2){
         let lines = [];
-        sortedGroups.forEach(cnt => {
-            lines.push(group[cnt].map(padZero).join(' '));
-        });
+        sortedCounts.forEach(cnt => lines.push(group[cnt].map(padZero).join(' ')));
         group2Lines = lines.join('\n');
     }
 
-    const zodiac = {};
-    zodiacList.forEach(z => zodiac[z] = 0);
-    inputArr.forEach(n => zodiac[getZodiac(n)]++);
+    const zodiacCount = {};
+    zodiacList.forEach(z => zodiacCount[z] = 0);
+    inputArr.forEach(n => zodiacCount[getZodiac(n)]++);
 
-    renderBase(no, inputArr.length, new Set(inputArr).size, minMax[no].max, minMax[no].min);
-    renderGroup(no, sortedGroups, group, minMax[no].max, minMax[no].min);
-    renderZodiac(no, zodiac);
+    renderBase(no, inputArr.length, [...new Set(inputArr)].length, minMax[no].max, minMax[no].min);
+    renderGroup(no, sortedCounts, group, minMax[no].max, minMax[no].min);
+    renderZodiac(no, zodiacCount);
+    hasCalculated[no] = true;
     showInputInfo(no);
-    bindCopyEvents();
 }
 
-function renderBase(no, total, unique, max, min){
+// 渲染基础信息
+function renderBase(no, total, unique, max, min) {
     document.getElementById(`baseResult${no}`).innerHTML = `
     <div class="result-title">📊 基础统计</div>
     <div class="base-row">
@@ -493,32 +461,28 @@ function renderBase(no, total, unique, max, min){
     </div>`;
 }
 
-function renderGroup(no, sorted, group, maxCnt, minCnt){
+// 渲染次数分组 + 复制全部
+function renderGroup(no, sorted, group, maxCnt, minCnt) {
     let html = `<div class="result-title">
         <span>📦 次数分组（最冷→最热）</span>
         <div class="title-right">`;
 
     if(no === 1) {
-        html += `<button class="copy-btn" data-copy="${group1Lines}" data-tip="g1Tip">复制全部</button>
-                 <span id="g1Tip" class="copy-tip"></span>`;
+        html += `<button class="copy-btn" onclick="copyText('${group1Lines}','g1Tip')">复制全部</button><span id="g1Tip" class="copy-tip"></span>`;
     }
     if(no === 2) {
-        html += `<button class="copy-btn" data-copy="${group2Lines}" data-tip="g2Tip">复制全部</button>
-                 <span id="g2Tip" class="copy-tip"></span>`;
+        html += `<button class="copy-btn" onclick="copyText('${group2Lines}','g2Tip')">复制全部</button><span id="g2Tip" class="copy-tip"></span>`;
     }
     html += `</div></div>`;
 
     sorted.forEach((cnt, i) => {
         const list = group[cnt].map(padZero).join(' ');
-        let mark = '';
-        if(cnt === maxCnt) mark = '<span class="hot">【最热】</span>';
-        if(cnt === minCnt) mark = '<span class="cold">【最冷】</span>';
-        
+        const mark = cnt === maxCnt ? '<span class="hot">【最热】</span>' : cnt === minCnt ? '<span class="cold">【最冷】</span>' : '';
         html += `
         <div class="group-item">
             <div>${mark} 出现${cnt}次（共${group[cnt].length}个）：${list}</div>
             <div class="item-right">
-                <button class="copy-btn" data-copy="${list}" data-tip="g${no}_${i}">复制</button>
+                <button class="copy-btn" onclick="copyText('${list}','g${no}_${i}')">复制</button>
                 <span id="g${no}_${i}" class="copy-tip"></span>
             </div>
         </div>`;
@@ -526,61 +490,77 @@ function renderGroup(no, sorted, group, maxCnt, minCnt){
     document.getElementById(`groupResult${no}`).innerHTML = html;
 }
 
-function renderZodiac(no, zodiac){
-    const sorted = Object.entries(zodiac).sort((a,b)=>b[1]-a[1]);
-    const max = sorted[0][1], min = sorted.at(-1)[1];
-    let html = `<div class="result-title"><span>🐉 生肖出现统计</span></div>`;
-    sorted.forEach(([z, c]) => {
-        const cls = c === max ? 'zodiac-item hot' : c === min ? 'zodiac-item cold' : 'zodiac-item';
-        html += `<div class="${cls}">${z}：${c}次</div>`;
+// 渲染生肖
+function renderZodiac(no, zodiacCount) {
+    const sorted = Object.entries(zodiacCount).sort((a, b) => b[1] - a[1]);
+    let html = `<div class="result-title"><span>🐉 生肖统计</span></div>`;
+    const max = sorted[0][1], min = sorted[sorted.length-1][1];
+    sorted.forEach(([z, cnt]) => {
+        const cls = cnt === max ? 'zodiac-item hot' : cnt === min ? 'zodiac-item cold' : 'zodiac-item';
+        html += `<div class="${cls}">${z}：${cnt}次</div>`;
     });
     document.getElementById(`zodiacResult${no}`).innerHTML = html;
 }
 
-function clearCompare(){
+// 交叉对比
+function clearCompare() {
     document.getElementById('compareResult').innerHTML = '';
+    document.getElementById('compareTip').innerHTML = '';
 }
 
-function compareAll(){
-    if(Object.keys(countData[1]).length === 0 || Object.keys(countData[2]).length === 0){
-        alert('请先对两组数据分别点击【一键统计】后再对比！');
+function compareAll() {
+    if(!hasCalculated[1] || !hasCalculated[2]){
+        document.getElementById('compareTip').innerHTML = '<div class="error">⚠️ 请先分别点击【一键统计】两组数据，再进行对比！</div>';
         return;
     }
+    document.getElementById('compareTip').innerHTML = '';
 
     const c1 = countData[1], c2 = countData[2];
     const min1 = minMax[1].min, min2 = minMax[2].min;
     const max1 = minMax[1].max, max2 = minMax[2].max;
-    const all = Array.from({length:49},(_,i)=>i+1);
+    const all = Array.from({ length: 49 }, (_, i) => i + 1);
 
-    const r1 = all.filter(n => inRange(c1[n], 1, 2) && inRange(c2[n], min2, 1));
-    const r2 = all.filter(n => inRange(c1[n], 2, 5) && inRange(c2[n], 2, 4));
-    const r3 = all.filter(n => inRange(c1[n], 6, max1) && inRange(c2[n], 5, max2));
-    const r4 = all.filter(n => c1[n] === 7 && inRange(c2[n], 3, 4));
-    const r5 = all.filter(n => c1[n] === 4 && c2[n] === 6);
+    const r1 = all.filter(n => inRange(c1[n], min1, 2) && inRange(c2[n], min2, 1));
+    const r2 = all.filter(n => inRange(c1[n], 2, 6) && inRange(c2[n], 2, 5));
+    const r3 = all.filter(n => inRange(c1[n], 6, max1) && inRange(c2[n], 4, max2));
 
-    const [s1,s2,s3,s4,s5] = [r1,r2,r3,r4,r5].map(format);
-    const final = uniqueSort([...r1,...r2,...r3,...r4,...r5]);
+    const s1 = formatNumbers(r1);
+    const s2 = formatNumbers(r2);
+    const s3 = formatNumbers(r3);
+
+    const finalArr = uniqueSort([...r1, ...r2, ...r3]);
+    const finalStr = formatNumbers(finalArr);
 
     document.getElementById('compareResult').innerHTML = `
-    <div class="result-title">🎯 蚂蚁数据统计结果</div>
-    <div class="group-item compare-row"><div>【1‑2 & 0‑1】：${s1}</div><div class="item-right"><button class="copy-btn" data-copy="${s1}" data-tip="c1">复制</button><span id="c1" class="copy-tip"></span></div></div>
-    <div class="group-item compare-row"><div>【2‑5 & 2‑4】：${s2}</div><div class="item-right"><button class="copy-btn" data-copy="${s2}" data-tip="c2">复制</button><span id="c2" class="copy-tip"></span></div></div>
-    <div class="group-item compare-row"><div>【6‑最热 & 5‑最热】：${s3}</div><div class="item-right"><button class="copy-btn" data-copy="${s3}" data-tip="c3">复制</button><span id="c3" class="copy-tip"></span></div></div>
-    <div class="group-item compare-row"><div>【7 & 3‑4】：${s4}</div><div class="item-right"><button class="copy-btn" data-copy="${s4}" data-tip="c4">复制</button><span id="c4" class="copy-tip"></span></div></div>
-    <div class="group-item compare-row"><div>【4 & 6】：${s5}</div><div class="item-right"><button class="copy-btn" data-copy="${s5}" data-tip="c5">复制</button><span id="c5" class="copy-tip"></span></div></div>
-    <div class="group-item final-row"><div>✅ 推荐号码（共 ${final.length} 个）：${format(final)}</div><div class="item-right"><button class="copy-btn" data-copy="${format(final)}" data-tip="cf">复制</button><span id="cf" class="copy-tip"></span></div></div>`;
-    
-    bindCopyEvents();
-}
-
-function bindCopyEvents() {
-    document.querySelectorAll('.copy-btn').forEach(btn => {
-        btn.onclick = function () {
-            const text = this.getAttribute('data-copy');
-            const tipId = this.getAttribute('data-tip');
-            copyText(text, tipId);
-        };
-    });
+    <div class="result-title">🎯 三组交叉对比</div>
+    <div class="group-item compare-row">
+        <div>【冷门码】：${s1}</div>
+        <div class="item-right">
+            <button class="copy-btn" onclick="copyText('${s1}','c1')">复制</button>
+            <span id="c1" class="copy-tip"></span>
+        </div>
+    </div>
+    <div class="group-item compare-row">
+        <div>【中热码】：${s2}</div>
+        <div class="item-right">
+            <button class="copy-btn" onclick="copyText('${s2}','c2')">复制</button>
+            <span id="c2" class="copy-tip"></span>
+        </div>
+    </div>
+    <div class="group-item compare-row">
+        <div>【热门码】：${s3}</div>
+        <div class="item-right">
+            <button class="copy-btn" onclick="copyText('${s3}','c3')">复制</button>
+            <span id="c3" class="copy-tip"></span>
+        </div>
+    </div>
+    <div class="group-item final-row">
+        <div>✅ 三组合并去重（共 ${finalArr.length} 个）：${finalStr}</div>
+        <div class="item-right">
+            <button class="copy-btn" onclick="copyText('${finalStr}','cf')">复制</button>
+            <span id="cf" class="copy-tip"></span>
+        </div>
+    </div>`;
 }
 </script>
 </body>
