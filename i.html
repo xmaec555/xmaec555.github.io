@@ -11,21 +11,60 @@
             box-sizing: border-box;
             font-family: "Microsoft YaHei", sans-serif;
         }
+
         body {
-            background-color: #f5f7fa;
-            padding: 30px;
-            max-width: 1000px;
-            margin: 0 auto;
+            background: #121212;
+            color: #e0e0e0;
+            padding-top: 60px;
         }
+
+        /* 顶部导航栏 - 手机电脑自适应 */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.9rem 5%;
+            background: #1e1e1e;
+            border-bottom: 1px solid #333;
+            z-index: 100;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-links a {
+            color: #bbbbbb;
+            padding: 5px 8px;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+        }
+
+        /* 工具容器 */
         .container {
-            background: white;
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .tool-box {
+            background: #1e1e1e;
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #333;
         }
         h1 {
             text-align: center;
-            color: #2c3e50;
+            color: #ffffff;
             margin-bottom: 25px;
             font-size: 24px;
         }
@@ -36,60 +75,66 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #34495e;
+            color: #e0e0e0;
         }
         textarea {
             width: 100%;
             height: 120px;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid #444;
             border-radius: 6px;
             resize: vertical;
             font-size: 16px;
+            background: #2a2a2a;
+            color: #ffffff;
         }
         .btn-group {
             display: flex;
             gap: 15px;
             margin-bottom: 25px;
+            flex-wrap: wrap;
         }
         button {
             padding: 10px 20px;
             border: none;
             border-radius: 6px;
-            background-color: #3498db;
+            background-color: #3a6ea5;
             color: white;
             font-size: 16px;
             cursor: pointer;
             transition: 0.2s;
+            flex: 1;
+            min-width: 120px;
         }
         button:hover {
-            background-color: #2980b9;
+            background-color: #2d5a8c;
         }
         button.clear {
-            background-color: #e74c3c;
+            background-color: #d9534f;
         }
         button.clear:hover {
-            background-color: #c0392b;
+            background-color: #c9302c;
         }
         .result-section {
             margin-top: 20px;
             padding: 15px;
-            border: 1px solid #eee;
+            border: 1px solid #444;
             border-radius: 8px;
+            background: #252525;
         }
         .result-title {
             font-size: 18px;
             font-weight: bold;
-            color: #2c3e50;
+            color: #ffffff;
             margin-bottom: 12px;
             padding-bottom: 6px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #444;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         .highlight {
-            color: #e67e22;
+            color: #ff6b6b;
             font-weight: bold;
         }
         .zodiac-item {
@@ -97,33 +142,35 @@
             align-items: center;
             margin: 5px 10px 5px 0;
             padding: 4px 8px;
-            background: #ecf0f1;
+            background: #2a2a2a;
+            border: 1px solid #444;
             border-radius: 4px;
             gap: 6px;
+            color: #e0e0e0;
         }
         .group-item {
-            border: 1px solid #ddd;
+            border: 1px solid #444;
             border-radius: 8px;
             padding: 12px 15px;
             margin: 8px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #fff;
+            background: #2a2a2a;
         }
         .copy-btn {
             padding: 5px 12px;
-            background: #2ecc71;
+            background: #4d7a43;
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
         .copy-btn:hover {
-            background: #27ae60;
+            background: #3f6436;
         }
         .copy-tip {
-            color: #2ecc71;
+            color: #6cce6c;
             font-size: 13px;
             margin-left: 5px;
         }
@@ -131,33 +178,73 @@
             display: flex;
             gap: 25px;
             font-size: 15px;
+            flex-wrap: wrap;
         }
         .random-row {
             line-height: 1.8;
         }
+
+        /* 底部版权 */
+        .bottom-link {
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+            margin-top: 25px;
+            line-height: 1.8;
+        }
+        .bottom-link a {
+            color: #8ab4f8;
+            text-decoration: none;
+            padding: 0 4px;
+        }
     </style>
 </head>
 <body>
+
+<!-- 导航栏 -->
+<nav>
+    <div class="nav-links">
+        <a href="https://m.hxyx.cc.cd">首页</a>
+        <a href="https://m.hxyx.cc.cd/28tj.html">28M</a>
+        <a href="https://m.hxyx.cc.cd/35tj.html">35M</a>
+        <a href="https://m.hxyx.cc.cd/i.html">工具</a>
+    </div>
+</nav>
+
+<!-- 统计工具 -->
 <div class="container">
-    <h1>蚂蚁澳彩统计工具</h1>
-    <div class="input-box">
-        <label>请输入数字（1-49，空格/逗号/换行分隔）：</label>
-        <textarea id="numInput" placeholder="示例：1 3 5 7 9 11"></textarea>
-    </div>
+    <div class="tool-box">
+        <h1>蚂蚁澳彩统计工具</h1>
+        <div class="input-box">
+            <label>请输入数字（1-49，空格/逗号/换行分隔）：</label>
+            <textarea id="numInput" placeholder="示例：1 3 5 7 9 11"></textarea>
+        </div>
 
-    <div class="btn-group">
-        <button onclick="calculate()">一键统计</button>
-        <button class="clear" onclick="clearAll()">清空</button>
-    </div>
+        <div class="btn-group">
+            <button onclick="calculate()">一键统计</button>
+            <button class="clear" onclick="clearAll()">清空</button>
+        </div>
 
-    <div class="result-section" id="baseResult"></div>
-    <div class="result-section" id="groupResult"></div>
-    <div class="result-section" id="randomResult"></div>
-    <div class="result-section" id="zodiacResult"></div>
+        <div class="result-section" id="baseResult"></div>
+        <div class="result-section" id="groupResult"></div>
+        <div class="result-section" id="randomResult"></div>
+        <div class="result-section" id="zodiacResult"></div>
+
+        <!-- 底部版权 -->
+        <div class="bottom-link">
+            <p>© 2026 蚂蚁数据澳彩团队 - 版权所有</p>
+            <p>
+                <a href="https://t.me/+RjaMJ26EAPw0ZTc1">频道</a>
+                <a href="https://m.hxyx.cc.cd/kj.html">直播</a>
+                <a href="https://m.hxyx.cc.cd">收藏</a>
+            </p>
+        </div>
+    </div>
 </div>
 
 <script>
-    const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
+    // 标准澳彩生肖顺序
+    const zodiacList = ['鼠','牛','虎','兔','龙','蛇','马','羊','猴','鸡','狗','猪'];
     
     function getZodiac(num) {
         return zodiacList[(num - 1) % 12];
@@ -177,9 +264,10 @@
 
     function copyText(text, tipId) {
         navigator.clipboard.writeText(text).then(() => {
-            document.getElementById(tipId).innerText = "已复制！";
-            setTimeout(() => document.getElementById(tipId).innerText = "", 1500);
-        });
+            const tip = document.getElementById(tipId);
+            tip.innerText = "已复制！";
+            setTimeout(() => tip.innerText = "", 1500);
+        }).catch(err => console.log(err));
     }
 
     function shuffleArray(arr) {
@@ -196,8 +284,20 @@
 
     function calculate() {
         const input = document.getElementById('numInput').value.trim();
+        if (!input) {
+            clearAll();
+            alert("请输入数字！");
+            return;
+        }
+
         const inputNums = input.match(/\d+/g) || [];
         const inputArr = inputNums.map(Number).filter(n => n >= 1 && n <= 49);
+
+        if (inputArr.length === 0) {
+            clearAll();
+            alert("未检测到有效数字（1-49）！");
+            return;
+        }
 
         const allNumbers = Array.from({ length: 49 }, (_, i) => i + 1);
         
@@ -215,7 +315,7 @@
             if (!group[c]) group[c] = [];
             group[c].push(n);
         }
-        const sortedCounts = Object.keys(group).map(Number).sort((a, b) => a - b);
+        const sortedCounts = Object.keys(group).map(Number).sort((a, b) => b - a);
 
         const zodiacCount = {};
         zodiacList.forEach(z => zodiacCount[z] = 0);
@@ -229,7 +329,10 @@
         const totalOnce = onceNumbers.length;
         const beforeSort = onceNumbers.map(n => padZero(n)).join(' ');
         const afterSort = shuffledOnce.map(n => padZero(n)).join(' ');
-        const checkResult = (onceNumbers.sort((a,b)=>a-b).join(',') === shuffledOnce.sort((a,b)=>a-b).join(',')) ? "一致" : "不一致";
+        
+        const checkResult = onceNumbers.slice().sort((a,b)=>a-b).join(',') 
+                          === shuffledOnce.slice().sort((a,b)=>a-b).join(',') 
+                          ? "✅ 一致" : "❌ 不一致";
 
         renderBase(totalCount, uniqueCount, maxCount);
         renderGroup(sortedCounts, group);
@@ -267,7 +370,7 @@
             <div class="group-item">
                 <div>${line}</div>
                 <div>
-                    <button class="copy-btn" onclick="copyText('${list}','g${i}')">复制</button>
+                    <button class="copy-btn" onclick="copyText('${list.replace(/'/g, "\\'")}','g${i}')">复制</button>
                     <span id="g${i}" class="copy-tip"></span>
                 </div>
             </div>`;
@@ -285,7 +388,7 @@
             <div>打乱总数：${totalOnce}</div>
             <div>打乱前：${before}</div>
             <div>打乱后：${after} 
-                <button class="copy-btn" onclick="copyText('${after}','randTip')">复制</button>
+                <button class="copy-btn" onclick="copyText('${after.replace(/'/g, "\\'")}','randTip')">复制</button>
                 <span id="randTip" class="copy-tip"></span>
             </div>
             <div>复核结果：${check}</div>
