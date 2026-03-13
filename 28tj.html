@@ -193,8 +193,10 @@
             flex-wrap: wrap;
             gap: 8px;
         }
+
+        /* ========== 统一复制按钮样式 ========== */
         .copy-btn {
-            padding: 6px 14px;
+            padding: 8px 14px;
             background: #4d7a43;
             color: #fff;
             border: none;
@@ -210,9 +212,20 @@
         .copy-tip {
             color: #6cce6c;
             font-size: 13px;
-            margin-left: 6px;
+            margin-left: 8px;
             white-space: nowrap;
         }
+        .title-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .item-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .base-row {
             display: flex;
             gap: 25px;
@@ -481,7 +494,7 @@ function renderBase(no, total, unique, max, min){
 function renderGroup(no, sorted, group, maxCnt, minCnt){
     let html = `<div class="result-title">
         <span>📦 次数分组（最冷→最热）</span>
-        <div style="display:flex;align-items:center;gap:6px;">`;
+        <div class="title-right">`;
 
     if(no === 1) {
         html += `<button class="copy-btn" data-copy="${group1Lines}" data-tip="g1Tip">复制全部</button>
@@ -502,7 +515,7 @@ function renderGroup(no, sorted, group, maxCnt, minCnt){
         html += `
         <div class="group-item">
             <div>${mark} 出现${cnt}次（共${group[cnt].length}个）：${list}</div>
-            <div style="display:flex;gap:6px;align-items:center;">
+            <div class="item-right">
                 <button class="copy-btn" data-copy="${list}" data-tip="g${no}_${i}">复制</button>
                 <span id="g${no}_${i}" class="copy-tip"></span>
             </div>
@@ -548,12 +561,12 @@ function compareAll(){
 
     document.getElementById('compareResult').innerHTML = `
     <div class="result-title">🎯 蚂蚁数据统计结果</div>
-    <div class="group-item compare-row"><div>【1‑2 & 0‑1】：${s1}</div><div><button class="copy-btn" data-copy="${s1}" data-tip="c1">复制</button><span id="c1" class="copy-tip"></span></div></div>
-    <div class="group-item compare-row"><div>【2‑5 & 2‑4】：${s2}</div><div><button class="copy-btn" data-copy="${s2}" data-tip="c2">复制</button><span id="c2" class="copy-tip"></span></div></div>
-    <div class="group-item compare-row"><div>【6‑最热 & 5‑最热】：${s3}</div><div><button class="copy-btn" data-copy="${s3}" data-tip="c3">复制</button><span id="c3" class="copy-tip"></span></div></div>
-    <div class="group-item compare-row"><div>【7 & 3‑4】：${s4}</div><div><button class="copy-btn" data-copy="${s4}" data-tip="c4">复制</button><span id="c4" class="copy-tip"></span></div></div>
-    <div class="group-item compare-row"><div>【4 & 6】：${s5}</div><div><button class="copy-btn" data-copy="${s5}" data-tip="c5">复制</button><span id="c5" class="copy-tip"></span></div></div>
-    <div class="group-item final-row"><div>✅ 推荐号码（共 ${final.length} 个）：${format(final)}</div><div><button class="copy-btn" data-copy="${format(final)}" data-tip="cf">复制</button><span id="cf" class="copy-tip"></span></div></div>`;
+    <div class="group-item compare-row"><div>【1‑2 & 0‑1】：${s1}</div><div class="item-right"><button class="copy-btn" data-copy="${s1}" data-tip="c1">复制</button><span id="c1" class="copy-tip"></span></div></div>
+    <div class="group-item compare-row"><div>【2‑5 & 2‑4】：${s2}</div><div class="item-right"><button class="copy-btn" data-copy="${s2}" data-tip="c2">复制</button><span id="c2" class="copy-tip"></span></div></div>
+    <div class="group-item compare-row"><div>【6‑最热 & 5‑最热】：${s3}</div><div class="item-right"><button class="copy-btn" data-copy="${s3}" data-tip="c3">复制</button><span id="c3" class="copy-tip"></span></div></div>
+    <div class="group-item compare-row"><div>【7 & 3‑4】：${s4}</div><div class="item-right"><button class="copy-btn" data-copy="${s4}" data-tip="c4">复制</button><span id="c4" class="copy-tip"></span></div></div>
+    <div class="group-item compare-row"><div>【4 & 6】：${s5}</div><div class="item-right"><button class="copy-btn" data-copy="${s5}" data-tip="c5">复制</button><span id="c5" class="copy-tip"></span></div></div>
+    <div class="group-item final-row"><div>✅ 推荐号码（共 ${final.length} 个）：${format(final)}</div><div class="item-right"><button class="copy-btn" data-copy="${format(final)}" data-tip="cf">复制</button><span id="cf" class="copy-tip"></span></div></div>`;
     
     bindCopyEvents();
 }
