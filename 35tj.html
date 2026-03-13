@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>蚂蚁澳彩盘口35M统计</title>
+    <title>蚂蚁啊啊盘子35M统计</title>
     <style>
         * {
             margin: 0;
@@ -291,13 +291,13 @@
 
 <div class="container">
     <div class="tool-box">
-        <h1>蚂蚁澳彩盘口35M统计</h1>
+        <h1>蚂蚁啊啊盘子35M统计</h1>
 
         <div class="panel">
             <h2>第一组统计</h2>
             <div class="input-box">
-                <label>蚂蚁数据-澳彩专家（第一组）：</label>
-                <textarea id="numInput1" placeholder="示例：1 3 5 7 9 11" oninput="showInputInfo(1)"></textarea>
+                <label>蚂蚁数据-啊啊专家（第一组）：</label>
+                <textarea id="numInput1" placeholder="示例：1 3 5 7 9 11" oninput="autoCalculate(1)"></textarea>
                 <div class="input-info" id="inputInfo1">已输入：0 个数字</div>
             </div>
             <div class="btn-group">
@@ -314,8 +314,8 @@
         <div class="panel">
             <h2>第二组统计</h2>
             <div class="input-box">
-                <label>蚂蚁数据-澳彩专家（第二组）：</label>
-                <textarea id="numInput2" placeholder="示例：2 4 6 8 10 12" oninput="showInputInfo(2)"></textarea>
+                <label>蚂蚁数据-啊啊专家（第二组）：</label>
+                <textarea id="numInput2" placeholder="示例：2 4 6 8 10 12" oninput="autoCalculate(2)"></textarea>
                 <div class="input-info" id="inputInfo2">已输入：0 个数字</div>
             </div>
             <div class="btn-group">
@@ -340,7 +340,7 @@
         </div>
 
         <div class="bottom-link">
-            <p>© 2026 蚂蚁数据澳彩团队 - 版权所有</p>
+            <p>© 2026 蚂蚁数据啊啊团队 - 版权所有</p>
             <p>
                 <a href="https://t.me/+RjaMJ26EAPw0ZTc1">频道</a>
                 <a href="https://m.hxyx.cc.cd/kj.html">直播</a>
@@ -364,6 +364,19 @@ const uniqueSort = arr => [...new Set(arr)].sort((a, b) => a - b);
 const formatNumbers = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
 const inRange = (val, min, max) => val >= min && val <= max;
 
+// 自动统计（输入时实时触发）
+function autoCalculate(no) {
+    showInputInfo(no);
+    calculate(no);
+    
+    // 两组都统计完成后自动对比
+    if (hasCalculated[1] && hasCalculated[2]) {
+        compareAll();
+    } else {
+        clearCompare();
+    }
+}
+
 // 输入状态
 function showInputInfo(no) {
     const val = document.getElementById(`numInput${no}`).value;
@@ -379,6 +392,11 @@ function clearAll(no) {
     document.getElementById(`zodiacResult${no}`).innerHTML = '';
     hasCalculated[no] = false;
     showInputInfo(no);
+    if (hasCalculated[1] && hasCalculated[2]) {
+        compareAll();
+    } else {
+        clearCompare();
+    }
 }
 
 // 复制功能（修复版）
@@ -411,13 +429,13 @@ function uniqueNum(no) {
     const el = document.getElementById(`numInput${no}`);
     const arr = (el.value.match(/\d+/g) || []).map(Number).filter(n => n >=1 && n <=49);
     el.value = uniqueSort(arr).join(' ');
-    showInputInfo(no);
+    autoCalculate(no);
 }
 function sortNum(no) {
     const el = document.getElementById(`numInput${no}`);
     const arr = (el.value.match(/\d+/g) || []).map(Number).filter(n => n >=1 && n <=49).sort((a,b)=>a-b);
     el.value = arr.join(' ');
-    showInputInfo(no);
+    autoCalculate(no);
 }
 
 // 核心统计
@@ -426,7 +444,7 @@ function calculate(no) {
     const inputArr = (input.match(/\d+/g) || []).map(Number).filter(n => n >= 1 && n <= 49);
     
     if(inputArr.length === 0){
-        alert('请输入1-49的数字再统计');
+        hasCalculated[no] = false;
         return;
     }
 
@@ -456,7 +474,6 @@ function calculate(no) {
     renderGroup(no, sortedCounts, group, minMax[no].max, minMax[no].min);
     renderZodiac(no, zodiacCount);
     hasCalculated[no] = true;
-    showInputInfo(no);
 }
 
 // 渲染基础信息
@@ -509,7 +526,7 @@ function clearCompare() {
 
 function compareAll() {
     if(!hasCalculated[1] || !hasCalculated[2]){
-        document.getElementById('compareTip').innerHTML = '<div class="error">⚠️ 请先分别点击【一键统计】两组数据，再进行对比！</div>';
+        document.getElementById('compareTip').innerHTML = '<div class="error">⚠️ 请先输入两组数据进行统计</div>';
         return;
     }
     document.getElementById('compareTip').innerHTML = '';
@@ -542,21 +559,21 @@ function compareAll() {
     <div class="group-item compare-row">
         <div>【中热码】：${s2}</div>
         <div class="item-right">
-            <button class="copy-btn" onclick="copyText('${s2}','c2')">复制</button>
+            <button class="copy-btn" onclick="copyText('${s2}','c2')</button>
             <span id="c2" class="copy-tip"></span>
         </div>
     </div>
     <div class="group-item compare-row">
         <div>【热门码】：${s3}</div>
         <div class="item-right">
-            <button class="copy-btn" onclick="copyText('${s3}','c3')">复制</button>
+            <button class="copy-btn" onclick="copyText('${s3}','c3')</button>
             <span id="c3" class="copy-tip"></span>
         </div>
     </div>
     <div class="group-item final-row">
         <div>✅ 推荐号码（共 ${finalArr.length} 个）：${finalStr}</div>
         <div class="item-right">
-            <button class="copy-btn" onclick="copyText('${finalStr}','cf')">复制</button>
+            <button class="copy-btn" onclick="copyText('${finalStr}','cf')</button>
             <span id="cf" class="copy-tip"></span>
         </div>
     </div>`;
