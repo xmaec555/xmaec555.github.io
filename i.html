@@ -2,206 +2,239 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>蚂蚁澳彩统计工具</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Microsoft YaHei", sans-serif;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
         }
 
         body {
             background: #121212;
             color: #e0e0e0;
-            padding-top: 60px;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 70px 12px 20px;
+            line-height: 1.5;
         }
 
-        /* 顶部导航栏 - 手机电脑自适应 */
+        /* 导航栏 - 全端适配 */
         nav {
             position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
             width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0.9rem 5%;
             background: #1e1e1e;
             border-bottom: 1px solid #333;
-            z-index: 100;
+            z-index: 999;
+            padding: 10px 0;
         }
 
         .nav-links {
             display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
             justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 10px;
         }
 
         .nav-links a {
             color: #bbbbbb;
-            padding: 5px 8px;
             text-decoration: none;
             font-size: 15px;
+            padding: 4px 2px;
+            white-space: nowrap;
         }
 
         .nav-links a:hover {
             color: #ffffff;
         }
 
-        /* 工具容器 */
         .container {
-            max-width: 1000px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-        .tool-box {
             background: #1e1e1e;
-            padding: 25px;
-            border-radius: 12px;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
             border: 1px solid #333;
         }
+
         h1 {
             text-align: center;
             color: #ffffff;
-            margin-bottom: 25px;
-            font-size: 24px;
+            margin-bottom: 22px;
+            font-size: clamp(20px, 5vw, 24px);
         }
+
         .input-box {
             margin-bottom: 20px;
         }
+
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
             color: #e0e0e0;
+            font-size: 15px;
         }
+
         textarea {
             width: 100%;
-            height: 120px;
+            min-height: 120px;
             padding: 12px;
             border: 1px solid #444;
-            border-radius: 6px;
+            border-radius: 8px;
             resize: vertical;
             font-size: 16px;
             background: #2a2a2a;
-            color: #ffffff;
+            color: #fff;
+            outline: none;
         }
+
+        textarea:focus {
+            border-color: #3a6ea5;
+        }
+
+        .tip {
+            color: #aaa;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
         .btn-group {
             display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
+            gap: 12px;
+            margin-bottom: 24px;
             flex-wrap: wrap;
         }
+
         button {
-            padding: 10px 20px;
+            flex: 1;
+            min-width: 120px;
+            padding: 11px 20px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             background-color: #3a6ea5;
             color: white;
             font-size: 16px;
             cursor: pointer;
             transition: 0.2s;
-            flex: 1;
-            min-width: 120px;
+            font-weight: 500;
         }
+
         button:hover {
             background-color: #2d5a8c;
         }
+
         button.clear {
-            background-color: #d9534f;
+            background-color: #c75450;
         }
+
         button.clear:hover {
-            background-color: #c9302c;
+            background-color: #a84440;
         }
+
         .result-section {
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 18px;
+            padding: 16px;
             border: 1px solid #444;
-            border-radius: 8px;
+            border-radius: 10px;
             background: #252525;
         }
+
         .result-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: bold;
             color: #ffffff;
             margin-bottom: 12px;
-            padding-bottom: 6px;
+            padding-bottom: 8px;
             border-bottom: 1px solid #444;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
+
         .highlight {
             color: #ff6b6b;
             font-weight: bold;
         }
-        .zodiac-item {
-            display: inline-flex;
-            align-items: center;
-            margin: 5px 10px 5px 0;
-            padding: 4px 8px;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            border-radius: 4px;
-            gap: 6px;
-            color: #e0e0e0;
+
+        .base-row {
+            display: flex;
+            gap: 20px;
+            font-size: 15px;
+            flex-wrap: wrap;
         }
+
         .group-item {
             border: 1px solid #444;
             border-radius: 8px;
-            padding: 12px 15px;
+            padding: 12px 14px;
             margin: 8px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: #2a2a2a;
+            flex-wrap: wrap;
+            gap: 10px;
+            word-break: break-all;
         }
+
+        .zodiac-item {
+            display: inline-flex;
+            align-items: center;
+            margin: 6px 8px 6px 0;
+            padding: 6px 10px;
+            background: #333;
+            border-radius: 6px;
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+
         .copy-btn {
-            padding: 5px 12px;
+            padding: 6px 12px;
             background: #4d7a43;
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 14px;
+            white-space: nowrap;
         }
+
         .copy-btn:hover {
             background: #3f6436;
         }
+
         .copy-tip {
             color: #6cce6c;
             font-size: 13px;
-            margin-left: 5px;
-        }
-        .base-row {
-            display: flex;
-            gap: 25px;
-            font-size: 15px;
-            flex-wrap: wrap;
-        }
-        .random-row {
-            line-height: 1.8;
+            margin-left: 6px;
         }
 
-        /* 底部版权 */
-        .bottom-link {
-            text-align: center;
-            font-size: 14px;
-            color: #888;
-            margin-top: 25px;
-            line-height: 1.8;
-        }
-        .bottom-link a {
-            color: #8ab4f8;
-            text-decoration: none;
-            padding: 0 4px;
+        /* 小屏幕优化 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 16px 14px;
+            }
+            .result-section {
+                padding: 14px 12px;
+            }
+            .group-item {
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- 导航栏 -->
 <nav>
     <div class="nav-links">
         <a href="https://m.hxyx.cc.cd/sy.html">首页</a>
@@ -211,210 +244,144 @@
     </div>
 </nav>
 
-<!-- 统计工具 -->
 <div class="container">
-    <div class="tool-box">
-        <h1>蚂蚁澳彩统计工具</h1>
-        <div class="input-box">
-            <label>请输入数字（1-49，空格/逗号/换行分隔）：</label>
-            <textarea id="numInput" placeholder="示例：1 3 5 7 9 11"></textarea>
-        </div>
-
-        <div class="btn-group">
-            <button onclick="calculate()">一键统计</button>
-            <button class="clear" onclick="clearAll()">清空</button>
-        </div>
-
-        <div class="result-section" id="baseResult"></div>
-        <div class="result-section" id="groupResult"></div>
-        <div class="result-section" id="randomResult"></div>
-        <div class="result-section" id="zodiacResult"></div>
-
-        <!-- 底部版权 -->
-        <div class="bottom-link">
-            <p>© 2026 蚂蚁数据澳彩团队 - 版权所有</p>
-            <p>
-                <a href="https://t.me/+RjaMJ26EAPw0ZTc1">频道</a>
-                <a href="https://m.hxyx.cc.cd/kj.html">直播</a>
-                <a href="https://m.hxyx.cc.cd">收藏</a>
-            </p>
-        </div>
+    <h1>蚂蚁澳彩统计工具</h1>
+    <div class="input-box">
+        <label>蚂蚁数据-澳彩专家：</label>
+        <textarea id="numInput" placeholder="示例：1 3 5 7 9 11"></textarea>
+        <div class="tip">支持空格/换行/任意符号分隔，自动提取 1-49 数字</div>
     </div>
+
+    <div class="btn-group">
+        <button onclick="calculate()">一键统计</button>
+        <button class="clear" onclick="clearAll()">清空</button>
+    </div>
+
+    <div class="result-section" id="baseResult"></div>
+    <div class="result-section" id="groupResult"></div>
+    <div class="result-section" id="zodiacResult"></div>
 </div>
 
 <script>
-    // 标准澳彩生肖顺序
-    const zodiacList = ['鼠','牛','虎','兔','龙','蛇','马','羊','猴','鸡','狗','猪'];
+const zodiacList = ['鼠','牛','虎','兔','龙','蛇','马','羊','猴','鸡','狗','猪'];
+const $ = id => document.getElementById(id);
+const getZodiac = num => zodiacList[(num - 1) % 12];
+const padZero = num => num.toString().padStart(2, '0');
+let fullGroupText = "", fullZodiacText = "";
+
+function clearAll() {
+    $('numInput').value = '';
+    $('baseResult').innerHTML = '';
+    $('groupResult').innerHTML = '';
+    $('zodiacResult').innerHTML = '';
+}
+
+async function copyText(text, tipId) {
+    const tip = $(tipId);
+    try {
+        await navigator.clipboard.writeText(text);
+        tip.textContent = "✅ 已复制";
+    } catch (err) {
+        tip.textContent = "❌ 复制失败";
+        tip.style.color = "#ff6b6b";
+    }
+    setTimeout(() => tip.textContent = "", 1500);
+}
+
+function calculate() {
+    const input = $('numInput').value.trim();
+    if (!input) return alert("请输入数字");
     
-    function getZodiac(num) {
-        return zodiacList[(num - 1) % 12];
+    const inputArr = (input.match(/\d+/g) || [])
+        .map(Number)
+        .filter(n => n >= 1 && n <= 49);
+    
+    if (inputArr.length === 0) return alert("未识别到有效 1-49 数字");
+
+    const countMap = {};
+    for (let i = 1; i <= 49; i++) countMap[i] = 0;
+    inputArr.forEach(n => countMap[n]++);
+
+    const totalCount = inputArr.length;
+    const uniqueCount = new Set(inputArr).size;
+    const maxCount = Math.max(...Object.values(countMap));
+
+    const group = {};
+    for (const n in countMap) {
+        const c = countMap[n];
+        (group[c] || (group[c] = [])).push(+n);
     }
+    const sortedCounts = Object.keys(group).map(Number).sort((a, b) => a - b);
 
-    function padZero(num) {
-        return num.toString().padStart(2, '0');
-    }
+    const zodiacCount = {};
+    zodiacList.forEach(z => zodiacCount[z] = 0);
+    inputArr.forEach(n => zodiacCount[getZodiac(n)]++);
 
-    function clearAll() {
-        document.getElementById('numInput').value = '';
-        document.getElementById('baseResult').innerHTML = '';
-        document.getElementById('groupResult').innerHTML = '';
-        document.getElementById('randomResult').innerHTML = '';
-        document.getElementById('zodiacResult').innerHTML = '';
-    }
+    renderBase(totalCount, uniqueCount, maxCount);
+    renderGroup(sortedCounts, group);
+    renderZodiac(zodiacCount);
+}
 
-    function copyText(text, tipId) {
-        navigator.clipboard.writeText(text).then(() => {
-            const tip = document.getElementById(tipId);
-            tip.innerText = "已复制！";
-            setTimeout(() => tip.innerText = "", 1500);
-        }).catch(err => console.log(err));
-    }
-
-    function shuffleArray(arr) {
-        let newArr = [...arr];
-        for (let i = newArr.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
-        }
-        return newArr;
-    }
-
-    let fullGroupText = "";
-    let fullZodiacText = "";
-
-    function calculate() {
-        const input = document.getElementById('numInput').value.trim();
-        if (!input) {
-            clearAll();
-            alert("请输入数字！");
-            return;
-        }
-
-        const inputNums = input.match(/\d+/g) || [];
-        const inputArr = inputNums.map(Number).filter(n => n >= 1 && n <= 49);
-
-        if (inputArr.length === 0) {
-            clearAll();
-            alert("未检测到有效数字（1-49）！");
-            return;
-        }
-
-        const allNumbers = Array.from({ length: 49 }, (_, i) => i + 1);
-        
-        const countMap = {};
-        allNumbers.forEach(n => countMap[n] = 0);
-        inputArr.forEach(n => countMap[n]++);
-
-        const totalCount = inputArr.length;
-        const uniqueCount = [...new Set(inputArr)].length;
-        const maxCount = Math.max(...Object.values(countMap));
-
-        const group = {};
-        for (let n of allNumbers) {
-            const c = countMap[n];
-            if (!group[c]) group[c] = [];
-            group[c].push(n);
-        }
-        const sortedCounts = Object.keys(group).map(Number).sort((a, b) => b - a);
-
-        const zodiacCount = {};
-        zodiacList.forEach(z => zodiacCount[z] = 0);
-        inputArr.forEach(n => {
-            const z = getZodiac(n);
-            zodiacCount[z]++;
-        });
-
-        const onceNumbers = allNumbers.filter(n => countMap[n] === 1);
-        const shuffledOnce = shuffleArray(onceNumbers);
-        const totalOnce = onceNumbers.length;
-        const beforeSort = onceNumbers.map(n => padZero(n)).join(' ');
-        const afterSort = shuffledOnce.map(n => padZero(n)).join(' ');
-        
-        const checkResult = onceNumbers.slice().sort((a,b)=>a-b).join(',') 
-                          === shuffledOnce.slice().sort((a,b)=>a-b).join(',') 
-                          ? "✅ 一致" : "❌ 不一致";
-
-        renderBase(totalCount, uniqueCount, maxCount);
-        renderGroup(sortedCounts, group);
-        renderRandom(totalOnce, beforeSort, afterSort, checkResult);
-        renderZodiac(zodiacCount);
-    }
-
-    function renderBase(total, unique, max) {
-        document.getElementById('baseResult').innerHTML = `
+function renderBase(total, unique, max) {
+    $('baseResult').innerHTML = `
         <div class="result-title">📊 基础统计结果</div>
         <div class="base-row">
             <div>输入总数量：<span class="highlight">${total}</span></div>
             <div>不重复数量：<span class="highlight">${unique}</span></div>
             <div>最高出现次数：<span class="highlight">${max}</span></div>
         </div>
-        `;
-    }
+    `;
+}
 
-    function renderGroup(sorted, group) {
-        let allText = [];
-        let html = `<div class="result-title">
-            <span>📦 按出现次数分组（含未出现数字）</span>
-            <button class="copy-btn" onclick="copyText(fullGroupText,'allTip')">一键复制全部</button>
+function renderGroup(sorted, group) {
+    const allText = [];
+    let html = `<div class="result-title">
+        <span>📦 按出现次数分组</span>
+        <div>
+            <button class="copy-btn" onclick="copyText(fullGroupText,'allTip')">复制全部</button>
             <span id="allTip" class="copy-tip"></span>
-        </div>`;
-        
-        sorted.forEach((cnt, i) => {
-            const nums = group[cnt];
-            const list = nums.map(n => padZero(n)).join(' ');
-            const totalNum = nums.length;
-            const line = `出现${cnt}次（共${totalNum}个数）：${list}`;
-            allText.push(line);
-            
-            html += `
+        </div>
+    </div>`;
+
+    sorted.forEach((cnt, i) => {
+        const nums = group[cnt];
+        const list = nums.map(padZero).join(' ');
+        const line = `出现${cnt}次（共${nums.length}个）：${list}`;
+        allText.push(line);
+        html += `
             <div class="group-item">
                 <div>${line}</div>
                 <div>
-                    <button class="copy-btn" onclick="copyText('${list.replace(/'/g, "\\'")}','g${i}')">复制</button>
-                    <span id="g${i}" class="copy-tip"></span>
+                    <button class="copy-btn" onclick="copyText(\`${line}\`,'gtip${i}')">复制</button>
+                    <span id="gtip${i}" class="copy-tip"></span>
                 </div>
             </div>`;
-        });
-        
-        fullGroupText = allText.join("\n");
-        document.getElementById('groupResult').innerHTML = html;
-    }
+    });
 
-    function renderRandom(totalOnce, before, after, check) {
-        let html = `<div class="result-title">
-            <span>🔀 出现1次数字随机打乱</span>
-        </div>`;
-        html += `<div class="random-row">
-            <div>打乱总数：${totalOnce}</div>
-            <div>打乱前：${before}</div>
-            <div>打乱后：${after} 
-                <button class="copy-btn" onclick="copyText('${after.replace(/'/g, "\\'")}','randTip')">复制</button>
-                <span id="randTip" class="copy-tip"></span>
-            </div>
-            <div>复核结果：${check}</div>
-        </div>`;
-        document.getElementById('randomResult').innerHTML = html;
-    }
+    fullGroupText = allText.join("\n");
+    $('groupResult').innerHTML = html;
+}
 
-    function renderZodiac(zodiacCount) {
-        const sortedZodiac = Object.entries(zodiacCount).sort((a, b) => b[1] - a[1]);
-        let allText = [];
-        sortedZodiac.forEach(([z, cnt]) => {
-            allText.push(`${z}：${cnt}次`);
-        });
-        fullZodiacText = allText.join("\n");
-        
-        let html = `<div class="result-title">
-            <span>🐉 生肖出现次数</span>
+function renderZodiac(zodiacCount) {
+    const sortedZodiac = Object.entries(zodiacCount).sort((a, b) => b[1] - a[1]);
+    const allText = [];
+    let html = `<div class="result-title">
+        <span>🐉 生肖出现次数</span>
+        <div>
             <button class="copy-btn" onclick="copyText(fullZodiacText,'zAllTip')">一键复制</button>
             <span id="zAllTip" class="copy-tip"></span>
-        </div>`;
-        
-        sortedZodiac.forEach(([z, cnt]) => {
-            html += `<span class="zodiac-item">${z}：${cnt}次</span>`;
-        });
-        document.getElementById('zodiacResult').innerHTML = html;
-    }
+        </div>
+    </div>`;
+
+    sortedZodiac.forEach(([z, cnt]) => {
+        const line = `${z}：${cnt}次`;
+        allText.push(line);
+        html += `<span class="zodiac-item">${line}</span>`;
+    });
+
+    fullZodiacText = allText.join("\n");
+    $('zodiacResult').innerHTML = html;
+}
 </script>
 </body>
 </html>
