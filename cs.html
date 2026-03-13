@@ -15,33 +15,35 @@
         body {
             background: #121212;
             color: #e0e0e0;
-            padding-top: 70px;
+            padding-top: 60px;
         }
 
-        /* 顶部导航栏（唯一） */
+        /* 顶部导航栏 - 手机电脑自适应 */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            padding: 1rem 5%;
+            padding: 0.9rem 5%;
             background: #1e1e1e;
             border-bottom: 1px solid #333;
             z-index: 100;
         }
 
-        .logo {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: #ffffff;
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .nav-links a {
             color: #bbbbbb;
-            margin-left: 2rem;
+            padding: 5px 8px;
             text-decoration: none;
+            font-size: 15px;
         }
 
         .nav-links a:hover {
@@ -64,6 +66,7 @@
             text-align: center;
             color: #ffffff;
             margin-bottom: 20px;
+            font-size: 22px;
         }
         textarea {
             width: 100%;
@@ -167,14 +170,14 @@
         .bottom-link a {
             color: #8ab4f8;
             text-decoration: none;
+            padding: 0 4px;
         }
     </style>
 </head>
 <body>
 
-<!-- 顶部导航栏 -->
+<!-- 精简导航栏（无logo + 手机自适应） -->
 <nav>
-    <div class="logo">蚂蚁数据</div>
     <div class="nav-links">
         <a href="#">首页</a>
         <a href="#">工具</a>
