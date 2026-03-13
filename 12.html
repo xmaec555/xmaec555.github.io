@@ -244,7 +244,7 @@
 
     let currentGroup = {};
 
-    // 查詢（支持簡繁體）
+    // 查詢（支持簡繁體 + 逗號分隔）
     function search() {
         let val = document.getElementById("input").value.trim();
         let res = document.getElementById("result");
@@ -255,7 +255,8 @@
             return;
         }
 
-        let items = val.split(/\s+/).filter(x => x);
+        // ✅ 支持 逗号、空格、换行、中英文逗号
+        let items = val.split(/[\s,，]+/).filter(x => x);
         let group = {};
 
         for (let item of items) {
