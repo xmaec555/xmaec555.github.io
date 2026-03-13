@@ -9,13 +9,14 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Microsoft YaHei", sans-serif;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
         }
 
         body {
             background: #121212;
             color: #e0e0e0;
             padding-top: 60px;
+            min-height: 100vh;
         }
 
         nav {
@@ -26,9 +27,10 @@
             justify-content: center;
             align-items: center;
             padding: 0.9rem 5%;
-            background: #1e1e1e;
+            background: #1a1a1a;
             border-bottom: 1px solid #333;
             z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
         .nav-links {
@@ -40,13 +42,16 @@
 
         .nav-links a {
             color: #bbbbbb;
-            padding: 5px 8px;
+            padding: 6px 10px;
             text-decoration: none;
             font-size: 15px;
+            border-radius: 4px;
+            transition: all 0.2s;
         }
 
         .nav-links a:hover {
             color: #ffffff;
+            background: #333;
         }
 
         .container {
@@ -55,10 +60,11 @@
             padding: 0 20px;
         }
         .tool-box {
-            background: #1e1e1e;
-            padding: 25px;
-            border-radius: 12px;
+            background: #1a1a1a;
+            padding: 28px;
+            border-radius: 14px;
             border: 1px solid #333;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
         h1,h2 {
             text-align: center;
@@ -97,9 +103,14 @@
             font-size: 14px;
             background: #2a2a2a;
             color: #ffffff;
+            outline: none;
+            transition: border 0.2s;
+        }
+        textarea:focus {
+            border-color: #3a6ea5;
         }
         .input-info {
-            font-size: 13px;
+            font-size: 3px;
             color: #aaa;
             margin-top: 5px;
         }
@@ -120,9 +131,11 @@
             font-size: 15px;
             cursor: pointer;
             transition: 0.2s;
+            font-weight: 500;
         }
         button:hover {
             background: #2d5a8c;
+            transform: translateY(-1px);
         }
         button.clear {
             background: #a83232;
@@ -194,7 +207,7 @@
             gap: 8px;
         }
 
-        /* ========== 统一复制按钮样式 ========== */
+        /* 复制按钮统一样式 */
         .copy-btn {
             padding: 8px 14px;
             background: #4d7a43;
@@ -205,6 +218,7 @@
             font-size: 14px;
             font-weight: 500;
             min-width: 70px;
+            transition: background 0.2s;
         }
         .copy-btn:hover {
             background: #3f6436;
@@ -255,6 +269,9 @@
             text-decoration: none;
             padding: 0 4px;
         }
+        .bottom-link a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -270,13 +287,13 @@
 
 <div class="container">
     <div class="tool-box">
-        <h1>蚂蚁澳彩 - 双盘口统计</h1>
+        <h1>蚂蚁澳彩 - 自动统计</h1>
 
         <div class="panel">
             <h2>第一组统计</h2>
             <div class="input-box">
                 <label>蚂蚁数据-天子数据盘：</label>
-                <textarea id="numInput1" placeholder="请输入数字" oninput="showInputInfo(1)"></textarea>
+                <textarea id="numInput1" placeholder="请输入数字" oninput="autoCalculate(1)"></textarea>
                 <div class="input-info" id="inputInfo1">已输入：0 个数字</div>
             </div>
             <div class="btn-group">
@@ -294,7 +311,7 @@
             <h2>第二组统计</h2>
             <div class="input-box">
                 <label>蚂蚁数据-广东数据盘：</label>
-                <textarea id="numInput2" placeholder="请输入数字" oninput="showInputInfo(2)"></textarea>
+                <textarea id="numInput2" placeholder="请输入数字" oninput="autoCalculate(2)"></textarea>
                 <div class="input-info" id="inputInfo2">已输入：0 个数字</div>
             </div>
             <div class="btn-group">
@@ -318,7 +335,7 @@
         </div>
 
         <div class="bottom-link">
-            <p>© 2026 蚂蚁数据澳彩团队 -版权所有</p>
+            <p>© 2026 蚂蚁数据澳彩团队 - 版权所有</p>
             <p>
                 <a href="https://t.me/+RjaMJ26EAPw0ZTc1">频道</a>
                 <a href="https://m.hxyx.cc.cd/kj.html">直播</a>
@@ -335,18 +352,35 @@ const minMax = {1:{min:0,max:0},2:{min:0,max:0}};
 let group1Lines = "";
 let group2Lines = "";
 
+let autoCompareTimer = null;
+
 const padZero = n => n.toString().padStart(2, '0');
 const getZodiac = n => zodiacList[(n-1)%12];
 const uniqueSort = arr => [...new Set(arr)].sort((a,b)=>a-b);
 const format = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
 const inRange = (v, min, max) => v >= min && v <= max;
 
+// 自动统计 + 自动对比
+function autoCalculate(no) {
+    showInputInfo(no);
+    calculate(no);
+
+    clearTimeout(autoCompareTimer);
+    autoCompareTimer = setTimeout(() => {
+        const v1 = document.getElementById('numInput1').value.trim();
+        const v2 = document.getElementById('numInput2').value.trim();
+        if (v1 && v2) compareAll();
+    }, 260);
+}
+
+// 显示输入数量
 function showInputInfo(no){
     const v = document.getElementById(`numInput${no}`).value;
     const cnt = (v.match(/\d+/g) || []).length;
     document.getElementById(`inputInfo${no}`).innerText = `已输入：${cnt} 个数字`;
 }
 
+// 清空功能
 function clearAll(no){
     const ids = ['numInput','baseResult','groupResult','zodiacResult'];
     ids.forEach(id => {
@@ -362,8 +396,10 @@ function clearAll(no){
     if(no === 1) group1Lines = "";
     if(no === 2) group2Lines = "";
     showInputInfo(no);
+    clearCompare();
 }
 
+// 复制功能（修复版）
 function copyText(text, tipId){
     if(!text || text === '无'){
         alert('暂无内容可复制');
@@ -371,63 +407,55 @@ function copyText(text, tipId){
     }
     const tip = document.getElementById(tipId);
     try {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(text).then(() => {
-                showCopyTip(tip, true);
-            }).catch(() => {
-                fallbackCopy(text, tip);
-            });
-        } else {
+        navigator.clipboard.writeText(text).then(() => {
+            showCopyTip(tip, true);
+        }).catch(() => {
             fallbackCopy(text, tip);
-        }
+        });
     } catch (e) {
         fallbackCopy(text, tip);
     }
 }
 
+// 兼容复制
 function fallbackCopy(text, tip) {
     const textArea = document.createElement("textarea");
     textArea.value = text;
-    textArea.style.position = "fixed";
-    textArea.style.left = "-9999px";
-    textArea.style.opacity = "0";
+    textArea.style.position="fixed";
+    textArea.style.left="-9999px";
     document.body.appendChild(textArea);
     textArea.select();
-    textArea.setSelectionRange(0, textArea.value.length);
-    try {
-        document.execCommand('copy');
-        showCopyTip(tip, true);
-    } catch (err) {
-        showCopyTip(tip, false);
-    }
+    document.execCommand('copy');
     document.body.removeChild(textArea);
+    showCopyTip(tip, true);
 }
 
+// 复制提示
 function showCopyTip(tip, success) {
-    if (success) {
-        tip.innerText = "✅ 已复制";
-        tip.style.color = "#6cce6c";
-    } else {
-        tip.innerText = "❌ 失败";
-        tip.style.color = "#ff6b6b";
-    }
+    tip.innerText = success ? "✅ 已复制" : "❌ 失败";
+    tip.style.color = success ? "#6cce6c" : "#ff6b6b";
     setTimeout(() => tip.innerText = '', 1500);
 }
 
+// 去重
 function uniqueNum(no){
     const el = document.getElementById(`numInput${no}`);
     const nums = el.value.match(/\d+/g) || [];
     el.value = [...new Set(nums)].join(' ');
     showInputInfo(no);
+    autoCalculate(no);
 }
 
+// 排序
 function sortNum(no){
     const el = document.getElementById(`numInput${no}`);
     const nums = (el.value.match(/\d+/g) || []).map(Number).sort((a,b)=>a-b);
     el.value = nums.join(' ');
     showInputInfo(no);
+    autoCalculate(no);
 }
 
+// 核心统计
 function calculate(no){
     const input = document.getElementById(`numInput${no}`).value.trim();
     const inputArr = (input.match(/\d+/g) || [])
@@ -435,7 +463,11 @@ function calculate(no){
                         .filter(n => !isNaN(n) && n >= 1 && n <= 49);
     
     if(inputArr.length === 0){
-        alert("请输入1-49的数字再统计！");
+        countData[no] = {};
+        minMax[no] = {min:0, max:0};
+        document.getElementById(`baseResult${no}`).innerHTML = '';
+        document.getElementById(`groupResult${no}`).innerHTML = '';
+        document.getElementById(`zodiacResult${no}`).innerHTML = '';
         return;
     }
 
@@ -448,6 +480,7 @@ function calculate(no){
     const vals = Object.values(countMap);
     minMax[no] = { min: Math.min(...vals), max: Math.max(...vals) };
 
+    // 分组统计
     const group = {};
     all.forEach(n => {
         const c = countMap[n];
@@ -456,21 +489,19 @@ function calculate(no){
     });
     const sortedGroups = Object.keys(group).map(Number).sort((a,b)=>a-b);
 
+    // 生成分组文本
     if(no === 1){
         let lines = [];
-        sortedGroups.forEach(cnt => {
-            lines.push(group[cnt].map(padZero).join(' '));
-        });
+        sortedGroups.forEach(cnt => lines.push(group[cnt].map(padZero).join(' ')));
         group1Lines = lines.join('\n');
     }
     if(no === 2){
         let lines = [];
-        sortedGroups.forEach(cnt => {
-            lines.push(group[cnt].map(padZero).join(' '));
-        });
+        sortedGroups.forEach(cnt => lines.push(group[cnt].map(padZero).join(' ')));
         group2Lines = lines.join('\n');
     }
 
+    // 生肖统计
     const zodiac = {};
     zodiacList.forEach(z => zodiac[z] = 0);
     inputArr.forEach(n => zodiac[getZodiac(n)]++);
@@ -478,10 +509,10 @@ function calculate(no){
     renderBase(no, inputArr.length, new Set(inputArr).size, minMax[no].max, minMax[no].min);
     renderGroup(no, sortedGroups, group, minMax[no].max, minMax[no].min);
     renderZodiac(no, zodiac);
-    showInputInfo(no);
     bindCopyEvents();
 }
 
+// 渲染基础统计
 function renderBase(no, total, unique, max, min){
     document.getElementById(`baseResult${no}`).innerHTML = `
     <div class="result-title">📊 基础统计</div>
@@ -493,6 +524,7 @@ function renderBase(no, total, unique, max, min){
     </div>`;
 }
 
+// 渲染次数分组
 function renderGroup(no, sorted, group, maxCnt, minCnt){
     let html = `<div class="result-title">
         <span>📦 次数分组（最冷→最热）</span>
@@ -526,6 +558,7 @@ function renderGroup(no, sorted, group, maxCnt, minCnt){
     document.getElementById(`groupResult${no}`).innerHTML = html;
 }
 
+// 渲染生肖
 function renderZodiac(no, zodiac){
     const sorted = Object.entries(zodiac).sort((a,b)=>b[1]-a[1]);
     const max = sorted[0][1], min = sorted.at(-1)[1];
@@ -537,13 +570,15 @@ function renderZodiac(no, zodiac){
     document.getElementById(`zodiacResult${no}`).innerHTML = html;
 }
 
+// 清空对比
 function clearCompare(){
     document.getElementById('compareResult').innerHTML = '';
 }
 
+// 双盘口对比（原有规则完全保留）
 function compareAll(){
     if(Object.keys(countData[1]).length === 0 || Object.keys(countData[2]).length === 0){
-        alert('请先对两组数据分别点击【一键统计】后再对比！');
+        document.getElementById('compareResult').innerHTML = '';
         return;
     }
 
@@ -573,6 +608,7 @@ function compareAll(){
     bindCopyEvents();
 }
 
+// 绑定复制事件
 function bindCopyEvents() {
     document.querySelectorAll('.copy-btn').forEach(btn => {
         btn.onclick = function () {
