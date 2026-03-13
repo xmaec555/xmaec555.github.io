@@ -173,7 +173,7 @@
 <div class="container">
     <h2>🐎 生肖數字統計工具（1-49）</h2>
     
-    <textarea id="input" placeholder="支援輸入：數字 或 生肖，自動去重統計，如：2 2 14 蛇 猴"></textarea>
+    <textarea id="input" placeholder="支援輸入：數字 / 簡體生肖 / 繁體生肖，自動去重統計"></textarea>
 
     <div class="btn-group">
         <button onclick="search()">立即查詢</button>
@@ -204,6 +204,22 @@
 </div>
 
 <script>
+    // 🔥 核心：同时支持 简体 + 繁体 生肖
+    const zodiacMapAll = {
+        "鼠": "鼠", "鼠": "鼠",
+        "牛": "牛", "牛": "牛",
+        "虎": "虎", "虎": "虎",
+        "兔": "兔", "兔": "兔",
+        "龙": "龍", "龍": "龍",
+        "蛇": "蛇", "蛇": "蛇",
+        "马": "馬", "馬": "馬",
+        "羊": "羊", "羊": "羊",
+        "猴": "猴", "猴": "猴",
+        "鸡": "雞", "雞": "雞",
+        "狗": "狗", "狗": "狗",
+        "猪": "豬", "豬": "豬"
+    };
+
     const zodiacStart = {
         "馬": 1, "羊": 12, "蛇": 2, "鼠": 7,
         "牛": 6, "虎": 5, "兔": 4, "龍": 3,
@@ -228,7 +244,7 @@
 
     let currentGroup = {};
 
-    // 查詢
+    // 查詢（支持簡繁體）
     function search() {
         let val = document.getElementById("input").value.trim();
         let res = document.getElementById("result");
@@ -243,16 +259,19 @@
         let group = {};
 
         for (let item of items) {
-            if (zodiacMap[item]) {
-                if (!group[item]) group[item] = [];
-                group[item].push(...zodiacMap[item]);
+            // 🔥 统一转换：简体 → 繁体，兼容输入
+            let z = zodiacMapAll[item] || item;
+            if (zodiacMap[z]) {
+                if (!group[z]) group[z] = [];
+                group[z].push(...zodiacMap[z]);
                 continue;
             }
+
             let num = parseInt(item, 10);
             if (!isNaN(num) && numMap[num]) {
-                let z = numMap[num];
-                if (!group[z]) group[z] = [];
-                group[z].push(num);
+                let zodiac = numMap[num];
+                if (!group[zodiac]) group[zodiac] = [];
+                group[zodiac].push(num);
             }
         }
 
