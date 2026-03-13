@@ -374,9 +374,11 @@ function calculate(){
     });
     const sortedGroups = Object.keys(group).map(Number).sort((a,b)=>a-b);
 
+    // 生成完整的带“出现X次”描述的复制文本
     let lines = [];
     sortedGroups.forEach(cnt => {
-        lines.push(group[cnt].map(padZero).join(' '));
+        const list = group[cnt].map(padZero).join(' ');
+        lines.push(`出现${cnt}次（共${group[cnt].length}个）：${list}`);
     });
     groupLines = lines.join('\n');
 
