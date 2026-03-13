@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生肖數字統計工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+        }
+        body {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background: #f5f7fa;
+        }
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        h2 {
+            text-align: center;
+            color: #222;
+            margin-bottom: 24px;
+            font-size: 22px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            outline: none;
+            margin-bottom: 18px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+        textarea:focus {
+            border-color: #409eff;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        button {
+            flex: 1;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            background: #409eff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        button.clear {
+            background: #909399;
+        }
+        button.copy {
+            background: #67c23a;
+        }
+
+        .result-box {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 80px;
+            margin-bottom: 20px;
+        }
+        .result-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .result-count {
+            color: #1677ff;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .result-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .zodiac-item {
+            background: #ffffff;
+            border-left: 4px solid #409eff;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .edit-num {
+            display: inline-block;
+            min-width: 24px;
+            padding: 2px 4px;
+            margin: 0 3px;
+            border-bottom: 1px dashed #999;
+            outline: none;
+            color: #1677ff;
+        }
+        .num-count {
+            color: #f56c6c;
+            font-size: 14px;
+            margin-left: 3px;
+        }
+
+        .filter-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        .filter-input {
+            width: 80px;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            text-align: center;
+        }
+        .filter-label {
+            font-size: 15px;
+            color: #333;
+        }
+        .confirm-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #e6a23c;
+            color: #fff;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .footer {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+        .footer a {
+            color: #1677ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🐎 生肖數字統計工具（1-49）</h2>
+    
+    <textarea id="input" placeholder="支援輸入：數字 或 生肖，自動去重統計，如：2 2 14 蛇 猴"></textarea>
+
+    <div class="btn-group">
+        <button onclick="search()">立即查詢</button>
+        <button class="copy" onclick="copyNumbers()">🔗 複製結果數字</button>
+        <button class="clear" onclick="clearAll()">清空</button>
+    </div>
+
+    <div class="result-box">
+        <div class="result-title">
+            <span>查詢結果</span>
+            <span class="result-count" id="totalCount">目前剩餘：0 個數字</span>
+        </div>
+        <div class="result-items" id="result" oninput="syncManualCount()">
+            請輸入數字或生肖查詢
+        </div>
+    </div>
+
+    <div class="filter-row">
+        <span class="filter-label">刪除出現次數 =</span>
+        <input type="number" class="filter-input" id="filterCount" value="0" min="0">
+        <span class="filter-label">次的數字</span>
+        <button class="confirm-btn" onclick="applyFilter()">確定</button>
+    </div>
+
+    <div class="footer">
+        <a href="https://t.me/+RjaMJ26EAPw0ZTc1" target="_blank">螞蟻澳彩數據頻道</a>
+    </div>
+</div>
+
+<script>
+    const zodiacStart = {
+        "馬": 1, "羊": 12, "蛇": 2, "鼠": 7,
+        "牛": 6, "虎": 5, "兔": 4, "龍": 3,
+        "雞": 10, "猴": 11, "狗": 9, "豬": 8
+    };
+
+    const zodiacMap = {};
+    for (let [zodiac, start] of Object.entries(zodiacStart)) {
+        let list = [];
+        let num = start;
+        while (num <= 49) {
+            list.push(num);
+            num += 12;
+        }
+        zodiacMap[zodiac] = list;
+    }
+
+    const numMap = {};
+    for (let [zodiac, nums] of Object.entries(zodiacMap)) {
+        nums.forEach(n => numMap[n] = zodiac);
+    }
+
+    let currentGroup = {};
+
+    // 查詢
+    function search() {
+        let val = document.getElementById("input").value.trim();
+        let res = document.getElementById("result");
+
+        if (!val) {
+            res.innerHTML = "請輸入數字或生肖";
+            document.getElementById("totalCount").innerText = "目前剩餘：0 個數字";
+            return;
+        }
+
+        let items = val.split(/\s+/).filter(x => x);
+        let group = {};
+
+        for (let item of items) {
+            if (zodiacMap[item]) {
+                if (!group[item]) group[item] = [];
+                group[item].push(...zodiacMap[item]);
+                continue;
+            }
+            let num = parseInt(item, 10);
+            if (!isNaN(num) && numMap[num]) {
+                let z = numMap[num];
+                if (!group[z]) group[z] = [];
+                group[z].push(num);
+            }
+        }
+
+        if (Object.keys(group).length === 0) {
+            res.innerHTML = "未識別有效內容";
+            document.getElementById("totalCount").innerText = "目前剩餘：0 個數字";
+            return;
+        }
+
+        currentGroup = JSON.parse(JSON.stringify(group));
+        renderResult();
+    }
+
+    // 永久刪除
+    function applyFilter() {
+        let filterVal = document.getElementById("filterCount").value;
+        let delNum = parseInt(filterVal) || 0;
+
+        if (Object.keys(currentGroup).length === 0) {
+            alert("請先查詢數據！");
+            return;
+        }
+
+        for (let zodiac in currentGroup) {
+            let nums = currentGroup[zodiac];
+            let countMap = {};
+            nums.forEach(n => countMap[n] = (countMap[n] || 0) + 1);
+            currentGroup[zodiac] = nums.filter(n => countMap[n] !== delNum);
+        }
+
+        renderResult();
+    }
+
+    // 渲染
+    function renderResult() {
+        let html = "";
+        let total = 0;
+
+        for (let [zodiac, nums] of Object.entries(currentGroup)) {
+            if (nums.length === 0) continue;
+
+            let countMap = {};
+            nums.forEach(n => countMap[n] = (countMap[n] || 0) + 1);
+            let unique = [...new Set(nums)].sort((a, b) => a - b);
+            total += unique.length;
+
+            let numHtml = unique.map(n => {
+                let fmt = n.toString().padStart(2, '0');
+                let cnt = countMap[n];
+                return cnt > 1
+                    ? `<span contenteditable class="edit-num">${fmt}</span><span class="num-count">(${cnt}次)</span>`
+                    : `<span contenteditable class="edit-num">${fmt}</span>`;
+            }).join(' ');
+
+            html += `<div class="zodiac-item">${zodiac}：${numHtml}</div>`;
+        }
+
+        document.getElementById("result").innerHTML = html || "已全部刪除";
+        document.getElementById("totalCount").innerText = `目前剩餘：${total} 個數字`;
+    }
+
+    // 手動編輯同步統計
+    function syncManualCount() {
+        let allNodes = document.querySelectorAll(".edit-num");
+        let count = 0;
+        allNodes.forEach(node => {
+            let val = node.innerText.trim();
+            if (val !== "" && !isNaN(parseInt(val))) {
+                count++;
+            }
+        });
+        document.getElementById("totalCount").innerText = `目前剩餘：${count} 個數字`;
+    }
+
+    // 複製數字
+    function copyNumbers() {
+        let numbers = [];
+        document.querySelectorAll(".edit-num").forEach(el => {
+            let val = el.innerText.trim();
+            if (val && !isNaN(val)) {
+                numbers.push(val);
+            }
+        });
+
+        if (numbers.length === 0) {
+            alert("暫無結果可複製！");
+            return;
+        }
+
+        let copyText = numbers.join(" ");
+        
+        let textArea = document.createElement("textarea");
+        textArea.value = copyText;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        
+        alert("複製成功！\n" + copyText);
+    }
+
+    // 清空
+    function clearAll() {
+        document.getElementById("input").value = "";
+        document.getElementById("filterCount").value = 0;
+        document.getElementById("result").innerHTML = "請輸入數字或生肖查詢";
+        document.getElementById("totalCount").innerText = "目前剩餘：0 個數字";
+        currentGroup = {};
+    }
+</script>
+
+</body>
+</html>
