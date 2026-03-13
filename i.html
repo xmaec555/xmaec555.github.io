@@ -16,6 +16,7 @@
             background: #121212;
             color: #e0e0e0;
             padding-top: 60px;
+            padding-bottom: 20px;
         }
 
         nav {
@@ -33,7 +34,7 @@
 
         .nav-links {
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -51,62 +52,63 @@
 
         .container {
             max-width: 900px;
-            margin: 30px auto;
-            padding: 0 20px;
+            margin: 20px auto;
+            padding: 0 12px;
         }
         .tool-box {
             background: #1e1e1e;
-            padding: 25px;
-            border-radius: 12px;
+            padding: 20px;
+            border-radius: 14px;
             border: 1px solid #333;
         }
         h1 {
             text-align: center;
             color: #ffffff;
             margin-bottom: 20px;
-            font-size: 24px;
+            font-size: 22px;
         }
 
         .input-box {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
             color: #fff;
+            font-size: 15px;
         }
         textarea {
             width: 100%;
             height: 120px;
             padding: 12px;
             border: 1px solid #444;
-            border-radius: 6px;
+            border-radius: 8px;
             resize: vertical;
-            font-size: 14px;
+            font-size: 15px;
             background: #2a2a2a;
             color: #ffffff;
         }
         .input-info {
-            font-size: 13px;
+            font-size: 12px;
             color: #aaa;
             margin-top: 5px;
         }
         .btn-group {
             display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
+            gap: 8px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
         button {
             flex: 1;
-            min-width: 110px;
-            padding: 10px 12px;
+            min-width: 80px;
+            padding: 11px 8px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             background: #3a6ea5;
             color: white;
-            font-size: 15px;
+            font-size: 14px;
             cursor: pointer;
             transition: 0.2s;
         }
@@ -116,20 +118,18 @@
         button.clear {
             background: #a83232;
         }
-        button.clear:hover {
-            background: #8b2828;
-        }
         button.sort {
             background: #b57c1b;
         }
         button.uniq {
             background: #8049a8;
         }
+
         .result-section {
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 16px;
+            padding: 14px;
             border: 1px solid #444;
-            border-radius: 8px;
+            border-radius: 10px;
             background: #252525;
         }
         .result-title {
@@ -142,7 +142,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 10px;
         }
         .highlight {
             color: #ffaa00;
@@ -159,63 +158,50 @@
         .zodiac-item {
             display: inline-flex;
             align-items: center;
-            margin: 5px 10px 5px 0;
-            padding: 4px 8px;
+            margin: 6px 8px 6px 0;
+            padding: 6px 10px;
             background: #333;
-            border-radius: 4px;
-            gap: 6px;
-            color: #fff;
+            border-radius: 6px;
+            font-size: 14px;
         }
         .group-item {
             border: 1px solid #444;
             border-radius: 8px;
-            padding: 12px 15px;
+            padding: 12px;
             margin: 8px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             background: #2a2a2a;
-            flex-wrap: wrap;
-            gap: 8px;
+            line-height: 1.5;
+            word-break: break-all;
         }
 
+        /* 迷你精致 复制全部按钮 */
         .copy-btn {
-            padding: 8px 14px;
+            padding: 4px 10px;
+            font-size: 12px;
+            border-radius: 4px;
             background: #4d7a43;
             color: #fff;
             border: none;
-            border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            min-width: 70px;
         }
         .copy-btn:hover {
             background: #3f6436;
         }
         .copy-tip {
             color: #6cce6c;
-            font-size: 13px;
-            margin-left: 8px;
-            white-space: nowrap;
+            font-size: 11px;
+            margin-left: 6px;
         }
         .title-right {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-left: auto;
-        }
-        .item-right {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-left: auto;
+            gap: 6px;
         }
 
         .base-row {
             display: flex;
-            gap: 25px;
-            font-size: 15px;
+            gap: 15px;
+            font-size: 14px;
             flex-wrap: wrap;
         }
     </style>
@@ -263,7 +249,6 @@ let groupLines = "";
 const padZero = n => n.toString().padStart(2, '0');
 const getZodiac = n => zodiacList[(n-1)%12];
 const uniqueSort = arr => [...new Set(arr)].sort((a,b)=>a-b);
-const format = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
 
 function showInputInfo(){
     const v = document.getElementById(`numInput1`).value;
@@ -275,8 +260,7 @@ function clearAll(){
     const ids = ['numInput1','baseResult1','groupResult1','zodiacResult1'];
     ids.forEach(id => {
         const el = document.getElementById(id);
-        if (id === 'numInput1') el.value = '';
-        else el.innerHTML = '';
+        id === 'numInput1' ? (el.value = '') : (el.innerHTML = '');
     });
     countData = {};
     minMax = {min:0, max:0};
@@ -285,77 +269,41 @@ function clearAll(){
 }
 
 function copyText(text, tipId){
-    if(!text || text === '无'){
-        alert('暂无内容可复制');
-        return;
-    }
+    if(!text) { alert('暂无内容可复制'); return; }
     const tip = document.getElementById(tipId);
     try {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(text).then(() => {
-                showCopyTip(tip, true);
-            }).catch(() => fallbackCopy(text, tip));
-        } else {
-            fallbackCopy(text, tip);
-        }
-    } catch (e) {
-        fallbackCopy(text, tip);
+        navigator.clipboard.writeText(text).then(() => showCopyTip(tip, true)).catch(fallback);
+    } catch (e) { fallback(); }
+    function fallback(){
+        const t = document.createElement("textarea");
+        t.value = text; t.style.cssText = "position:fixed;left:-9999px;opacity:0";
+        document.body.appendChild(t); t.select(); document.execCommand('copy');
+        document.body.removeChild(t); showCopyTip(tip, true);
     }
-}
-
-function fallbackCopy(text, tip) {
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-    textArea.style.position = "fixed";
-    textArea.style.left = "-9999px";
-    textArea.style.opacity = "0";
-    document.body.appendChild(textArea);
-    textArea.select();
-    textArea.setSelectionRange(0, textArea.value.length);
-    try {
-        document.execCommand('copy');
-        showCopyTip(tip, true);
-    } catch (err) {
-        showCopyTip(tip, false);
-    }
-    document.body.removeChild(textArea);
 }
 
 function showCopyTip(tip, success) {
-    if (success) {
-        tip.innerText = "✅ 已复制";
-        tip.style.color = "#6cce6c";
-    } else {
-        tip.innerText = "❌ 失败";
-        tip.style.color = "#ff6b6b";
-    }
+    tip.innerText = success ? "✅ 已复制" : "❌ 失败";
+    tip.style.color = success ? "#6cce6c" : "#ff6b6b";
     setTimeout(() => tip.innerText = '', 1500);
 }
 
 function uniqueNum(){
     const el = document.getElementById(`numInput1`);
-    const nums = el.value.match(/\d+/g) || [];
-    el.value = [...new Set(nums)].join(' ');
+    el.value = [...new Set(el.value.match(/\d+/g) || [])].join(' ');
     showInputInfo();
 }
 
 function sortNum(){
     const el = document.getElementById(`numInput1`);
-    const nums = (el.value.match(/\d+/g) || []).map(Number).sort((a,b)=>a-b);
-    el.value = nums.join(' ');
+    el.value = (el.value.match(/\d+/g) || []).map(Number).sort((a,b)=>a-b).join(' ');
     showInputInfo();
 }
 
 function calculate(){
     const input = document.getElementById(`numInput1`).value.trim();
-    const inputArr = (input.match(/\d+/g) || [])
-                        .map(Number)
-                        .filter(n => !isNaN(n) && n >= 1 && n <= 49);
-    
-    if(inputArr.length === 0){
-        alert("请输入1-49的数字再统计！");
-        return;
-    }
+    const inputArr = (input.match(/\d+/g) || []).map(Number).filter(n => n>=1&&n<=49);
+    if(inputArr.length === 0){ alert("请输入1-49的数字再统计！"); return; }
 
     const all = Array.from({length:49},(_,i)=>i+1);
     const countMap = {};
@@ -367,14 +315,9 @@ function calculate(){
     minMax = { min: Math.min(...vals), max: Math.max(...vals) };
 
     const group = {};
-    all.forEach(n => {
-        const c = countMap[n];
-        group[c] = group[c] || [];
-        group[c].push(n);
-    });
+    all.forEach(n => { const c = countMap[n]; (group[c] = group[c] || []).push(n); });
     const sortedGroups = Object.keys(group).map(Number).sort((a,b)=>a-b);
 
-    // 生成完整的带“出现X次”描述的复制文本
     let lines = [];
     sortedGroups.forEach(cnt => {
         const list = group[cnt].map(padZero).join(' ');
@@ -413,20 +356,12 @@ function renderGroup(sorted, group, maxCnt, minCnt){
         </div>
     </div>`;
 
-    sorted.forEach((cnt, i) => {
+    sorted.forEach(cnt => {
         const list = group[cnt].map(padZero).join(' ');
         let mark = '';
         if(cnt === maxCnt) mark = '<span class="hot">【最热】</span>';
         if(cnt === minCnt) mark = '<span class="cold">【最冷】</span>';
-        
-        html += `
-        <div class="group-item">
-            <div>${mark} 出现${cnt}次（共${group[cnt].length}个）：${list}</div>
-            <div class="item-right">
-                <button class="copy-btn" data-copy="${list}" data-tip="g_${i}">复制</button>
-                <span id="g_${i}" class="copy-tip"></span>
-            </div>
-        </div>`;
+        html += `<div class="group-item">${mark} 出现${cnt}次（共${group[cnt].length}个）：${list}</div>`;
     });
     document.getElementById(`groupResult1`).innerHTML = html;
 }
@@ -444,11 +379,7 @@ function renderZodiac(zodiac){
 
 function bindCopyEvents() {
     document.querySelectorAll('.copy-btn').forEach(btn => {
-        btn.onclick = function () {
-            const text = this.getAttribute('data-copy');
-            const tipId = this.getAttribute('data-tip');
-            copyText(text, tipId);
-        };
+        btn.onclick = () => copyText(btn.dataset.copy, btn.dataset.tip);
     });
 }
 </script>
