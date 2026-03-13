@@ -119,17 +119,14 @@
         }
         .btn-group {
             display: flex;
-            gap: 10px;
+            justify-content: flex-end;
             margin-bottom: 25px;
-            flex-wrap: wrap;
         }
         button {
-            flex: 1;
-            min-width: 110px;
-            padding: 10px 12px;
+            padding: 10px 18px;
             border: none;
             border-radius: 6px;
-            background: #3a6ea5;
+            background: #a83232;
             color: white;
             font-size: 15px;
             cursor: pointer;
@@ -137,20 +134,8 @@
             font-weight: 500;
         }
         button:hover {
-            background: #2d5a8c;
-            transform: translateY(-1px);
-        }
-        button.clear {
-            background: #a83232;
-        }
-        button.clear:hover {
             background: #8b2828;
-        }
-        button.sort {
-            background: #b57c1b;
-        }
-        button.uniq {
-            background: #8049a8;
+            transform: translateY(-1px);
         }
         button.compare {
             background: #cc7a29;
@@ -231,19 +216,12 @@
             margin-left: 8px;
             white-space: nowrap;
         }
-        .title-right {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-left: auto;
-        }
         .item-right {
             display: flex;
             align-items: center;
             gap: 8px;
             margin-left: auto;
         }
-
         .base-row {
             display: flex;
             gap: 25px;
@@ -275,7 +253,7 @@
             font-size: 14px;
             color: #888;
             margin-top: 20px;
-            line-height: 1.8;
+            line-height: 1.6;
         }
         .bottom-link a {
             color: #8ab4f8;
@@ -303,14 +281,11 @@
             <h2>第一组统计 <span id="autoTip1" class="auto-tip"></span></h2>
             <div class="input-box">
                 <label>蚂蚁数据-啊啊专家（第一组）：</label>
-                <textarea id="numInput1" placeholder="示例：1 3 5 7 9 11" oninput="autoCalculate(1)"></textarea>
+                <textarea id="numInput1" placeholder="示例：1 3 5 7 9 11" oninput="onDataChange()"></textarea>
                 <div class="input-info" id="inputInfo1">已输入：0 个数字</div>
             </div>
             <div class="btn-group">
-                <button onclick="calculate(1)">一键统计</button>
-                <button class="uniq" onclick="uniqueNum(1)">一键去重</button>
-                <button class="sort" onclick="sortNum(1)">从小到大排序</button>
-                <button class="clear" onclick="clearAll(1)">清空</button>
+                <button onclick="clearAll(1)">清空</button>
             </div>
             <div class="result-section" id="baseResult1"></div>
             <div class="result-section" id="groupResult1"></div>
@@ -321,14 +296,11 @@
             <h2>第二组统计 <span id="autoTip2" class="auto-tip"></span></h2>
             <div class="input-box">
                 <label>蚂蚁数据-啊啊专家（第二组）：</label>
-                <textarea id="numInput2" placeholder="示例：2 4 6 8 10 12" oninput="autoCalculate(2)"></textarea>
+                <textarea id="numInput2" placeholder="示例：2 4 6 8 10 12" oninput="onDataChange()"></textarea>
                 <div class="input-info" id="inputInfo2">已输入：0 个数字</div>
             </div>
             <div class="btn-group">
-                <button onclick="calculate(2)">一键统计</button>
-                <button class="uniq" onclick="uniqueNum(2)">一键去重</button>
-                <button class="sort" onclick="sortNum(2)">从小到大排序</button>
-                <button class="clear" onclick="clearAll(2)">清空</button>
+                <button onclick="clearAll(2)">清空</button>
             </div>
             <div class="result-section" id="baseResult2"></div>
             <div class="result-section" id="groupResult2"></div>
@@ -338,8 +310,7 @@
         <div class="panel">
             <h2 style="color:#ff9c41">🔍 交叉对比结果 <span id="autoCompareTip" class="auto-tip"></span></h2>
             <div class="btn-group">
-                <button class="compare" onclick="compareAll()">✅ 开始对比</button>
-                <button class="clear" onclick="clearCompare()">清空对比</button>
+                <button style="margin-left:10px" onclick="clearCompare()">清空对比</button>
             </div>
             <div id="compareTip"></div>
             <div class="result-section" id="compareResult"></div>
@@ -361,11 +332,7 @@
 const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
 const countData = { 1: {}, 2: {} };
 const minMax = { 1: { min:0, max:0 }, 2: { min:0, max:0 } };
-const hasCalculated = {1: false, 2: false};
-
-// 防抖定时器（防止输入过快重复执行）
-let timer1 = null;
-let timer2 = null;
+let timer = null;
 
 // 工具函数
 const padZero = num => num.toString().padStart(2, '0');
@@ -374,44 +341,32 @@ const uniqueSort = arr => [...new Set(arr)].sort((a, b) => a - b);
 const formatNumbers = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
 const inRange = (val, min, max) => val >= min && val <= max;
 
-// 自动统计（输入时触发）
-function autoCalculate(no) {
-    showInputInfo(no);
-    const tipEl = document.getElementById(`autoTip${no}`);
-    
-    // 清空输入时重置状态
-    const val = document.getElementById(`numInput${no}`).value.trim();
-    if(!val){
-        hasCalculated[no] = false;
-        tipEl.innerText = '';
-        clearCompare();
-        return;
-    }
-
-    // 防抖：停止输入300ms后自动统计
-    if(no === 1){
-        clearTimeout(timer1);
-        timer1 = setTimeout(() => {
-            calculate(no);
-            tipEl.innerText = '✅ 已自动统计';
-            autoCompare();
-        }, 300);
-    }else{
-        clearTimeout(timer2);
-        timer2 = setTimeout(() => {
-            calculate(no);
-            tipEl.innerText = '✅ 已自动统计';
-            autoCompare();
-        }, 300);
-    }
+// 【核心】任何数据变动都触发全自动刷新
+function onDataChange() {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+        refreshAll();
+    }, 150);
 }
 
-// 自动对比（两组都完成后触发）
-function autoCompare() {
-    if(hasCalculated[1] && hasCalculated[2]){
-        compareAll();
-        document.getElementById('autoCompareTip').innerText = '✅ 已自动对比';
-    }
+// 全自动刷新：统计两组 + 刷新对比
+function refreshAll() {
+    calculate(1);
+    calculate(2);
+    showInputInfo(1);
+    showInputInfo(2);
+    compareAll();
+    
+    // 状态提示
+    document.getElementById('autoTip1').innerText = getValidInput(1) ? '✅ 已自动统计' : '';
+    document.getElementById('autoTip2').innerText = getValidInput(2) ? '✅ 已自动统计' : '';
+    document.getElementById('autoCompareTip').innerText = (getValidInput(1) && getValidInput(2)) ? '✅ 已自动对比' : '';
+}
+
+// 获取有效输入
+function getValidInput(no) {
+    const val = document.getElementById(`numInput${no}`).value.trim();
+    return (val.match(/\d+/g) || []).filter(n => n >=1 && n <=49).length > 0;
 }
 
 // 输入状态
@@ -428,12 +383,10 @@ function clearAll(no) {
     document.getElementById(`groupResult${no}`).innerHTML = '';
     document.getElementById(`zodiacResult${no}`).innerHTML = '';
     document.getElementById(`autoTip${no}`).innerText = '';
-    hasCalculated[no] = false;
-    showInputInfo(no);
-    clearCompare();
+    onDataChange();
 }
 
-// 复制功能（稳定版）
+// 复制功能
 function copyText(text, tipId) {
     if(!text || text === '无'){
         alert('暂无内容可复制');
@@ -449,7 +402,6 @@ function copyText(text, tipId) {
         fallbackCopy(text, tipId);
     }
 }
-
 function fallbackCopy(text, tipId) {
     const textArea = document.createElement("textarea");
     textArea.value = text;
@@ -461,41 +413,18 @@ function fallbackCopy(text, tipId) {
     document.body.removeChild(textArea);
     showCopyTip(tipId);
 }
-
 function showCopyTip(tipId) {
     const tip = document.getElementById(tipId);
     tip.innerText = '✅ 复制成功';
     setTimeout(() => tip.innerText = '', 1500);
 }
 
-// 去重 & 排序
-function uniqueNum(no) {
-    const el = document.getElementById(`numInput${no}`);
-    const arr = (el.value.match(/\d+/g) || []).map(Number).filter(n => n >=1 && n <=49);
-    el.value = uniqueSort(arr).join(' ');
-    showInputInfo(no);
-    autoCalculate(no);
-}
-function sortNum(no) {
-    const el = document.getElementById(`numInput${no}`);
-    const arr = (el.value.match(/\d+/g) || []).map(Number).filter(n => n >=1 && n <=49).sort((a,b)=>a-b);
-    el.value = arr.join(' ');
-    showInputInfo(no);
-    autoCalculate(no);
-}
-
 // 核心统计
 function calculate(no) {
     const input = document.getElementById(`numInput${no}`).value.trim();
     const inputArr = (input.match(/\d+/g) || []).map(Number).filter(n => n >= 1 && n <= 49);
-    
-    if(inputArr.length === 0){
-        hasCalculated[no] = false;
-        return;
-    }
 
     const allNumbers = Array.from({ length: 49 }, (_, i) => i + 1);
-
     const countMap = {};
     allNumbers.forEach(n => countMap[n] = 0);
     inputArr.forEach(n => countMap[n]++);
@@ -516,13 +445,18 @@ function calculate(no) {
     zodiacList.forEach(z => zodiacCount[z] = 0);
     inputArr.forEach(n => zodiacCount[getZodiac(n)]++);
 
-    renderBase(no, inputArr.length, [...new Set(inputArr)].length, minMax[no].max, minMax[no].min);
-    renderGroup(no, sortedCounts, group, minMax[no].max, minMax[no].min);
-    renderZodiac(no, zodiacCount);
-    hasCalculated[no] = true;
+    if(inputArr.length > 0){
+        renderBase(no, inputArr.length, [...new Set(inputArr)].length, minMax[no].max, minMax[no].min);
+        renderGroup(no, sortedCounts, group, minMax[no].max, minMax[no].min);
+        renderZodiac(no, zodiacCount);
+    } else {
+        document.getElementById(`baseResult${no}`).innerHTML = '';
+        document.getElementById(`groupResult${no}`).innerHTML = '';
+        document.getElementById(`zodiacResult${no}`).innerHTML = '';
+    }
 }
 
-// 渲染基础信息
+// 渲染基础
 function renderBase(no, total, unique, max, min) {
     document.getElementById(`baseResult${no}`).innerHTML = `
     <div class="result-title">📊 基础统计</div>
@@ -564,7 +498,7 @@ function renderZodiac(no, zodiacCount) {
     document.getElementById(`zodiacResult${no}`).innerHTML = html;
 }
 
-// 交叉对比
+// 对比
 function clearCompare() {
     document.getElementById('compareResult').innerHTML = '';
     document.getElementById('compareTip').innerHTML = '';
@@ -572,11 +506,13 @@ function clearCompare() {
 }
 
 function compareAll() {
-    if(!hasCalculated[1] || !hasCalculated[2]){
-        document.getElementById('compareTip').innerHTML = '<div class="error">⚠️ 请先分别输入两组数据，自动统计完成后再对比！</div>';
+    const has1 = getValidInput(1);
+    const has2 = getValidInput(2);
+    
+    if(!has1 || !has2){
+        document.getElementById('compareResult').innerHTML = '';
         return;
     }
-    document.getElementById('compareTip').innerHTML = '';
 
     const c1 = countData[1], c2 = countData[2];
     const min1 = minMax[1].min, min2 = minMax[2].min;
@@ -590,7 +526,6 @@ function compareAll() {
     const s1 = formatNumbers(r1);
     const s2 = formatNumbers(r2);
     const s3 = formatNumbers(r3);
-
     const finalArr = uniqueSort([...r1, ...r2, ...r3]);
     const finalStr = formatNumbers(finalArr);
 
