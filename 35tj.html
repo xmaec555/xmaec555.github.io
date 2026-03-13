@@ -309,6 +309,12 @@ const uniqueSort = arr => [...new Set(arr)].sort((a,b)=>a-b);
 const format = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
 const inRange = (v,min,max) => v>=min && v<=max;
 
+// 新增：根据编号复制全部内容
+function copyAllGroup(no) {
+    const text = no === 1 ? group1All : group2All;
+    copyText(text, `gAll${no}`);
+}
+
 function showInputInfo(no){
     const v = document.getElementById(`numInput${no}`).value;
     const cnt = (v.match(/\d+/g)||[]).length;
@@ -328,17 +334,14 @@ function clearAll(no){
 
 function copyText(text, tipId){
     if(!text || text==='无'){ alert('无内容可复制'); return; }
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.style.position='fixed';
-    textarea.style.opacity='0';
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    const tip = document.getElementById(tipId);
-    tip.innerText = "✅ 已复制";
-    setTimeout(()=>tip.innerText="",1500);
+    // 使用现代Clipboard API，兼容所有浏览器
+    navigator.clipboard.writeText(text).then(() => {
+        const tip = document.getElementById(tipId);
+        tip.innerText = "✅ 已复制";
+        setTimeout(()=>tip.innerText="",1500);
+    }).catch(err => {
+        alert('复制失败：' + err);
+    });
 }
 
 function uniqueNum(no){
@@ -399,7 +402,7 @@ function renderGroup(no,sorted,group,maxCnt,minCnt){
     let html = `<div class="result-title">
         <span>📦 次数分组</span>
         <div>
-            <button class="copy-btn" onclick="copyText(${no===1?`'${group1All}'`:`'${group2All}'`},'gAll${no}')">复制全部</button>
+            <button class="copy-btn" onclick="copyAllGroup(${no})">复制全部</button>
             <span id="gAll${no}" class="copy-tip"></span>
         </div>
     </div>`;
