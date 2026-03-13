@@ -16,6 +16,7 @@
             background: #121212;
             color: #e0e0e0;
             padding-top: 60px;
+            line-height: 1.6;
         }
 
         /* 顶部导航栏 */
@@ -30,6 +31,7 @@
             background: #1e1e1e;
             border-bottom: 1px solid #333;
             z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
         .nav-links {
@@ -41,13 +43,16 @@
 
         .nav-links a {
             color: #bbbbbb;
-            padding: 5px 8px;
+            padding: 5px 10px;
             text-decoration: none;
             font-size: 15px;
+            border-radius: 4px;
+            transition: 0.2s;
         }
 
         .nav-links a:hover {
             color: #ffffff;
+            background: #333;
         }
 
         /* 容器统一 */
@@ -61,6 +66,7 @@
             padding: 25px;
             border-radius: 12px;
             border: 1px solid #333;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
         h1,h2 {
             text-align: center;
@@ -99,6 +105,12 @@
             font-size: 14px;
             background: #2a2a2a;
             color: #ffffff;
+            outline: none;
+            transition: 0.2s;
+        }
+        textarea:focus {
+            border-color: #3a6ea5;
+            background: #2d2d2d;
         }
         .input-info {
             font-size: 13px;
@@ -122,9 +134,11 @@
             font-size: 15px;
             cursor: pointer;
             transition: 0.2s;
+            font-weight: 500;
         }
         button:hover {
             background: #2d5a8c;
+            transform: translateY(-1px);
         }
         button.clear {
             background: #a83232;
@@ -195,7 +209,7 @@
             gap: 10px;
         }
 
-        /* ========== 统一复制按钮样式 ========== */
+        /* 复制按钮 */
         .copy-btn {
             padding: 8px 14px;
             background: #4d7a43;
@@ -206,6 +220,7 @@
             font-size: 14px;
             font-weight: 500;
             min-width: 70px;
+            transition: 0.2s;
         }
         .copy-btn:hover {
             background: #3f6436;
@@ -265,7 +280,6 @@
 </head>
 <body>
 
-<!-- 导航栏 -->
 <nav>
     <div class="nav-links">
         <a href="https://m.hxyx.cc.cd/sy.html">首页</a>
@@ -367,7 +381,7 @@ function clearAll(no) {
     showInputInfo(no);
 }
 
-// 复制功能
+// 复制功能（修复版）
 function copyText(text, tipId) {
     if(!text || text === '无'){
         alert('无内容可复制');
@@ -377,7 +391,19 @@ function copyText(text, tipId) {
         const tip = document.getElementById(tipId);
         tip.innerText = '✅ 复制成功';
         setTimeout(() => tip.innerText = '', 1500);
-    }).catch(() => alert('复制失败，请手动复制'));
+    }).catch(() => {
+        // 降级方案
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        const tip = document.getElementById(tipId);
+        tip.innerText = '✅ 复制成功';
+        setTimeout(() => tip.innerText = '', 1500);
+    });
 }
 
 // 去重 & 排序
