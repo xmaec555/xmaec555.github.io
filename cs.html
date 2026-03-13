@@ -3,285 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>蚂蚁澳彩数据打乱工具</title>
+    <title>Minimal Dark</title>
     <style>
+        /* 全局样式重置 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Microsoft YaHei", sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* 深色主题根变量 */
+        :root {
+            --dark-bg: #121212;
+            --dark-card: #1e1e1e;
+            --accent: #4f46e5;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border-color: #333333;
         }
 
         body {
-            background: #121212;
-            color: #e0e0e0;
-            padding-top: 60px;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-top: 70px; /* 适配固定导航栏 */
         }
 
-        /* 顶部导航栏 - 手机电脑自适应 */
-        nav {
+        /* 导航栏样式 */
+        .navbar {
             position: fixed;
             top: 0;
             width: 100%;
+            height: 70px;
+            background-color: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
-            justify-content: center;
             align-items: center;
-            padding: 0.9rem 5%;
-            background: #1e1e1e;
-            border-bottom: 1px solid #333;
-            z-index: 100;
+            justify-content: space-between;
+            padding: 0 5%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--accent);
+            text-decoration: none;
+            letter-spacing: 1px;
         }
 
         .nav-links {
             display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
+            gap: 35px;
+            list-style: none;
         }
 
         .nav-links a {
-            color: #bbbbbb;
-            padding: 5px 8px;
+            color: var(--text-secondary);
             text-decoration: none;
-            font-size: 15px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
 
         .nav-links a:hover {
-            color: #ffffff;
+            color: var(--accent);
+            transform: translateY(-2px);
         }
 
-        /* 工具容器 */
+        /* 主要内容区域 */
         .container {
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 0 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
         }
-        .tool-box {
-            background: #1e1e1e;
-            padding: 25px;
-            border-radius: 12px;
-            border: 1px solid #333;
-        }
-        h2 {
-            text-align: center;
-            color: #ffffff;
-            margin-bottom: 20px;
-            font-size: 22px;
-        }
-        textarea {
-            width: 100%;
-            height: 120px;
-            padding: 12px;
-            border: 1px solid #444;
-            border-radius: 6px;
-            resize: vertical;
-            font-size: 14px;
-            margin-bottom: 15px;
-            background: #2a2a2a;
-            color: #ffffff;
-        }
-        .btn-group {
+
+        .hero {
+            min-height: 60vh;
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        button {
-            flex: 1;
-            min-width: 120px;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            background: #3a6ea5;
-            color: white;
-            font-size: 15px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        button:hover {
-            background: #2d5a8c;
-        }
-        button.copy-btn {
-            background: #4d7a43;
-        }
-        button.copy-btn:hover {
-            background: #3f6436;
-        }
-        .result-box {
-            padding: 15px;
-            background: #252525;
-            border-radius: 6px;
-            border: 1px solid #444;
-            margin-bottom: 15px;
-        }
-        .result-title {
-            font-weight: bold;
-            color: #ffffff;
-            margin-bottom: 8px;
-        }
-        #resultNum {
-            color: #ff6b6b;
-            font-weight: bold;
-        }
-        #resultText {
-            line-height: 1.6;
-            color: #e0e0e0;
-            word-break: break-all;
-        }
-
-        .check-box {
-            padding: 15px;
-            background: #2a2722;
-            border-radius: 6px;
-            border: 1px solid #4a4436;
-            margin-bottom: 20px;
-        }
-        .check-title {
-            font-weight: bold;
-            color: #f1d07f;
-            margin-bottom: 10px;
-        }
-        .check-item {
-            color: #d0d0d0;
-            line-height: 1.5;
-        }
-        .check-result {
-            font-weight: bold;
-            padding: 6px 10px;
-            border-radius: 4px;
-            display: inline-block;
-        }
-        .check-success {
-            background: #253b25;
-            color: #6cce6c;
-        }
-        .check-error {
-            background: #3b2525;
-            color: #ff6b6b;
-        }
-
-        .bottom-link {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            font-size: 14px;
-            color: #888;
-            margin-top: 10px;
-            line-height: 1.8;
+            gap: 25px;
         }
-        .bottom-link a {
-            color: #8ab4f8;
-            text-decoration: none;
-            padding: 0 4px;
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 20px;
+            }
+            .hero h1 {
+                font-size: 36px;
+            }
+            .hero p {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- 导航栏已替换为你指定的内容 -->
+    <nav class="navbar">
+        <a href="#" class="logo">MINIMAL</a>
+        <ul class="nav-links">
+            <li><a href="https://m.hxyx.cc.cd">首页</a></li>
+            <li><a href="https://t.me/+RjaMJ26EAPw0ZTc1">特码</a></li>
+            <li><a href="https://t.me/mayiya_bot">机器人</a></li>
+            <li><a href="https://t.me/mayi2036">联系</a></li>
+        </ul>
+    </nav>
 
-<!-- 精简导航栏（无logo + 手机自适应） -->
-<nav>
-    <div class="nav-links">
-        <a href="https://m.hxyx.cc.cd">首页</a>
-        <a href="https://t.me/+RjaMJ26EAPw0ZTc1">特码</a>
-        <a href="https://t.me/mayiya_bot">机器人</a>
-        <a href="https://t.me/mayi2036">联系</a>
+    <!-- 主要内容 -->
+    <div class="container">
+        <section class="hero" id="home">
+            <h1>简约至上 · 极简设计</h1>
+            <p>专注于深色主题的简约风格设计，去除冗余元素，保留核心质感，打造舒适的视觉体验</p>
+            <button class="btn">探索更多</button>
+        </section>
     </div>
-</nav>
-
-<!-- 打乱工具 -->
-<div class="container">
-    <div class="tool-box">
-        <h2>蚂蚁澳彩数据 - 打乱工具</h2>
-        <textarea id="input" placeholder="请粘贴需要打乱的数据，用空格分隔"></textarea>
-        
-        <div class="btn-group">
-            <button onclick="shuffleNum()">我要打乱</button>
-            <button class="copy-btn" onclick="copyResult()">复制结果</button>
-            <button onclick="clearAll()">清空重置</button>
-        </div>
-
-        <div class="result-box">
-            <div class="result-title">打乱后总数：<span id="resultNum">0</span> 个</div>
-            <div id="resultText">打乱结果将显示在这里...</div>
-        </div>
-
-        <div class="check-box">
-            <div class="check-title">✅ 打乱前后数字复核对比</div>
-            <div class="check-item"><b>打乱前：</b><span id="originalText">-</span></div>
-            <div class="check-item"><b>打乱后：</b><span id="shuffledText">-</span></div>
-            <div><b>复核结果：</b> <span id="checkStatus" class="check-result">未校验</span></div>
-        </div>
-
-        <div class="bottom-link">
-            <p>© 2026 蚂蚁数据澳彩团队 - 版权所有</p>
-            <p>
-                <a href="https://t.me/+RjaMJ26EAPw0ZTc1">频道</a>
-                <a href="https://m.hxyx.cc.cd/kj.html">直播</a>
-                <a href="https://m.hxyx.cc.cd">收藏</a>
-            </p>
-        </div>
-    </div>
-</div>
-
-<script>
-    let currentResult = "";
-    let originalNums = [];
-
-    function shuffleArray(arr) {
-        let newArr = [...arr];
-        for (let i = newArr.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
-        }
-        return newArr;
-    }
-
-    function shuffleNum() {
-        const input = document.getElementById('input').value.trim();
-        if (!input) return alert('请先粘贴数据！');
-        originalNums = input.split(/\s+/).filter(item => item.trim());
-        if (!originalNums.length) return alert('未检测到有效数据！');
-        
-        const resultArr = shuffleArray(originalNums);
-        currentResult = resultArr.join(' ');
-        document.getElementById('resultNum').textContent = resultArr.length;
-        document.getElementById('resultText').textContent = currentResult;
-        document.getElementById('originalText').textContent = originalNums.join(' ');
-        document.getElementById('shuffledText').textContent = currentResult;
-        doCheck();
-    }
-
-    async function copyResult() {
-        if (!currentResult) return alert('请先生成结果！');
-        try { await navigator.clipboard.writeText(currentResult); }
-        catch {
-            const t = document.createElement('textarea');
-            t.value = currentResult; document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t);
-        }
-        alert('复制成功！');
-    }
-
-    function doCheck() {
-        const s = document.getElementById('checkStatus');
-        const a = [...originalNums].sort().join();
-        const b = currentResult.split(' ').filter(Boolean).sort().join();
-        if (a === b) {
-            s.className = 'check-result check-success';
-            s.textContent = '✅ 完全一致';
-        } else {
-            s.className = 'check-result check-error';
-            s.textContent = '❌ 不一致';
-        }
-    }
-
-    function clearAll() {
-        document.getElementById('input').value = '';
-        document.getElementById('resultNum').textContent = '0';
-        document.getElementById('resultText').textContent = '打乱结果将显示在这里...';
-        document.getElementById('originalText').textContent = '-';
-        document.getElementById('shuffledText').textContent = '-';
-        const st = document.getElementById('checkStatus');
-        st.className = 'check-result'; st.textContent = '未校验';
-        currentResult = ''; originalNums = [];
-    }
-</script>
 </body>
 </html>
