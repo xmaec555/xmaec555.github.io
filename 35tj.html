@@ -9,323 +9,296 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Microsoft YaHei", sans-serif;
+            font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
         }
 
         body {
-            background: #121212;
-            color: #e0e0e0;
-            padding-top: 60px;
+            background: #0f0f12;
+            color: #eaeaea;
+            padding: 20px;
             line-height: 1.6;
         }
 
-        /* 顶部导航栏 */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0.9rem 5%;
-            background: #1e1e1e;
-            border-bottom: 1px solid #333;
-            z-index: 100;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .nav-links a {
-            color: #bbbbbb;
-            padding: 5px 10px;
-            text-decoration: none;
-            font-size: 15px;
-            border-radius: 4px;
-            transition: 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: #ffffff;
-            background: #333;
-        }
-
-        /* 容器统一 */
-        .container {
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-        .tool-box {
-            background: #1e1e1e;
-            padding: 25px;
-            border-radius: 12px;
-            border: 1px solid #333;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-        }
-        h1,h2 {
+        /* 顶部标题 */
+        .page-header {
             text-align: center;
+            margin-bottom: 30px;
+        }
+        .page-title {
+            font-size: 26px;
+            font-weight: 600;
             color: #ffffff;
-            margin-bottom: 20px;
+            background: linear-gradient(90deg, #4d9fff, #ff9c41);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
-        h1 { font-size: 24px; }
-        h2 { font-size: 20px; text-align:left; }
 
-        .panel {
-            margin-bottom: 35px;
-            padding-bottom: 25px;
-            border-bottom: 1px dashed #444;
+        /* 主容器 */
+        .main-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
         }
-        .panel:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
+
+        /* 卡片样式 */
+        .card {
+            background: #1a1a20;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+            border: 1px solid #2d2d35;
+            transition: all 0.2s;
         }
-        .input-box {
-            margin-bottom: 20px;
+        .card:hover {
+            border-color: #3a3a45;
         }
-        label {
-            display: block;
+
+        /* 卡片标题 */
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2d2d35;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .title-1 { color: #4d9fff; }
+        .title-2 { color: #5ccb5f; }
+        .title-compare { color: #ff9c41; }
+
+        /* 输入区域 */
+        .input-group {
+            margin-bottom: 16px;
+        }
+        .input-label {
+            font-size: 14px;
+            font-weight: 500;
             margin-bottom: 8px;
-            font-weight: bold;
-            color: #fff;
+            color: #ccc;
         }
         textarea {
             width: 100%;
-            height: 120px;
-            padding: 12px;
-            border: 1px solid #444;
-            border-radius: 6px;
-            resize: vertical;
+            height: 110px;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            background: #24242d;
+            color: #fff;
             font-size: 14px;
-            background: #2a2a2a;
-            color: #ffffff;
+            resize: vertical;
             outline: none;
             transition: 0.2s;
         }
         textarea:focus {
-            border-color: #3a6ea5;
-            background: #2d2d2d;
+            border-color: #4d9fff;
+            background: #272732;
+            box-shadow: 0 0 0 3px rgba(77, 159, 255, 0.1);
         }
-        .input-info {
+        .input-count {
             font-size: 13px;
-            color: #aaa;
-            margin-top: 5px;
+            color: #888;
+            margin-top: 6px;
         }
-        .btn-group {
+
+        /* 按钮 */
+        .btn-row {
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 25px;
+            margin-top: 10px;
         }
-        button {
-            padding: 10px 18px;
+        .btn {
+            padding: 9px 16px;
+            border-radius: 10px;
             border: none;
-            border-radius: 6px;
-            background: #a83232;
-            color: white;
-            font-size: 15px;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
             transition: 0.2s;
-            font-weight: 500;
         }
-        button:hover {
-            background: #8b2828;
-            transform: translateY(-1px);
+        .btn-clear {
+            background: #d9534f;
+            color: #fff;
         }
-        button.compare {
-            background: #cc7a29;
-            font-weight: bold;
+        .btn-clear:hover {
+            background: #c44642;
         }
-        .result-section {
+        .btn-compare-clear {
+            background: #444;
+            color: #fff;
+        }
+        .btn-compare-clear:hover {
+            background: #555;
+        }
+
+        /* 结果区域 */
+        .result-box {
             margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #444;
-            border-radius: 8px;
-            background: #252525;
+            padding-top: 20px;
+            border-top: 1px dashed #2d2d35;
         }
-        .result-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #fff;
-            margin-bottom: 12px;
-            padding-bottom: 6px;
-            border-bottom: 1px solid #444;
+        .result-item {
+            margin-bottom: 14px;
+            font-size: 14px;
+        }
+        .result-label {
+            display: inline-block;
+            width: 70px;
+            color: #aaa;
+        }
+        .result-value {
+            font-weight: 600;
+        }
+        .highlight { color: #ffaa00; }
+        .hot { color: #ff6b6b; }
+        .cold { color: #4d9fff; }
+
+        /* 统计列表 */
+        .stats-grid {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .highlight {
-            color: #ffaa00;
-            font-weight: bold;
-        }
-        .hot {
-            color: #ff6b6b !important;
-            font-weight: bold;
-        }
-        .cold {
-            color: #4d9fff !important;
-            font-weight: bold;
-        }
-        .zodiac-item {
-            display: inline-flex;
-            align-items: center;
-            margin: 5px 10px 5px 0;
-            padding: 4px 8px;
-            background: #333;
-            border-radius: 4px;
-            gap: 6px;
-            color: #fff;
-        }
-        .group-item {
-            border: 1px solid #444;
-            border-radius: 8px;
-            padding: 12px 15px;
-            margin: 8px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #2a2a2a;
             flex-wrap: wrap;
             gap: 10px;
+            margin-top: 12px;
+        }
+        .stats-item {
+            padding: 6px 10px;
+            background: #272732;
+            border-radius: 8px;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+        .stats-hot { background: #3d2626; color: #ff6b6b; }
+        .stats-cold { background: #262d3d; color: #4d9fff; }
+
+        /* 对比结果 */
+        .compare-item {
+            padding: 14px 16px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            background: #272732;
+            border-left: 4px solid #444;
+        }
+        .compare-l1 { border-left-color: #4d9fff; background: #262d3d; }
+        .compare-l2 { border-left-color: #5ccb5f; background: #263d27; }
+        .compare-l3 { border-left-color: #ff9c41; background: #3d2f26; }
+        .compare-final {
+            border-left-color: #ff6b6b;
+            background: #3d2626;
+            font-weight: 600;
+            font-size: 15px;
         }
 
         /* 复制按钮 */
         .copy-btn {
-            padding: 8px 14px;
-            background: #4d7a43;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background: #3b9453;
             color: #fff;
             border: none;
-            border-radius: 6px;
+            font-size: 12px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            min-width: 70px;
-            transition: 0.2s;
+            margin-left: 10px;
         }
         .copy-btn:hover {
-            background: #3f6436;
+            background: #328047;
         }
         .copy-tip {
-            color: #6cce6c;
-            font-size: 13px;
+            font-size: 12px;
+            color: #5ccb5f;
             margin-left: 8px;
-            white-space: nowrap;
         }
-        .item-right {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-left: auto;
-        }
-        .base-row {
-            display: flex;
-            gap: 25px;
-            font-size: 15px;
-            flex-wrap: wrap;
-        }
-        .compare-row {
-            background: #3b3629 !important;
-            border-left: 4px solid #cc7a29;
-        }
-        .final-row {
-            background: #293b2a !important;
-            border-left: 4px solid #4d7a43 !important;
-            font-weight: bold;
-        }
-        .error{
-            color:#ff6b6b;
-            font-weight:bold;
-            margin-top:10px
-        }
+
+        /* 自动提示 */
         .auto-tip {
-            color: #6cce6c;
             font-size: 13px;
-            margin-left: 10px;
-            font-weight: bold;
+            color: #5ccb5f;
+            font-weight: 600;
         }
-        .bottom-link {
+
+        /* 底部 */
+        .footer {
             text-align: center;
-            font-size: 14px;
-            color: #888;
-            margin-top: 20px;
+            font-size: 13px;
+            color: #666;
+            margin-top: 30px;
             line-height: 1.6;
-        }
-        .bottom-link a {
-            color: #8ab4f8;
-            text-decoration: none;
-            padding: 0 4px;
         }
     </style>
 </head>
+
 <body>
-
-<nav>
-    <div class="nav-links">
-        <a href="https://m.hxyx.cc.cd/sy.html">首页</a>
-        <a href="https://m.hxyx.cc.cd/i.html">统计</a>
-        <a href="https://m.hxyx.cc.cd/28tj.html">28M</a>
-        <a href="https://m.hxyx.cc.cd/gj.html">工具</a>
+    <div class="page-header">
+        <h1 class="page-title">蚂蚁啊啊盘子35M统计</h1>
     </div>
-</nav>
 
-<div class="container">
-    <div class="tool-box">
-        <h1>蚂蚁啊啊盘子35M统计</h1>
+    <div class="main-container">
+        <!-- 第一组 -->
+        <div class="card">
+            <div class="card-title title-1">
+                第一组数据统计
+                <span id="autoTip1" class="auto-tip"></span>
+            </div>
+            <div class="input-group">
+                <div class="input-label">蚂蚁数据-啊啊专家</div>
+                <textarea id="numInput1" placeholder="请输入数字，用空格分隔" oninput="onDataChange()"></textarea>
+                <div class="input-count" id="inputInfo1">已输入：0 个数字</div>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-clear" onclick="clearAll(1)">清空本组</button>
+            </div>
 
-        <div class="panel">
-            <h2>第一组统计 <span id="autoTip1" class="auto-tip"></span></h2>
-            <div class="input-box">
-                <label>蚂蚁数据-啊啊专家（第一组）：</label>
-                <textarea id="numInput1" placeholder="示例：1 3 5 7 9 11" oninput="onDataChange()"></textarea>
-                <div class="input-info" id="inputInfo1">已输入：0 个数字</div>
+            <div class="result-box">
+                <div id="baseResult1"></div>
+                <div id="groupResult1" style="margin-top:12px"></div>
+                <div id="zodiacResult1" style="margin-top:12px"></div>
             </div>
-            <div class="btn-group">
-                <button onclick="clearAll(1)">清空</button>
-            </div>
-            <div class="result-section" id="baseResult1"></div>
-            <div class="result-section" id="groupResult1"></div>
-            <div class="result-section" id="zodiacResult1"></div>
         </div>
 
-        <div class="panel">
-            <h2>第二组统计 <span id="autoTip2" class="auto-tip"></span></h2>
-            <div class="input-box">
-                <label>蚂蚁数据-啊啊专家（第二组）：</label>
-                <textarea id="numInput2" placeholder="示例：2 4 6 8 10 12" oninput="onDataChange()"></textarea>
-                <div class="input-info" id="inputInfo2">已输入：0 个数字</div>
+        <!-- 第二组 -->
+        <div class="card">
+            <div class="card-title title-2">
+                第二组数据统计
+                <span id="autoTip2" class="auto-tip"></span>
             </div>
-            <div class="btn-group">
-                <button onclick="clearAll(2)">清空</button>
+            <div class="input-group">
+                <div class="input-label">蚂蚁数据-啊啊专家</div>
+                <textarea id="numInput2" placeholder="请输入数字，用空格分隔" oninput="onDataChange()"></textarea>
+                <div class="input-count" id="inputInfo2">已输入：0 个数字</div>
             </div>
-            <div class="result-section" id="baseResult2"></div>
-            <div class="result-section" id="groupResult2"></div>
-            <div class="result-section" id="zodiacResult2"></div>
+            <div class="btn-row">
+                <button class="btn btn-clear" onclick="clearAll(2)">清空本组</button>
+            </div>
+
+            <div class="result-box">
+                <div id="baseResult2"></div>
+                <div id="groupResult2" style="margin-top:12px"></div>
+                <div id="zodiacResult2" style="margin-top:12px"></div>
+            </div>
         </div>
 
-        <div class="panel">
-            <h2 style="color:#ff9c41">🔍 交叉对比结果 <span id="autoCompareTip" class="auto-tip"></span></h2>
-            <div class="btn-group">
-                <button style="margin-left:10px" onclick="clearCompare()">清空对比</button>
+        <!-- 交叉对比 -->
+        <div class="card">
+            <div class="card-title title-compare">
+                🔍 交叉对比结果
+                <span id="autoCompareTip" class="auto-tip"></span>
             </div>
-            <div id="compareTip"></div>
-            <div class="result-section" id="compareResult"></div>
-        </div>
-
-        <div class="bottom-link">
-            <p>© 2026 蚂蚁数据啊啊团队 - 版权所有</p>
-            <p>
-                <a href="https://t.me/+RjaMJ26EAPw0ZTc1">频道</a>
-                <a href="https://m.hxyx.cc.cd/kj.html">直播</a>
-                <a href="https://m.hxyx.cc.cd">收藏</a>
-            </p>
+            <div class="btn-row">
+                <button class="btn btn-compare-clear" onclick="clearCompare()">清空对比结果</button>
+            </div>
+            <div id="compareTip" style="margin:10px 0"></div>
+            <div id="compareResult"></div>
         </div>
     </div>
-</div>
+
+    <div class="footer">
+        © 2026 蚂蚁数据啊啊团队 - 版权所有<br>
+        全自动统计 | 实时对比
+    </div>
 
 <script>
 // 全局配置
@@ -341,7 +314,7 @@ const uniqueSort = arr => [...new Set(arr)].sort((a, b) => a - b);
 const formatNumbers = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
 const inRange = (val, min, max) => val >= min && val <= max;
 
-// 【核心】任何数据变动都触发全自动刷新
+// 数据变动触发全自动刷新
 function onDataChange() {
     clearTimeout(timer);
     timer = setTimeout(() => {
@@ -349,7 +322,7 @@ function onDataChange() {
     }, 150);
 }
 
-// 全自动刷新：统计两组 + 刷新对比
+// 全量刷新
 function refreshAll() {
     calculate(1);
     calculate(2);
@@ -357,26 +330,25 @@ function refreshAll() {
     showInputInfo(2);
     compareAll();
     
-    // 状态提示
     document.getElementById('autoTip1').innerText = getValidInput(1) ? '✅ 已自动统计' : '';
     document.getElementById('autoTip2').innerText = getValidInput(2) ? '✅ 已自动统计' : '';
     document.getElementById('autoCompareTip').innerText = (getValidInput(1) && getValidInput(2)) ? '✅ 已自动对比' : '';
 }
 
-// 获取有效输入
+// 获取有效数据
 function getValidInput(no) {
     const val = document.getElementById(`numInput${no}`).value.trim();
     return (val.match(/\d+/g) || []).filter(n => n >=1 && n <=49).length > 0;
 }
 
-// 输入状态
+// 显示输入数量
 function showInputInfo(no) {
     const val = document.getElementById(`numInput${no}`).value;
     const count = (val.match(/\d+/g) || []).length;
     document.getElementById(`inputInfo${no}`).innerText = `已输入：${count} 个数字`;
 }
 
-// 清空单组
+// 清空本组
 function clearAll(no) {
     document.getElementById(`numInput${no}`).value = '';
     document.getElementById(`baseResult${no}`).innerHTML = '';
@@ -388,38 +360,23 @@ function clearAll(no) {
 
 // 复制功能
 function copyText(text, tipId) {
-    if(!text || text === '无'){
-        alert('暂无内容可复制');
-        return;
-    }
+    if(!text || text === '无'){ alert('暂无内容可复制'); return; }
     try {
-        navigator.clipboard.writeText(text).then(() => {
-            showCopyTip(tipId);
-        }).catch(err=>{
-            fallbackCopy(text, tipId);
-        });
+        navigator.clipboard.writeText(text).then(() => showCopyTip(tipId));
     } catch(e) {
-        fallbackCopy(text, tipId);
+        const ta = document.createElement("textarea");
+        ta.value = text; ta.style.position="fixed"; ta.style.left="-9999px";
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+        document.body.removeChild(ta); showCopyTip(tipId);
     }
-}
-function fallbackCopy(text, tipId) {
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-    textArea.style.position="fixed";
-    textArea.style.left="-9999px";
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textArea);
-    showCopyTip(tipId);
 }
 function showCopyTip(tipId) {
-    const tip = document.getElementById(tipId);
-    tip.innerText = '✅ 复制成功';
-    setTimeout(() => tip.innerText = '', 1500);
+    const t = document.getElementById(tipId);
+    t.innerText = '✅ 复制成功';
+    setTimeout(() => t.innerText = '', 1500);
 }
 
-// 核心统计
+// 统计核心
 function calculate(no) {
     const input = document.getElementById(`numInput${no}`).value.trim();
     const inputArr = (input.match(/\d+/g) || []).map(Number).filter(n => n >= 1 && n <= 49);
@@ -456,49 +413,56 @@ function calculate(no) {
     }
 }
 
-// 渲染基础
+// 渲染基础信息
 function renderBase(no, total, unique, max, min) {
     document.getElementById(`baseResult${no}`).innerHTML = `
-    <div class="result-title">📊 基础统计</div>
-    <div class="base-row">
-        <div>总数量：<span class="highlight">${total}</span></div>
-        <div>不重复：<span class="highlight">${unique}</span></div>
-        <div>最热：<span class="hot">${max} 次</span></div>
-        <div>最冷：<span class="cold">${min} 次</span></div>
+    <div class="result-item">
+        <span class="result-label">总数量：</span>
+        <span class="result-value highlight">${total}</span>
+    </div>
+    <div class="result-item">
+        <span class="result-label">不重复：</span>
+        <span class="result-value highlight">${unique}</span>
+    </div>
+    <div class="result-item">
+        <span class="result-label">最热：</span>
+        <span class="result-value hot">${max} 次</span>
+    </div>
+    <div class="result-item">
+        <span class="result-label">最冷：</span>
+        <span class="result-value cold">${min} 次</span>
     </div>`;
 }
 
 // 渲染次数分组
 function renderGroup(no, sorted, group, maxCnt, minCnt) {
-    let html = `<div class="result-title"><span>📦 次数分组（最冷→最热）</span></div>`;
+    let html = `<div style="font-weight:600;margin-bottom:8px">📦 次数统计</div>`;
     sorted.forEach((cnt, i) => {
         const list = group[cnt].map(padZero).join(' ');
-        const mark = cnt === maxCnt ? '<span class="hot">【最热】</span>' : cnt === minCnt ? '<span class="cold">【最冷】</span>' : '';
+        const cls = cnt === maxCnt ? 'stats-hot' : cnt === minCnt ? 'stats-cold' : '';
         html += `
-        <div class="group-item">
-            <div>${mark} 出现${cnt}次（共${group[cnt].length}个）：${list}</div>
-            <div class="item-right">
-                <button class="copy-btn" onclick="copyText('${list}','g${no}_${i}')">复制</button>
-                <span id="g${no}_${i}" class="copy-tip"></span>
-            </div>
+        <div class="stats-item ${cls}">
+            ${cnt} 次：${list}
+            <button class="copy-btn" onclick="copyText('${list}','g${no}_${i}')">复制</button>
+            <span id="g${no}_${i}" class="copy-tip"></span>
         </div>`;
     });
-    document.getElementById(`groupResult${no}`).innerHTML = html;
+    document.getElementById(`groupResult${no}`).innerHTML = `<div class="stats-grid">${html}</div>`;
 }
 
 // 渲染生肖
 function renderZodiac(no, zodiacCount) {
+    let html = `<div style="font-weight:600;margin-bottom:8px">🐉 生肖统计</div>`;
     const sorted = Object.entries(zodiacCount).sort((a, b) => b[1] - a[1]);
-    let html = `<div class="result-title"><span>🐉 生肖统计</span></div>`;
     const max = sorted[0][1], min = sorted[sorted.length-1][1];
     sorted.forEach(([z, cnt]) => {
-        const cls = cnt === max ? 'zodiac-item hot' : cnt === min ? 'zodiac-item cold' : 'zodiac-item';
-        html += `<div class="${cls}">${z}：${cnt}次</div>`;
+        const cls = cnt === max ? 'stats-hot' : cnt === min ? 'stats-cold' : '';
+        html += `<div class="stats-item ${cls}">${z}：${cnt}次</div>`;
     });
-    document.getElementById(`zodiacResult${no}`).innerHTML = html;
+    document.getElementById(`zodiacResult${no}`).innerHTML = `<div class="stats-grid">${html}</div>`;
 }
 
-// 对比
+// 对比结果
 function clearCompare() {
     document.getElementById('compareResult').innerHTML = '';
     document.getElementById('compareTip').innerHTML = '';
@@ -530,34 +494,21 @@ function compareAll() {
     const finalStr = formatNumbers(finalArr);
 
     document.getElementById('compareResult').innerHTML = `
-    <div class="result-title">🎯 三组交叉对比</div>
-    <div class="group-item compare-row">
-        <div>【冷门码】：${s1}</div>
-        <div class="item-right">
-            <button class="copy-btn" onclick="copyText('${s1}','c1')">复制</button>
-            <span id="c1" class="copy-tip"></span>
-        </div>
+    <div class="compare-item compare-l1">
+        【冷门码】：${s1}
+        <button class="copy-btn" onclick="copyText('${s1}','c1')">复制</button><span id="c1" class="copy-tip"></span>
     </div>
-    <div class="group-item compare-row">
-        <div>【中热码】：${s2}</div>
-        <div class="item-right">
-            <button class="copy-btn" onclick="copyText('${s2}','c2')">复制</button>
-            <span id="c2" class="copy-tip"></span>
-        </div>
+    <div class="compare-item compare-l2">
+        【中热码】：${s2}
+        <button class="copy-btn" onclick="copyText('${s2}','c2')">复制</button><span id="c2" class="copy-tip"></span>
     </div>
-    <div class="group-item compare-row">
-        <div>【热门码】：${s3}</div>
-        <div class="item-right">
-            <button class="copy-btn" onclick="copyText('${s3}','c3')">复制</button>
-            <span id="c3" class="copy-tip"></span>
-        </div>
+    <div class="compare-item compare-l3">
+        【热门码】：${s3}
+        <button class="copy-btn" onclick="copyText('${s3}','c3')">复制</button><span id="c3" class="copy-tip"></span>
     </div>
-    <div class="group-item final-row">
-        <div>✅ 推荐号码（共 ${finalArr.length} 个）：${finalStr}</div>
-        <div class="item-right">
-            <button class="copy-btn" onclick="copyText('${finalStr}','cf')">复制</button>
-            <span id="cf" class="copy-tip"></span>
-        </div>
+    <div class="compare-item compare-final">
+        ✅ 推荐号码（共 ${finalArr.length} 个）：${finalStr}
+        <button class="copy-btn" onclick="copyText('${finalStr}','cf')">复制</button><span id="cf" class="copy-tip"></span>
     </div>`;
 }
 </script>
