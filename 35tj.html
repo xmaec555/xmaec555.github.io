@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>蚂蚁澳彩盘口35M统计</title>
+    <title>数字统计分析工具</title>
     <style>
         * {
             margin: 0;
@@ -172,6 +172,7 @@
             font-size: 13px;
         }
 
+        /* 复制按钮统一右对齐样式 */
         .copy-btn {
             background: #467a43;
             color: #fff;
@@ -180,6 +181,7 @@
             padding: 6px 10px;
             font-size: 13px;
             cursor: pointer;
+            margin-left: auto; /* 关键：将按钮推到右侧 */
         }
         .copy-btn:hover {
             background: #3a6636;
@@ -217,32 +219,27 @@
             margin-top: 20px;
             line-height: 1.6;
         }
-        .bottom-link a {
-            color: #8ab4f8;
-            text-decoration: none;
-            margin: 0 4px;
-        }
     </style>
 </head>
 <body>
 
 <nav>
     <div class="nav-wrap">
-        <a href="https://m.hxyx.cc.cd/sy.html">首页</a>
-        <a href="https://m.hxyx.cc.cd/i.html">统计</a>
-        <a href="https://m.hxyx.cc.cd/28tj.html">28M</a>
-        <a href="https://m.hxyx.cc.cd/gj.html">工具</a>
+        <a>首页</a>
+        <a>统计</a>
+        <a>数据分析</a>
+        <a>工具</a>
     </div>
 </nav>
 
 <div class="container">
     <div class="tool-box">
-        <h1>蚂蚁澳彩盘口35M统计</h1>
+        <h1>数字统计分析工具</h1>
 
         <div class="panel">
             <h2>第一组统计</h2>
             <div class="input-box">
-                <label>蚂蚁数据-澳彩专家（第一组）</label>
+                <label>请输入数字（1-49，空格分隔）</label>
                 <textarea id="numInput1" placeholder="1 3 5 7 9..." oninput="showInputInfo(1)"></textarea>
                 <div class="input-info" id="inputInfo1">已输入：0 个数字</div>
             </div>
@@ -260,7 +257,7 @@
         <div class="panel">
             <h2>第二组统计</h2>
             <div class="input-box">
-                <label>蚂蚁数据-澳彩专家（第二组）</label>
+                <label>请输入数字（1-49，空格分隔）</label>
                 <textarea id="numInput2" placeholder="2 4 6 8 10..." oninput="showInputInfo(2)"></textarea>
                 <div class="input-info" id="inputInfo2">已输入：0 个数字</div>
             </div>
@@ -286,12 +283,7 @@
         </div>
 
         <div class="bottom-link">
-            <p>© 2026 蚂蚁数据澳彩团队 - 版权所有</p>
-            <p>
-                <a href="https://t.me/+RjaMJ26EAPw0ZTc1">频道</a>
-                <a href="https://m.hxyx.cc.cd/kj.html">直播</a>
-                <a href="https://m.hxyx.cc.cd">收藏</a>
-            </p>
+            <p>© 2026 数据统计工具 - 仅供学习使用</p>
         </div>
     </div>
 </div>
@@ -309,7 +301,6 @@ const uniqueSort = arr => [...new Set(arr)].sort((a,b)=>a-b);
 const format = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
 const inRange = (v,min,max) => v>=min && v<=max;
 
-// 新增：根据编号复制全部内容
 function copyAllGroup(no) {
     const text = no === 1 ? group1All : group2All;
     copyText(text, `gAll${no}`);
@@ -334,7 +325,6 @@ function clearAll(no){
 
 function copyText(text, tipId){
     if(!text || text==='无'){ alert('无内容可复制'); return; }
-    // 使用现代Clipboard API，兼容所有浏览器
     navigator.clipboard.writeText(text).then(() => {
         const tip = document.getElementById(tipId);
         tip.innerText = "✅ 已复制";
