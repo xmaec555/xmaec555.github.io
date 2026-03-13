@@ -296,7 +296,7 @@ function fallbackCopy(text, tip) {
     textArea.style.opacity = "0";
     document.body.appendChild(textArea);
     textArea.select();
-    textArea.setSelectionRange(0, text.value.length);
+    textArea.setSelectionRange(0, textArea.value.length);
     
     try {
         document.execCommand('copy');
@@ -322,29 +322,35 @@ function calculate() {
     const input = $('numInput').value.trim();
     if (!input) return alert("请输入数字");
     
+    // 提取所有数字
     const inputArr = (input.match(/\d+/g) || [])
         .map(Number)
         .filter(n => n >= 1 && n <= 49);
     
     if (inputArr.length === 0) return alert("未识别到有效 1-49 数字");
 
+    // 统计每个数字出现次数
     const countMap = {};
-    for (let i = 1; i <= 49; i++) countMap[i] = 0;
-    inputArr.forEach(n => countMap[n]++);
+    inputArr.forEach(n => {
+        countMap[n] = (countMap[n] || 0) + 1;
+    });
 
     const totalCount = inputArr.length;
-    const uniqueCount = new Set(inputArr).size;
+    const uniqueCount = Object.keys(countMap).length;
     const maxCount = Math.max(...Object.values(countMap));
 
+    // 按次数分组
     const group = {};
-    for (const n in countMap) {
-        const c = countMap[n];
-        if(c > 0) (group[c] || (group[c] = [])).push(+n);
+    for (const num in countMap) {
+        const cnt = countMap[num];
+        if (!group[cnt]) group[cnt] = [];
+        group[cnt].push(Number(num));
     }
-    
-    // ✅ 这一行已经改成：冷数字（次数少）在上，热数字（次数多）在下
+
+    // 排序：次数少（冷）在上，次数多（热）在下
     const sortedCounts = Object.keys(group).map(Number).sort((a, b) => a - b);
 
+    // 生肖统计
     const zodiacCount = {};
     zodiacList.forEach(z => zodiacCount[z] = 0);
     inputArr.forEach(n => zodiacCount[getZodiac(n)]++);
@@ -367,10 +373,16 @@ function renderBase(total, unique, max) {
 
 function renderGroup(sorted, group) {
     const allText = [];
-    let html = `<div class="result-title"><span>📦 按出现次数分组（冷 → 热）</span><div></div></div>`;
+    let html = `<div class="result-title">
+        <span>📦 按出现次数分组（冷 → 热）</span>
+        <div>
+            <button class="copy-btn" onclick="copyText('', 'allTip')">复制全部</button>
+            <span id="allTip" class="copy-tip"></span>
+        </div>
+    </div>`;
 
     sorted.forEach((cnt, i) => {
-        const nums = group[cnt];
+        const nums = group[cnt].sort((a, b) => a - b); // 数字从小到大排序
         const list = nums.map(padZero).join(' ');
         const line = `出现${cnt}次（共${nums.length}个）：${list}`;
         allText.push(line);
@@ -378,25 +390,28 @@ function renderGroup(sorted, group) {
             <div class="group-item">
                 <div>${line}</div>
                 <div>
-                    <button class="copy-btn" onclick="copyText('${line.replace(/'/g, "\\'")}', 'gtip${i}')">复制</button>
+                    <button class="copy-btn" onclick="copyText('${line}', 'gtip${i}')">复制</button>
                     <span id="gtip${i}" class="copy-tip"></span>
                 </div>
             </div>`;
     });
 
     const fullGroupText = allText.join("\n");
-    html = html.replace('</div></div>', `
-            <button class="copy-btn" onclick="copyText(\`${fullGroupText}\`, 'allTip')">复制全部</button>
-            <span id="allTip" class="copy-tip"></span>
-        </div></div>`);
-    
+    // 替换复制全部内容
+    html = html.replace(/copyText\('','allTip'\)/g, `copyText(\`${fullGroupText}\`, 'allTip')`);
     $('groupResult').innerHTML = html;
 }
 
 function renderZodiac(zodiacCount) {
     const sortedZodiac = Object.entries(zodiacCount).sort((a, b) => b[1] - a[1]);
     const allText = [];
-    let html = `<div class="result-title"><span>🐉 生肖出现次数</span><div></div></div>`;
+    let html = `<div class="result-title">
+        <span>🐉 生肖出现次数</span>
+        <div>
+            <button class="copy-btn" onclick="copyText('', 'zAllTip')">一键复制</button>
+            <span id="zAllTip" class="copy-tip"></span>
+        </div>
+    </div>`;
 
     sortedZodiac.forEach(([z, cnt]) => {
         const line = `${z}：${cnt}次`;
@@ -405,11 +420,7 @@ function renderZodiac(zodiacCount) {
     });
 
     const fullZodiacText = allText.join("\n");
-    html = html.replace('</div></div>', `
-            <button class="copy-btn" onclick="copyText(\`${fullZodiacText}\`, 'zAllTip')">一键复制</button>
-            <span id="zAllTip" class="copy-tip"></span>
-        </div></div>`);
-    
+    html = html.replace(/copyText\('','zAllTip'\)/g, `copyText(\`${fullZodiacText}\`, 'zAllTip')`);
     $('zodiacResult').innerHTML = html;
 }
 </script>
