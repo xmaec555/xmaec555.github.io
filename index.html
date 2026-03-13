@@ -3,169 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>新老澳彩 - 小小彩票 大大希望</title>
+    <title>MAYI</title>
     <style>
+        /* 全局样式重置 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Microsoft YaHei", sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* 页面整体样式 */
+        /* 深色主题根变量 */
+        :root {
+            --dark-bg: #121212;
+            --dark-card: #1e1e1e;
+            --accent: #4f46e5;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border-color: #333333;
+        }
+
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4eaf5 100%);
-            min-height: 100vh;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-top: 70px; /* 适配固定导航栏 */
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 70px;
+            background-color: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
+            justify-content: space-between;
+            padding: 0 5%;
+            z-index: 1000;
         }
 
-        /* 主卡片容器 */
-        .lottery-card {
-            background: white;
-            width: 100%;
-            max-width: 700px;
-            border-radius: 20px;
-            padding: 50px 30px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* 装饰元素 */
-        .lottery-card::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 6px;
-            background: linear-gradient(90deg, #ff6b6b, #4d96ff, #ffd93d);
-        }
-
-        /* 标题样式 */
-        .main-title {
-            font-size: 32px;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        /* 核心文案样式 */
-        .slogan {
+        .logo {
             font-size: 24px;
-            color: #4d96ff;
-            margin: 25px 0;
-            line-height: 1.6;
             font-weight: 600;
+            color: var(--accent);
+            text-decoration: none;
+            letter-spacing: 1px;
         }
 
-        .dream {
-            font-size: 22px;
-            color: #ff6b6b;
-            margin: 20px 0;
-            font-style: italic;
+        .nav-links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
         }
 
-        /* 分割线 */
-        .divider {
-            width: 80px;
-            height: 3px;
-            background: #e4eaf5;
-            margin: 30px auto;
-            border-radius: 3px;
-        }
-
-        /* 公益说明 */
-        .public-welfare {
-            color: #7f8c8d;
-            font-size: 16px;
-            line-height: 1.8;
-            margin: 20px 0;
-        }
-
-        /* 按钮样式 */
-        .btn {
-            display: inline-block;
-            padding: 14px 35px;
-            background: #4d96ff;
-            color: white;
-            border-radius: 50px;
+        .nav-links a {
+            color: var(--text-secondary);
             text-decoration: none;
             font-size: 16px;
-            margin-top: 30px;
+            font-weight: 500;
             transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* 主要内容区域 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 25px;
+        }
+
+        /* 已调小一号：从 56px → 48px */
+        .hero h1 {
+            font-size: 46px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background-color: var(--accent);
+            color: white;
             border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
             cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .btn:hover {
-            background: #3a82ee;
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(77, 150, 255, 0.3);
-        }
-
-        /* 底部合法链接样式 */
-        .footer-links {
-            margin-top: 40px;
-            font-size: 14px;
-            color: #999;
-        }
-        .footer-links a {
-            color: #4d96ff;
-            text-decoration: none;
-            margin: 0 8px;
-        }
-        .footer-links a:hover {
-            text-decoration: underline;
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
         }
 
         /* 响应式适配 */
-        @media (max-width: 576px) {
-            .main-title {
-                font-size: 26px;
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 20px;
             }
-            .slogan {
-                font-size: 20px;
+            .hero h1 {
+                font-size: 36px;
             }
-            .lottery-card {
-                padding: 35px 20px;
+            .hero p {
+                font-size: 16px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="lottery-card">
-        <h1 class="main-title">蚂蚁数据 - 澳彩专家</h1>
-        <div class="divider"></div>
-        
-        <p class="slogan">小小投入，大大希望，万事尽可期待</p>
-        
-        <p class="dream">梦想还是要有的，万一实现了呢</p>
-        
-        <div class="divider"></div>
-        
-        <p class="public-welfare">
-          没有数据，你只是另一个挂逼的人<br>
-            中奖是幸运，暴富是必然<br>
-            理性下注，快乐生活
-        </p>
+    <nav class="navbar">
+        <a href="#" class="logo">MAYI</a>
+        <ul class="nav-links">
+            <li><a href="https://m.hxyx.cc.cd" target="_blank">首页</a></li>
+            <li><a href="https://t.me/+RjaMJ26EAPw0ZTc1" target="_blank">特码</a></li>
+            <li><a href="https://m.hxyx.cc.cd/6.html" target="_blank">工具</a></li>
+            <li><a href="https://t.me/mayi2036" target="_blank">联系</a></li>
+        </ul>
+    </nav>
 
-        <button class="btn">心怀期待 · 遇见是缘</button>
-
-        <!-- 合法底部文字 -->
-        <div class="footer-links">
-            <p><a href="https://t.me/+RjaMJ26EAPw0ZTc1" target="_blank">财富钥匙-马上开启</a></p>
-			<p><a href="https://m.hxyx.cc.cd/kj.html" target="_blank">新澳开奖直播</a></p>
-			<p><a href="https://m.hxyx.cc.cd/6.html" target="_blank">数字随机打乱</a></p>
-            <p>© 2026 蚂蚁数据澳彩团队 - 版权所有</p>
-        </div>
+    <div class="container">
+        <section class="hero" id="home">
+            <h1>蚂蚁数据 · 澳彩专家</h1>
+            <p>中奖是幸运，暴富是必然，理性下注，快乐生活，打造梦想</p>
+            <a href="https://t.me/+RjaMJ26EAPw0ZTc1" class="btn" target="_blank">探索更多</a>
+        </section>
     </div>
 </body>
 </html>
-
-
 
