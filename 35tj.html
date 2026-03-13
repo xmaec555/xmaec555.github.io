@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>蚂蚁啊啊盘子35M统计</title>
     <style>
         * {
@@ -19,6 +19,37 @@
             line-height: 1.35;
         }
 
+        /* ========== 新增：顶部导航栏 ========== */
+        .navbar {
+            background: #181820;
+            border: 1px solid #282833;
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .nav-item {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ccc;
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: default;
+            transition: all 0.2s;
+        }
+        .nav-item.active {
+            background: #25252d;
+            color: #4fc3ff;
+        }
+        .nav-item:hover {
+            color: #fff;
+        }
+
+        /* 标题 */
         .page-header {
             text-align: center;
             margin-bottom: 10px;
@@ -32,21 +63,21 @@
             color: transparent;
         }
 
+        /* 容器 */
         .main-container {
             max-width: 900px;
-            width: 100%;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
 
+        /* 卡片 */
         .card {
             background: #181820;
             border-radius: 10px;
             padding: 12px;
             border: 1px solid #282833;
-            width: 100%;
         }
 
         .card-title {
@@ -63,6 +94,7 @@
         .title-2 { color: #5cdb5c; }
         .title-compare { color: #ff9500; }
 
+        /* 输入区域 */
         .input-label {
             font-size: 12px;
             color: #bbb;
@@ -90,6 +122,7 @@
             margin-top: 3px;
         }
 
+        /* 按钮 */
         .btn-row {
             display: flex;
             justify-content: flex-end;
@@ -115,6 +148,7 @@
             color: #fff;
         }
 
+        /* 基础统计 - 横排 */
         .base-row {
             display: flex;
             gap: 12px;
@@ -133,18 +167,17 @@
         .hot { color: #ff6b6b; font-weight: 600; }
         .cold { color: #4fc3ff; font-weight: 600; }
 
+        /* 结果布局 */
         .result-box {
             margin-top: 8px;
             padding-top: 8px;
             border-top: 1px dashed #282833;
-            width: 100%;
         }
 
         /* 次数统计 */
         .stats-group {
             margin: 6px 0;
             font-size: 12px;
-            width: 100%;
         }
         .stats-title {
             font-weight: 600;
@@ -155,7 +188,6 @@
             display: flex;
             flex-direction: column;
             gap: 4px;
-            width: 100%;
         }
         .stats-item {
             display: flex;
@@ -165,9 +197,6 @@
             border-radius: 5px;
             font-size: 11px;
             line-height: 1.3;
-            width: 100%;
-            flex-wrap: wrap;
-            gap: 4px;
         }
         .stats-item .count {
             min-width: 36px;
@@ -176,8 +205,6 @@
         .stats-item .nums {
             flex: 1;
             margin: 0 6px;
-            min-width: 100px;
-            word-break: break-all;
         }
         .stats-hot { background: #3a2525; color: #ff6b6b; }
         .stats-cold { background: #252e3a; color: #4fc3ff; }
@@ -201,6 +228,7 @@
             font-size: 11px;
         }
 
+        /* 复制按钮 */
         .copy-btn {
             padding: 2px 6px;
             border-radius: 4px;
@@ -215,6 +243,7 @@
             margin-left: 4px;
         }
 
+        /* 对比结果 */
         .compare-item {
             padding: 8px 10px;
             border-radius: 6px;
@@ -222,8 +251,6 @@
             background: #25252d;
             border-left: 3px solid #444;
             font-size: 12px;
-            width: 100%;
-            word-break: break-all;
         }
         .compare-l1 { border-left-color: #4fc3ff; }
         .compare-l2 { border-left-color: #5cdb5c; }
@@ -239,6 +266,7 @@
             color: #5cdb5c;
             font-weight: 600;
         }
+
         .footer {
             text-align: center;
             font-size: 11px;
@@ -246,22 +274,32 @@
             margin-top: 10px;
         }
 
-        /* 手机自适应专用优化 */
+        /* 手机自适应 */
         @media (max-width: 480px) {
             body { padding: 6px; }
             .card { padding: 10px; }
-            .stats-item .nums { min-width: 80px; }
-            .compare-item { padding: 6px 8px; }
+            .navbar { padding: 8px 10px; gap: 10px; }
+            .nav-item { font-size: 12px; padding: 3px 8px; }
         }
     </style>
 </head>
 
 <body>
+    <!-- ========== 新增：顶部导航栏 ========== -->
+    <div class="navbar">
+        <div class="nav-item active">数据统计</div>
+        <div class="nav-item">次数分析</div>
+        <div class="nav-item">生肖统计</div>
+        <div class="nav-item">交叉对比</div>
+        <div class="nav-item">推荐号码</div>
+    </div>
+
     <div class="page-header">
         <h1 class="page-title">蚂蚁啊啊盘子35M统计</h1>
     </div>
 
     <div class="main-container">
+        <!-- 第一组 -->
         <div class="card">
             <div class="card-title title-1">
                 第一组数据统计
@@ -280,6 +318,7 @@
             </div>
         </div>
 
+        <!-- 第二组 -->
         <div class="card">
             <div class="card-title title-2">
                 第二组数据统计
@@ -298,6 +337,7 @@
             </div>
         </div>
 
+        <!-- 对比 -->
         <div class="card">
             <div class="card-title title-compare">
                 🔍 交叉对比结果
@@ -358,7 +398,7 @@ function clearAll(no){
     onDataChange();
 }
 
-// ✅ 复制功能（已修复）
+// 复制功能（已修复）
 function copyText(text,tipId){
     if(!text || text === '无'){
         alert('暂无内容可复制');
