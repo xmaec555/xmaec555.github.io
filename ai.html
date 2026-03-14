@@ -351,7 +351,7 @@
             </div>
 
             <!-- 自定义对比条件 -->
-            <div class="panel">
+            <div class="panel" id="rulePanel" style="display:none;">
                 <div class="panel-title" style="color:#4fc3f7">🔧 自定义对比条件</div>
                 <div class="btn-group">
                     <button class="reset" onclick="resetRules()">🔄 恢复默认</button>
@@ -411,7 +411,6 @@
 
             <!-- 对比 -->
             <div class="panel">
-                <div class="panel-title" style="color:#ff9c41">盘口对比结果</div>
                 <div class="result-section" id="compareResult"></div>
             </div>
         </div>
@@ -503,9 +502,7 @@ function showResult(no, show) {
 function onRuleChange() {
     clearTimeout(ruleChangeTimer);
     ruleChangeTimer = setTimeout(() => {
-        const v1 = document.getElementById('numInput1').value.trim();
-        const v2 = document.getElementById('numInput2').value.trim();
-        if (v1 && v2) compareAll();
+        compareAll();
     }, 200);
 }
 
@@ -516,8 +513,16 @@ function autoCalculate(no) {
     autoCompareTimer = setTimeout(() => {
         const v1 = document.getElementById('numInput1').value.trim();
         const v2 = document.getElementById('numInput2').value.trim();
-        if (v1 && v2) compareAll();
-        else clearCompare();
+        const rulePanel = document.getElementById('rulePanel');
+        
+        // 核心：两组都有内容才显示自定义条件
+        if (v1 !== '' && v2 !== '') {
+            rulePanel.style.display = 'block';
+            compareAll();
+        } else {
+            rulePanel.style.display = 'none';
+            clearCompare();
+        }
     }, 260);
 }
 
@@ -539,7 +544,15 @@ function clearAll(no){
     if(no===1)group1Lines="";if(no===2)group2Lines="";
     showInputInfo(no);
     showResult(no, false);
-    clearCompare();
+    
+    // 清空后检查是否需要隐藏条件面板
+    const v1 = document.getElementById('numInput1').value.trim();
+    const v2 = document.getElementById('numInput2').value.trim();
+    const rulePanel = document.getElementById('rulePanel');
+    if (!(v1 && v2)) {
+        rulePanel.style.display = 'none';
+        clearCompare();
+    }
 }
 
 function copyText(text, tipId){
@@ -669,21 +682,22 @@ function renderZodiac(no,zodiac){
 
 function clearCompare(){
     const el=document.getElementById('compareResult');
-    el.innerHTML='';
-    el.style.display='none';
+    el.innerHTML = '';
+    el.style.display = 'none';
 }
 
 // 核心：自定义对比逻辑 + 标题完全同步
 function compareAll(){
-    if(Object.keys(countData[1]).length===0||Object.keys(countData[2]).length===0){
+    const c1 = countData[1], c2 = countData[2];
+    if(Object.keys(c1).length===0 || Object.keys(c2).length===0){
         clearCompare();
         return;
     }
-    document.getElementById('compareResult').style.display='block';
     
-    const c1 = countData[1], c2 = countData[2];
     const max1 = minMax[1].max, max2 = minMax[2].max;
     const all = Array.from({length:49},(_,i)=>i+1);
+    const compareEl = document.getElementById('compareResult');
+    compareEl.style.display = 'block';
 
     // 获取用户输入 + 条件3自动拼接 -热
     const ruleInputs = [
@@ -719,8 +733,8 @@ function compareAll(){
     const finalText = format(final);
     const finalCount = final.length;
 
-    // 渲染结果，标题完全同步输入内容
-    document.getElementById('compareResult').innerHTML=`
+    // 渲染结果
+    compareEl.innerHTML=`
     <div class="result-title">🎯 对比结果</div>
     <div class="group-item compare-row">【${ruleTexts[0]}】：${s1}</div>
     <div class="group-item compare-row">【${ruleTexts[1]}】：${s2}</div>
