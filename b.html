@@ -113,6 +113,12 @@
         button.uniq {
             background: #8049a8;
         }
+        button.copy-input {
+            background: #2d8a7b;
+        }
+        button.copy-input:hover {
+            background: #237063;
+        }
         button.reset {
             background: #c2661e;
             padding: 10px 6px;
@@ -313,6 +319,7 @@
                     <button class="shuffle" onclick="shuffleNum(1)">🔀 打乱</button>
                     <button class="uniq" onclick="uniqueNum(1)">去重</button>
                     <button class="sort" onclick="sortNum(1)">排序</button>
+                    <button class="copy-input" onclick="copyInput(1)">📋 复制</button>
                     <button class="clear" onclick="clearAll(1)">清空</button>
                 </div>
                 <div class="result-section" id="baseResult1"></div>
@@ -331,6 +338,7 @@
                     <button class="shuffle" onclick="shuffleNum(2)">🔀 打乱</button>
                     <button class="uniq" onclick="uniqueNum(2)">去重</button>
                     <button class="sort" onclick="sortNum(2)">排序</button>
+                    <button class="copy-input" onclick="copyInput(2)">📋 复制</button>
                     <button class="clear" onclick="clearAll(2)">清空</button>
                 </div>
                 <div class="result-section" id="baseResult2"></div>
@@ -458,6 +466,13 @@ function bindCopyEvents() {
     });
 }
 
+// 复制输入框内容
+function copyInput(no) {
+    const text = document.getElementById(`numInput${no}`).value.trim();
+    if (!text) return alert('输入框为空');
+    copyText(text, `inputTip${no}`);
+}
+
 // ====================== 记事本开关 ======================
 function toggleNote() {
     const note = document.getElementById('noteTextarea');
@@ -489,7 +504,8 @@ function sortNum(no) {
 function showInputInfo(no) {
     const v = document.getElementById(`numInput${no}`).value;
     const cnt = (v.match(/\d+/g) || []).length;
-    document.getElementById(`inputInfo${no}`).innerText = `已输入：${cnt} 个`;
+    const tip = `<span id="inputTip${no}" class="copy-tip"></span>`;
+    document.getElementById(`inputInfo${no}`).innerHTML = `已输入：${cnt} 个 ${tip}`;
 }
 
 function showResult(no, show) {
