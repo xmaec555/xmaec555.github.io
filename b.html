@@ -346,11 +346,11 @@
                     
                     <div class="rule-item">
                         <span class="rule-label">条件3：A盘</span>
-                        <input type="text" class="rule-input" id="rule3a" oninput="onRuleChange()">
+                        <input type="text" class="rule-input" id="rule3a" placeholder="默认：6-第一组最高" oninput="onRuleChange()">
                     </div>
                     <div class="rule-item">
                         <span class="rule-label">条件3：B盘</span>
-                        <input type="text" class="rule-input" id="rule3b" oninput="onRuleChange()">
+                        <input type="text" class="rule-input" id="rule3b" placeholder="默认：5-第二组最高" oninput="onRuleChange()">
                     </div>
 
                     <div class="rule-item">
@@ -389,11 +389,11 @@ let group2Lines = "";
 let autoCompareTimer = null;
 let ruleChangeTimer = null;
 
-// 默认条件配置
+// 默认条件配置（已加入条件3）
 const defaultRules = [
     {a: '1-2', b: '0-1'},
     {a: '2-5', b: '2-4'},
-    {a: '', b: ''},
+    {a: '6-', b: '5-'},  // 条件3默认
     {a: '7', b: '3-4'},
     {a: '4', b: '6'}
 ];
@@ -404,12 +404,14 @@ const uniqueSort = arr => [...new Set(arr)].sort((a,b)=>a-b);
 const format = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
 const inRange = (v, min, max) => v >= min && v <= max;
 
-// 恢复默认条件
+// 恢复默认条件（现在条件3也会恢复）
 function resetRules() {
     document.getElementById('rule1a').value = defaultRules[0].a;
     document.getElementById('rule1b').value = defaultRules[0].b;
     document.getElementById('rule2a').value = defaultRules[1].a;
     document.getElementById('rule2b').value = defaultRules[1].b;
+    document.getElementById('rule3a').value = defaultRules[2].a;
+    document.getElementById('rule3b').value = defaultRules[2].b;
     document.getElementById('rule4a').value = defaultRules[3].a;
     document.getElementById('rule4b').value = defaultRules[3].b;
     document.getElementById('rule5a').value = defaultRules[4].a;
@@ -424,6 +426,7 @@ function parseRange(val, maxVal) {
         let [a, b] = val.split('-').map(v => v.trim());
         a = parseInt(a) || 0;
         b = parseInt(b) || 0;
+        if(b === 0 && maxVal) b = maxVal;
         return [Math.min(a,b), Math.max(a,b)];
     }
     let num = parseInt(val) || 0;
@@ -471,11 +474,19 @@ function autoCalculate(no) {
     showInputInfo(no);
     calculate(no);
     
-    // ✅ 自动生成条件3默认值：A=6-最高，B=5-最高
+    // 自动填充条件3：6-第一组最高 | 5-第二组最高
     const max1 = minMax[1].max || 0;
     const max2 = minMax[2].max || 0;
-    document.getElementById('rule3a').value = `6-${max1}`;
-    document.getElementById('rule3b').value = `5-${max2}`;
+    
+    let rule3a = document.getElementById('rule3a');
+    let rule3b = document.getElementById('rule3b');
+    
+    if (!rule3a.value || rule3a.value === '6-') {
+        rule3a.value = `6-${max1}`;
+    }
+    if (!rule3b.value || rule3b.value === '5-') {
+        rule3b.value = `5-${max2}`;
+    }
 
     clearTimeout(autoCompareTimer);
     autoCompareTimer = setTimeout(() => {
@@ -511,9 +522,6 @@ function clearAll(no){
     if(no===1)group1Lines="";if(no===2)group2Lines="";
     showInputInfo(no);
     showResult(no, false);
-    
-    document.getElementById('rule3a').value = '';
-    document.getElementById('rule3b').value = '';
 
     const v1 = document.getElementById('numInput1').value.trim();
     const v2 = document.getElementById('numInput2').value.trim();
