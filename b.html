@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>蚂蚁澳彩双盘口统计</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", PingFang SC, sans-serif;
+        }
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            background: #121212;
+            color: #e0e0e0;
+            padding: 8px;
+        }
+        .container {
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .tool-box {
+            background: #1a1a1a;
+            padding: 12px;
+            border-radius: 16px;
+            border: 1px solid #333;
+        }
+        h1 {
+            text-align: center;
+            color: #fff;
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+        .panel {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+        }
+        .panel-title { font-size:15px; color:#fff; margin-bottom:6px; }
+        textarea {
+            width:100%; height:80px; padding:8px; border:1px solid #444; border-radius:6px;
+            background:#2a2a2a; color:#fff; outline:none;
+        }
+        .input-info { font-size:12px; color:#888; margin-top:2px; }
+        .btn-group { display:flex; gap:5px; margin-bottom:8px; flex-wrap:wrap; }
+        button {
+            flex:1; min-width:70px; padding:8px 6px; border:none; border-radius:6px;
+            background:#3a6ea5; color:#fff; font-size:14px; cursor:pointer;
+        }
+        button:hover { background:#2d5a8c; }
+        button.shuffle { background:#7259d6; }
+        button.clear { background:#a83232; }
+        button.sort { background:#b57c1b; }
+        button.uniq { background:#8049a8; }
+        button.reset { background:#c2661e; padding:10px 6px; }
+        .result-section {
+            margin-top:8px; padding:8px; border:1px solid #444; border-radius:8px;
+            background:#252525; display:none;
+        }
+        .result-title { font-size:14px; font-weight:bold; margin-bottom:6px; padding-bottom:4px; border-bottom:1px solid #444; }
+        .highlight { color:#ffaa00; font-weight:bold; }
+        .hot { color:#ff6b6b!important; font-weight:bold; }
+        .cold { color:#4d9fff!important; font-weight:bold; }
+        .base-row { display:flex; gap:12px; font-size:14px; flex-wrap:wrap; }
+        .group-item { border:1px solid #444; border-radius:6px; padding:6px 8px; margin:4px 0; background:#2a2a2a; }
+        .zodiac-item { display:inline-flex; margin:2px 4px; padding:2px 4px; background:#333; border-radius:4px; font-size:13px; }
+        .copy-btn { padding:4px 7px; background:#4d7a43; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:12px; }
+        .copy-tip { color:#6cce6c; font-size:12px; margin-left:4px; }
+        .compare-row { background:#3b3629!important; border-left:3px solid #cc7a29; }
+        .final-row { background:#293b2a!important; border-left:3px solid #4d7a43!important; font-weight:bold; }
+        .title-right { display:flex; justify-content:flex-end; margin-top:2px; }
+        .rule-inputs { display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-bottom:8px; }
+        .rule-item { display:flex; flex-direction:column; gap:3px; }
+        .rule-label { font-size:12px; color:#ccc; }
+        .rule-input { padding:6px 5px; border:1px solid #444; border-radius:4px; background:#2a2a2a; color:#fff; outline:none; }
+
+        .note-section { margin-top:10px; display:none; }
+        .note-text { width:100%; height:100px; background:#222; color:#fff; border:1px solid #444; border-radius:6px; padding:8px; resize:vertical; }
+        .note-btn { background:#6c5ce7; padding:6px 10px; border-radius:6px; color:#fff; cursor:pointer; }
+    </style>
+</head>
+<body>
+<div class="container">
+<div class="tool-box">
+    <h1>蚂蚁澳彩 · 双盘口统计</h1>
+
+    <div class="panel">
+        <div class="panel-title">第一组 · 天子数据盘（A盘）</div>
+        <div class="input-box">
+            <textarea id="numInput1" placeholder="输入数字" oninput="autoCalculate(1)"></textarea>
+            <div class="input-info" id="inputInfo1">已输入：0 个</div>
+        </div>
+        <div class="btn-group">
+            <button class="shuffle" onclick="shuffleNum(1)">🔀 打乱</button>
+            <button class="uniq" onclick="uniqueNum(1)">去重</button>
+            <button class="sort" onclick="sortNum(1)">排序</button>
+            <button class="clear" onclick="clearAll(1)">清空</button>
+        </div>
+        <div class="result-section" id="baseResult1"></div>
+        <div class="result-section" id="groupResult1"></div>
+        <div class="result-section" id="zodiacResult1"></div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">第二组 · 广东数据盘（B盘）</div>
+        <div class="input-box">
+            <textarea id="numInput2" placeholder="输入数字" oninput="autoCalculate(2)"></textarea>
+            <div class="input-info" id="inputInfo2">已输入：0 个</div>
+        </div>
+        <div class="btn-group">
+            <button class="shuffle" onclick="shuffleNum(2)">🔀 打乱</button>
+            <button class="uniq" onclick="uniqueNum(2)">去重</button>
+            <button class="sort" onclick="sortNum(2)">排序</button>
+            <button class="clear" onclick="clearAll(2)">清空</button>
+        </div>
+        <div class="result-section" id="baseResult2"></div>
+        <div class="result-section" id="groupResult2"></div>
+        <div class="result-section" id="zodiacResult2"></div>
+    </div>
+
+    <div class="panel" id="rulePanel" style="display:none;">
+        <div class="panel-title" style="color:#4fc3f7">🔧 自定义对比条件</div>
+        <div class="btn-group">
+            <button class="reset" onclick="resetRules()">🔄 恢复默认</button>
+        </div>
+        <div class="rule-inputs">
+            <div class="rule-item"><span class="rule-label">条件1：A盘 次数</span><input type="text" class="rule-input" id="rule1a" oninput="onRuleChange()"></div>
+            <div class="rule-item"><span class="rule-label">条件1：B盘 次数</span><input type="text" class="rule-input" id="rule1b" oninput="onRuleChange()"></div>
+            <div class="rule-item"><span class="rule-label">条件2：A盘 次数</span><input type="text" class="rule-input" id="rule2a" oninput="onRuleChange()"></div>
+            <div class="rule-item"><span class="rule-label">条件2：B盘 次数</span><input type="text" class="rule-input" id="rule2b" oninput="onRuleChange()"></div>
+            <div class="rule-item"><span class="rule-label">条件3：A盘 次数</span><input type="text" class="rule-input" id="rule3a" oninput="onRuleChange()"></div>
+            <div class="rule-item"><span class="rule-label">条件3：B盘 次数</span><input type="text" class="rule-input" id="rule3b" oninput="onRuleChange()"></div>
+            <div class="rule-item"><span class="rule-label">条件4：A盘 次数</span><input type="text" class="rule-input" id="rule4a" oninput="onRuleChange()"></div>
+            <div class="rule-item"><span class="rule-label">条件4：B盘 次数</span><input type="text" class="rule-input" id="rule4b" oninput="onRuleChange()"></div>
+            <div class="rule-item"><span class="rule-label">条件5：A盘 次数</span><input type="text" class="rule-input" id="rule5a" oninput="onRuleChange()"></div>
+            <div class="rule-item"><span class="rule-label">条件5：B盘 次数</span><input type="text" class="rule-input" id="rule5b" oninput="onRuleChange()"></div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="result-section" id="compareResult">
+            <div style="margin-bottom:8px;"><button class="note-btn" onclick="toggleNote()">记事本 📝</button></div>
+            <div class="note-section" id="noteArea"><textarea class="note-text" id="noteText" placeholder="记录笔记……"></textarea></div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<script>
+const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
+const countData = {1:{},2:{}};
+const minMax = {1:{min:0,max:0},2:{min:0,max:0}};
+let group1Lines = "", group2Lines = "";
+
+// ✅ 条件3 正确默认值：A=6-最高  B=5-最高
+const defaultRules = [
+    {a: '1-2', b: '0-1'},
+    {a: '2-5', b: '2-4'},
+    {a: '6-max', b: '5-max'},
+    {a: '7', b: '3-4'},
+    {a: '4', b: '6'}
+];
+
+const padZero = n => n.toString().padStart(2, '0');
+const getZodiac = n => zodiacList[(n-1)%12];
+const uniqueSort = arr => [...new Set(arr)].sort((a,b)=>a-b);
+const format = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
+
+// ==============================================
+// ✅ 核心修复：条件3 正确解析 max = 对应盘口最高次数
+// ==============================================
+function parseRange(val, diskNo) {
+    val = String(val || "").trim().toLowerCase();
+    const maxVal = minMax[diskNo]?.max || 999;
+    val = val.replace(/max/g, maxVal);
+
+    if (!val) return [0, 999];
+    if (val.includes("-")) {
+        let [a, b] = val.split("-").map(Number);
+        return [Math.min(a, b), Math.max(a, b)];
+    }
+    const v = Number(val) || 0;
+    return [v, v];
+}
+
+function toggleNote() {
+    const note = document.getElementById('noteArea');
+    note.style.display = note.style.display === 'block' ? 'none' : 'block';
+}
+
+window.onload = () => resetRules();
+
+function resetRules() {
+    document.getElementById('rule1a').value = defaultRules[0].a;
+    document.getElementById('rule1b').value = defaultRules[0].b;
+    document.getElementById('rule2a').value = defaultRules[1].a;
+    document.getElementById('rule2b').value = defaultRules[1].b;
+    document.getElementById('rule3a').value = defaultRules[2].a;
+    document.getElementById('rule3b').value = defaultRules[2].b;
+    document.getElementById('rule4a').value = defaultRules[3].a;
+    document.getElementById('rule4b').value = defaultRules[3].b;
+    document.getElementById('rule5a').value = defaultRules[4].a;
+    document.getElementById('rule5b').value = defaultRules[4].b;
+    compareAll();
+}
+
+function shuffleArray(arr) {
+    const a = [...arr];
+    for (let i=a.length-1;i>0;i--) {
+        const j = Math.floor(Math.random()*(i+1));
+        [a[i],a[j]] = [a[j],a[i]];
+    }
+    return a;
+}
+
+function shuffleNum(no) {
+    const el = document.getElementById(`numInput${no}`);
+    const nums = (el.value.match(/\d+/g)||[]).map(Number);
+    if (!nums.length) return;
+    el.value = shuffleArray(nums).join(' ');
+    showInputInfo(no); autoCalculate(no);
+}
+
+function showResult(no, show) {
+    ['baseResult','groupResult','zodiacResult'].forEach(id=>{
+        document.getElementById(`${id}${no}`).style.display = show?'block':'none';
+    });
+}
+
+let ruleTimer;
+function onRuleChange() {
+    clearTimeout(ruleTimer);
+    ruleTimer = setTimeout(compareAll,200);
+}
+
+let calcTimer;
+function autoCalculate(no) {
+    showInputInfo(no); calculate(no);
+    clearTimeout(calcTimer);
+    calcTimer = setTimeout(()=>{
+        const v1 = document.getElementById('numInput1').value.trim();
+        const v2 = document.getElementById('numInput2').value.trim();
+        document.getElementById('rulePanel').style.display = (v1&&v2)?'block':'none';
+        if (v1&&v2) compareAll(); else clearCompare();
+    },260);
+}
+
+function showInputInfo(no) {
+    const v = document.getElementById(`numInput${no}`).value;
+    const cnt = (v.match(/\d+/g)||[]).length;
+    document.getElementById(`inputInfo${no}`).innerText = `已输入：${cnt} 个`;
+}
+
+function clearAll(no) {
+    document.getElementById(`numInput${no}`).value = '';
+    document.getElementById(`baseResult${no}`).innerHTML = '';
+    document.getElementById(`groupResult${no}`).innerHTML = '';
+    document.getElementById(`zodiacResult${no}`).innerHTML = '';
+    countData[no] = {};
+    minMax[no] = {min:0, max:0};
+    no==1 ? group1Lines='' : group2Lines='';
+    showInputInfo(no);
+    showResult(no, false);
+    autoCalculate(no);
+}
+
+function copyText(text, tipId) {
+    if (!text || text === '无') { alert('暂无内容'); return; }
+    const tip = document.getElementById(tipId);
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position='fixed'; ta.style.left='-9999px';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    tip.innerText='✅已复制'; tip.style.color='#6cce6c';
+    setTimeout(()=>tip.innerText='',1500);
+}
+
+function uniqueNum(no) {
+    const el = document.getElementById(`numInput${no}`);
+    const nums = (el.value.match(/\d+/g)||[]).map(Number);
+    el.value = [...new Set(nums)].join(' ');
+    showInputInfo(no); autoCalculate(no);
+}
+
+function sortNum(no) {
+    const el = document.getElementById(`numInput${no}`);
+    const nums = (el.value.match(/\d+/g)||[]).map(Number).sort((a,b)=>a-b);
+    el.value = nums.join(' ');
+    showInputInfo(no); autoCalculate(no);
+}
+
+function calculate(no) {
+    const input = document.getElementById(`numInput${no}`).value.trim();
+    const inputArr = (input.match(/\d+/g)||[]).map(Number).filter(n=>n>=1&&n<=49);
+    if (!inputArr.length) {
+        countData[no] = {}; minMax[no] = {min:0,max:0}; showResult(no,false); return;
+    }
+    showResult(no,true);
+    const all = Array.from({length:49},(_,i)=>i+1);
+    const countMap = {}; all.forEach(n=>countMap[n]=0); inputArr.forEach(n=>countMap[n]++);
+    countData[no] = countMap;
+    const valid = Object.values(countMap).filter(v=>v>0);
+    minMax[no] = valid.length ? {min:Math.min(...valid),max:Math.max(...valid)} : {min:0,max:0};
+    const group = {}; all.forEach(n=>{const c=countMap[n]; group[c]=group[c]||[]; group[c].push(n);});
+    const sorted = Object.keys(group).map(Number).sort((a,b)=>a-b);
+    const lines = sorted.map(c=>group[c].map(padZero).join(' '));
+    no==1 ? group1Lines=lines.join('\n') : group2Lines=lines.join('\n');
+    const zodiac = {}; zodiacList.forEach(z=>zodiac[z]=0); inputArr.forEach(n=>zodiac[getZodiac(n)]++);
+    renderBase(no,inputArr.length,new Set(inputArr).size,minMax[no].max,minMax[no].min);
+    renderGroup(no,sorted,group,minMax[no].max,minMax[no].min);
+    renderZodiac(no,zodiac);
+}
+
+function renderBase(no,total,unique,max,min) {
+    document.getElementById(`baseResult${no}`).innerHTML=`
+    <div class="result-title">📊 基础统计</div>
+    <div class="base-row">
+        <div>总数：<span class="highlight">${total}</span></div>
+        <div>不重复：<span class="highlight">${unique}</span></div>
+        <div>最高：<span class="hot">${max}次</span></div>
+        <div>最低：<span class="cold">${min}次</span></div>
+    </div>`;
+}
+
+function renderGroup(no,sorted,group,maxCnt,minCnt) {
+    let html=`<div class="result-title">📦 次数分组</div>`;
+    sorted.forEach(cnt=>{
+        const list=group[cnt].map(padZero).join(' ');
+        const mark=cnt===maxCnt?`<span class="hot">${maxCnt}</span>`:cnt===minCnt?`<span class="cold">${minCnt}</span>`:'';
+        html+=`<div class="group-item">${mark} ${cnt}次：${list}</div>`;
+    });
+    html+=`<div class="title-right">
+        <button class="copy-btn" onclick="copyText('${no==1?group1Lines:group2Lines}','gTip${no}')">复制全部</button>
+        <span id="gTip${no}" class="copy-tip"></span>
+    </div>`;
+    document.getElementById(`groupResult${no}`).innerHTML=html;
+}
+
+function renderZodiac(no,zodiac) {
+    const sorted=Object.entries(zodiac).sort((a,b)=>b[1]-a[1]);
+    const max=sorted[0][1],min=sorted.at(-1)[1];
+    let html=`<div class="result-title">🐉 生肖统计</div>`;
+    sorted.forEach(([z,c])=>{
+        const cls=c===max?'zodiac-item hot':c===min?'zodiac-item cold':'zodiac-item';
+        html+=`<div class="${cls}">${z} ${c}</div>`;
+    });
+    document.getElementById(`zodiacResult${no}`).innerHTML=html;
+}
+
+function clearCompare() {
+    document.getElementById('compareResult').style.display='none';
+}
+
+// ==============================================
+// ✅ 最终修复：交叉对比 100% 正确
+// ==============================================
+function compareAll() {
+    const c1 = countData[1];
+    const c2 = countData[2];
+    if (!c1||!c2||!Object.keys(c1).length||!Object.keys(c2).length) { clearCompare(); return; }
+
+    const rules = [
+        {a:document.getElementById('rule1a').value, b:document.getElementById('rule1b').value},
+        {a:document.getElementById('rule2a').value, b:document.getElementById('rule2b').value},
+        {a:document.getElementById('rule3a').value, b:document.getElementById('rule3b').value},
+        {a:document.getElementById('rule4a').value, b:document.getElementById('rule4b').value},
+        {a:document.getElementById('rule5a').value, b:document.getElementById('rule5b').value},
+    ];
+
+    const all = Array.from({length:49},(_,i)=>i+1);
+    const res = [];
+    let html = `<div class="result-title">🎯 对比结果</div>`;
+
+    rules.forEach((r,i)=>{
+        // 关键：A盘传1，B盘传2 → 条件3 逻辑完全正确
+        const ra = parseRange(r.a, 1);
+        const rb = parseRange(r.b, 2);
+        const list = all.filter(n=>{
+            const ca = c1[n] || 0;
+            const cb = c2[n] || 0;
+            return ca >= ra[0] && ca <= ra[1] && cb >= rb[0] && cb <= rb[1];
+        });
+        res.push(...list);
+        html+=`<div class="group-item compare-row">条件${i+1}【${r.a||'任意'} & ${r.b||'任意'}】：${format(list)}</div>`;
+    });
+
+    const final = uniqueSort(res);
+    const fText = format(final);
+    html+=`<div class="group-item final-row">✅ 最终推荐（${final.length}个）：${fText}</div>
+    <div class="title-right">
+        <button class="copy-btn" onclick="copyText('${fText}','cfTip')">复制推荐</button>
+        <span id="cfTip" class="copy-tip"></span>
+    </div>`;
+
+    const el = document.getElementById('compareResult');
+    const note = `<div style="margin-bottom:8px;"><button class="note-btn" onclick="toggleNote()">记事本 📝</button></div>
+    <div class="note-section" id="noteArea"><textarea class="note-text" placeholder="记录笔记……"></textarea></div>`;
+    el.innerHTML = note + html;
+    el.style.display = 'block';
+}
+</script>
+</body>
+</html>
