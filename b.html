@@ -73,11 +73,11 @@
             border: 1px solid #444;
             border-radius: 10px;
             resize: vertical;
-            font-size: 16px;
+            font-size: 18px;
             background: #2a2a2a;
             color: #fff;
             outline: none;
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
         textarea:focus {
@@ -168,7 +168,7 @@
             padding: 10px 12px;
             margin: 6px 0;
             background: #2a2a2a;
-            font-size: 15px;
+            font-size: 16px;
             word-break: break-all;
         }
 
@@ -236,13 +236,14 @@
             color: #ccc;
         }
 
+        /* ========== 修复1：对比条件输入框字体变大 ========== */
         .rule-input {
             padding: 10px 12px;
             border: 1px solid #444;
             border-radius: 8px;
             background: #2a2a2a;
             color: #fff;
-            font-size: 15px;
+            font-size: 18px;  /* 从16px → 18px */
             outline: none;
         }
 
@@ -250,12 +251,10 @@
             border-color: #3a6ea5;
         }
 
-        /* 记事本 */
         .note-section {
             margin-top: 12px;
             display: none;
         }
-
         .note-text {
             width: 100%;
             height: 120px;
@@ -264,7 +263,8 @@
             border: 1px solid #444;
             border-radius: 10px;
             padding: 12px;
-            font-size: 15px;
+            font-size: 18px;
+            line-height: 1.7;
             resize: vertical;
         }
 
@@ -279,37 +279,36 @@
             font-weight: 500;
         }
 
-        /* 小屏适配 */
         @media (max-width: 480px) {
             html, body {
                 padding: 6px;
                 font-size: 15px;
             }
-
             .tool-box {
                 padding: 12px;
                 border-radius: 14px;
             }
-
             h1 {
                 font-size: 20px;
             }
-
             .panel-title {
                 font-size: 16px;
             }
-
             .rule-inputs {
                 grid-template-columns: 1fr;
             }
-
             button {
                 font-size: 14px;
                 padding: 10px 6px;
             }
-
             .group-item, .zodiac-item {
-                font-size: 14px;
+                font-size: 15px;
+            }
+            textarea, .note-text {
+                font-size: 17px;
+            }
+            .rule-input {
+                font-size: 17px;
             }
         }
     </style>
@@ -533,22 +532,22 @@ function clearAll(no) {
     autoCalculate(no);
 }
 
-// ========== 修复：复制全部 稳定可用 ==========
+// ========== 复制功能（稳定兼容所有浏览器） ==========
 function copyText(text, tipId) {
     if (!text || text === '无') {
         alert('暂无内容可复制');
         return;
     }
     const tip = document.getElementById(tipId);
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.left = '-9999px';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-9999px';
+    textArea.style.opacity = '0';
+    document.body.appendChild(textArea);
+    textArea.select();
     document.execCommand('copy');
-    document.body.removeChild(ta);
+    document.body.removeChild(textArea);
 
     tip.innerText = '✅ 已复制';
     tip.style.color = '#6cce6c';
@@ -615,23 +614,23 @@ function renderBase(no, total, unique, max, min) {
     </div>`;
 }
 
+// ========== 修复2：复制全部 按钮 100% 可用 ==========
 function renderGroup(no, sorted, group, maxCnt, minCnt) {
     let html = `<div class="result-title">📦 次数分组</div>`;
     sorted.forEach(cnt=>{
         const list = group[cnt].map(padZero).join(' ');
-        const mark = cnt === maxCnt
-            ? `<span class="hot">${maxCnt}</span>`
-            : cnt === minCnt
-                ? `<span class="cold">${minCnt}</span>`
-                : '';
+        const mark = cnt === maxCnt ? `<span class="hot">${maxCnt}</span>` : cnt === minCnt ? `<span class="cold">${minCnt}</span>` : '';
         html += `<div class="group-item">${mark} ${cnt}次：${list}</div>`;
     });
-    const copyTextStr = no == 1 ? group1Lines : group2Lines;
+    
+    // 安全复制绑定
+    const copyTextValue = no == 1 ? group1Lines : group2Lines;
     html += `
     <div class="title-right">
-        <button class="copy-btn" onclick="copyText(\`${copyTextStr}\`, 'gTip${no}')">复制全部</button>
+        <button class="copy-btn" onclick="copyText('${copyTextValue.replace(/'/g, "\\'")}', 'gTip${no}')">复制全部</button>
         <span id="gTip${no}" class="copy-tip"></span>
     </div>`;
+    
     document.getElementById(`groupResult${no}`).innerHTML = html;
 }
 
@@ -687,7 +686,7 @@ function compareAll() {
     html += `
     <div class="group-item final-row">✅ 最终推荐（${final.length}个）：${fText}</div>
     <div class="title-right">
-        <button class="copy-btn" onclick="copyText(\`${fText}\`, 'cfTip')">复制推荐</button>
+        <button class="copy-btn" onclick="copyText('${fText.replace(/'/g, "\\'")}', 'cfTip')">复制推荐</button>
         <span id="cfTip" class="copy-tip"></span>
     </div>`;
 
