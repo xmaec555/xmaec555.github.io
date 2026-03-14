@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>蚂蚁澳彩双盘口统计</title>
+    <title>蚂蚁澳彩 · 双盘口统计</title>
     <style>
         * {
             margin: 0;
@@ -353,30 +353,36 @@ const uniqueSort = arr => [...new Set(arr)].sort((a,b)=>a-b);
 const format = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
 const inRange = (v, min, max) => v >= min && v <= max;
 
-// 获取条件3当前默认值
-function getRule3Value() {
+// 获取动态默认值（条件3自动跟随最高次数）
+function getDynamicDefaults() {
     const m1 = minMax[1].max || 0;
     const m2 = minMax[2].max || 0;
-    return { a: `6-${m1}`, b: `5-${m2}` };
+    return [
+        {a: '1-2', b: '0-1'},
+        {a: '2-5', b: '2-4'},
+        {a: `6-${m1}`, b: `5-${m2}`},
+        {a: '7', b: '3-4'},
+        {a: '4', b: '6'}
+    ];
 }
 
-// 刷新条件3显示
-function updateRule3Inputs() {
-    const val = getRule3Value();
-    document.getElementById('rule3a').value = val.a;
-    document.getElementById('rule3b').value = val.b;
+// 同步所有自定义条件为最新默认值
+function syncAllRulesToDefault() {
+    const dyn = getDynamicDefaults();
+    document.getElementById('rule1a').value = dyn[0].a;
+    document.getElementById('rule1b').value = dyn[0].b;
+    document.getElementById('rule2a').value = dyn[1].a;
+    document.getElementById('rule2b').value = dyn[1].b;
+    document.getElementById('rule3a').value = dyn[2].a;
+    document.getElementById('rule3b').value = dyn[2].b;
+    document.getElementById('rule4a').value = dyn[3].a;
+    document.getElementById('rule4b').value = dyn[3].b;
+    document.getElementById('rule5a').value = dyn[4].a;
+    document.getElementById('rule5b').value = dyn[4].b;
 }
 
 function resetRules() {
-    updateRule3Inputs();
-    document.getElementById('rule1a').value = defaultRules[0].a;
-    document.getElementById('rule1b').value = defaultRules[0].b;
-    document.getElementById('rule2a').value = defaultRules[1].a;
-    document.getElementById('rule2b').value = defaultRules[1].b;
-    document.getElementById('rule4a').value = defaultRules[3].a;
-    document.getElementById('rule4b').value = defaultRules[3].b;
-    document.getElementById('rule5a').value = defaultRules[4].a;
-    document.getElementById('rule5b').value = defaultRules[4].b;
+    syncAllRulesToDefault();
     compareAll();
 }
 
@@ -421,6 +427,7 @@ function onRuleChange() {
     ruleChangeTimer = setTimeout(compareAll, 200);
 }
 
+// 核心：两组数据变化 → 自动同步默认条件 → 自动重新统计
 function autoCalculate(no) {
     showInputInfo(no);
     calculate(no);
@@ -429,9 +436,9 @@ function autoCalculate(no) {
     const v2 = document.getElementById('numInput2').value.trim();
     const hasBoth = !!v1 && !!v2;
 
-    // 只要两组都有值，数据变化就同步更新条件3
+    // ✅ 关键：只要数据改变，就同步所有自定义条件为最新默认值
     if (hasBoth) {
-        updateRule3Inputs();
+        syncAllRulesToDefault();
     }
 
     clearTimeout(autoCompareTimer);
@@ -593,18 +600,15 @@ function compareAll(){
         {a:document.getElementById('rule5a').value, b:document.getElementById('rule5b').value},
     ];
 
-    const defs = [
-        defaultRules[0], defaultRules[1], getRule3Value(), defaultRules[3], defaultRules[4]
-    ];
-
+    const dyn = getDynamicDefaults();
     const ranges = rules.map((r,i)=> ({
-        a: parseRange(r.a || defs[i].a, m1),
-        b: parseRange(r.b || defs[i].b, m2)
+        a: parseRange(r.a || dyn[i].a, m1),
+        b: parseRange(r.b || dyn[i].b, m2)
     }));
 
     const texts = rules.map((r,i)=> {
-        const a = r.a || defs[i].a;
-        const b = r.b || defs[i].b;
+        const a = r.a || dyn[i].a;
+        const b = r.b || dyn[i].b;
         return `${a} & ${b}`;
     });
 
