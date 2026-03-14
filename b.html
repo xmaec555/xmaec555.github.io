@@ -353,20 +353,26 @@ const uniqueSort = arr => [...new Set(arr)].sort((a,b)=>a-b);
 const format = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
 const inRange = (v, min, max) => v >= min && v <= max;
 
-function getRule3Default() {
+// 获取条件3当前默认值
+function getRule3Value() {
     const m1 = minMax[1].max || 0;
     const m2 = minMax[2].max || 0;
     return { a: `6-${m1}`, b: `5-${m2}` };
 }
 
+// 刷新条件3显示
+function updateRule3Inputs() {
+    const val = getRule3Value();
+    document.getElementById('rule3a').value = val.a;
+    document.getElementById('rule3b').value = val.b;
+}
+
 function resetRules() {
-    const r3 = getRule3Default();
+    updateRule3Inputs();
     document.getElementById('rule1a').value = defaultRules[0].a;
     document.getElementById('rule1b').value = defaultRules[0].b;
     document.getElementById('rule2a').value = defaultRules[1].a;
     document.getElementById('rule2b').value = defaultRules[1].b;
-    document.getElementById('rule3a').value = r3.a;
-    document.getElementById('rule3b').value = r3.b;
     document.getElementById('rule4a').value = defaultRules[3].a;
     document.getElementById('rule4b').value = defaultRules[3].b;
     document.getElementById('rule5a').value = defaultRules[4].a;
@@ -423,13 +429,9 @@ function autoCalculate(no) {
     const v2 = document.getElementById('numInput2').value.trim();
     const hasBoth = !!v1 && !!v2;
 
-    // 两组都有值时，自动填充条件3默认值
+    // 只要两组都有值，数据变化就同步更新条件3
     if (hasBoth) {
-        const r3 = getRule3Default();
-        const aEl = document.getElementById('rule3a');
-        const bEl = document.getElementById('rule3b');
-        if (!aEl.value) aEl.value = r3.a;
-        if (!bEl.value) bEl.value = r3.b;
+        updateRule3Inputs();
     }
 
     clearTimeout(autoCompareTimer);
@@ -592,7 +594,7 @@ function compareAll(){
     ];
 
     const defs = [
-        defaultRules[0], defaultRules[1], getRule3Default(), defaultRules[3], defaultRules[4]
+        defaultRules[0], defaultRules[1], getRule3Value(), defaultRules[3], defaultRules[4]
     ];
 
     const ranges = rules.map((r,i)=> ({
