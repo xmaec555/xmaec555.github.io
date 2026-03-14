@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>蚂蚁澳彩双盘口统计</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            background: #121212;
+            color: #e0e0e0;
+            padding: 8px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .tool-box {
+            background: #1a1a1a;
+            padding: 12px;
+            border-radius: 16px;
+            border: 1px solid #333;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .panel {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+        }
+
+        .panel:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .panel-title {
+            font-size: 15px;
+            color: #fff;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .input-box {
+            margin-bottom: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px;
+            padding: 8px;
+            border: 1px solid #444;
+            border-radius: 6px;
+            resize: vertical;
+            font-size: 14px;
+            background: #2a2a2a;
+            color: #ffffff;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        textarea:focus {
+            border-color: #3a6ea5;
+        }
+
+        .input-info {
+            font-size: 12px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            min-width: 70px;
+            padding: 8px 6px;
+            border: none;
+            border-radius: 6px;
+            background: #3a6ea5;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            -webkit-appearance: none;
+        }
+
+        button:hover {
+            background: #2d5a8c;
+        }
+
+        button.shuffle {
+            background: #7259d6;
+        }
+        button.shuffle:hover {
+            background: #5d46b3;
+        }
+
+        button.clear {
+            background: #a83232;
+        }
+
+        button.sort {
+            background: #b57c1b;
+        }
+
+        button.uniq {
+            background: #8049a8;
+        }
+
+        button.reset {
+            background: #c2661e;
+            padding: 10px 6px;
+            font-size: 15px;
+        }
+
+        .result-section {
+            margin-top: 8px;
+            padding: 8px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            background: #252525;
+            display: none;
+            width: 100%;
+        }
+
+        .result-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #444;
+        }
+
+        .highlight {
+            color: #ffaa00;
+            font-weight: bold;
+        }
+
+        .hot {
+            color: #ff6b6b !important;
+            font-weight: bold;
+        }
+
+        .cold {
+            color: #4d9fff !important;
+            font-weight: bold;
+        }
+
+        .base-row {
+            display: flex;
+            gap: 12px;
+            font-size: 14px;
+            flex-wrap: wrap;
+        }
+
+        .group-item {
+            border: 1px solid #444;
+            border-radius: 6px;
+            padding: 6px 8px;
+            margin: 4px 0;
+            background: #2a2a2a;
+            font-size: 14px;
+            word-break: break-all;
+        }
+
+        .zodiac-item {
+            display: inline-flex;
+            align-items: center;
+            margin: 2px 4px 2px 0;
+            padding: 2px 4px;
+            background: #333;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #fff;
+        }
+
+        .copy-btn {
+            padding: 4px 7px;
+            background: #4d7a43;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 4px;
+            -webkit-appearance: none;
+        }
+
+        .copy-tip {
+            color: #6cce6c;
+            font-size: 12px;
+            margin-left: 4px;
+        }
+
+        .compare-row {
+            background: #3b3629 !important;
+            border-left: 3px solid #cc7a29;
+        }
+
+        .final-row {
+            background: #293b2a !important;
+            border-left: 3px solid #4d7a43 !important;
+            font-weight: bold;
+        }
+
+        .title-right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-top: 2px;
+        }
+
+        /* 自定义条件输入样式 */
+        .rule-inputs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        .rule-item {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .rule-label {
+            font-size: 12px;
+            color: #ccc;
+        }
+
+        /* 普通输入框 */
+        .rule-input {
+            padding: 6px 5px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background: #2a2a2a;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .rule-input:focus {
+            border-color: #3a6ea5;
+        }
+
+        /* 固定热后缀的输入组合 */
+        .hot-input-group {
+            display: flex;
+            align-items: center;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background: #2a2a2a;
+            overflow: hidden;
+        }
+        .hot-input-group input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: #fff;
+            padding: 6px 5px;
+            font-size: 13px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .hot-suffix {
+            padding: 0 6px;
+            color: #ff6b6b;
+            font-weight: bold;
+            font-size: 13px;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        /* 移动端小屏优化 */
+        @media (max-width: 400px) {
+            .rule-inputs {
+                grid-template-columns: 1fr;
+            }
+            button {
+                font-size: 13px;
+                padding: 7px 4px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="tool-box">
+            <h1>蚂蚁澳彩 · 双盘口统计</h1>
+
+            <!-- 第一组 -->
+            <div class="panel">
+                <div class="panel-title">第一组 · 天子数据盘</div>
+                <div class="input-box">
+                    <textarea id="numInput1" placeholder="输入数字" oninput="autoCalculate(1)"></textarea>
+                    <div class="input-info" id="inputInfo1">已输入：0 个</div>
+                </div>
+                <div class="btn-group">
+                    <button class="shuffle" onclick="shuffleNum(1)">🔀 打乱</button>
+                    <button class="uniq" onclick="uniqueNum(1)">去重</button>
+                    <button class="sort" onclick="sortNum(1)">排序</button>
+                    <button class="clear" onclick="clearAll(1)">清空</button>
+                </div>
+                <div class="result-section" id="baseResult1"></div>
+                <div class="result-section" id="groupResult1"></div>
+                <div class="result-section" id="zodiacResult1"></div>
+            </div>
+
+            <!-- 第二组 -->
+            <div class="panel">
+                <div class="panel-title">第二组 · 广东数据盘</div>
+                <div class="input-box">
+                    <textarea id="numInput2" placeholder="输入数字" oninput="autoCalculate(2)"></textarea>
+                    <div class="input-info" id="inputInfo2">已输入：0 个</div>
+                </div>
+                <div class="btn-group">
+                    <button class="shuffle" onclick="shuffleNum(2)">🔀 打乱</button>
+                    <button class="uniq" onclick="uniqueNum(2)">去重</button>
+                    <button class="sort" onclick="sortNum(2)">排序</button>
+                    <button class="clear" onclick="clearAll(2)">清空</button>
+                </div>
+                <div class="result-section" id="baseResult2"></div>
+                <div class="result-section" id="groupResult2"></div>
+                <div class="result-section" id="zodiacResult2"></div>
+            </div>
+
+            <!-- 自定义对比条件 -->
+            <div class="panel">
+                <div class="panel-title" style="color:#4fc3f7">🔧 自定义对比条件</div>
+                <div class="btn-group">
+                    <button class="reset" onclick="resetRules()">🔄 恢复默认</button>
+                </div>
+                <div class="rule-inputs">
+                    <div class="rule-item">
+                        <span class="rule-label">条件1：A盘 min-max</span>
+                        <input type="text" class="rule-input" id="rule1a" placeholder="默认：1-2" oninput="onRuleChange()">
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-label">条件1：B盘 min-max</span>
+                        <input type="text" class="rule-input" id="rule1b" placeholder="默认：0-1" oninput="onRuleChange()">
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-label">条件2：A盘 min-max</span>
+                        <input type="text" class="rule-input" id="rule2a" placeholder="默认：2-5" oninput="onRuleChange()">
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-label">条件2：B盘 min-max</span>
+                        <input type="text" class="rule-input" id="rule2b" placeholder="默认：2-4" oninput="onRuleChange()">
+                    </div>
+                    
+                    <!-- 条件3：固定 -热 不可删除 -->
+                    <div class="rule-item">
+                        <span class="rule-label">条件3：A盘</span>
+                        <div class="hot-input-group">
+                            <input type="text" id="rule3a" value="6" oninput="onRuleChange()">
+                            <span class="hot-suffix">-热</span>
+                        </div>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-label">条件3：B盘</span>
+                        <div class="hot-input-group">
+                            <input type="text" id="rule3b" value="5" oninput="onRuleChange()">
+                            <span class="hot-suffix">-热</span>
+                        </div>
+                    </div>
+
+                    <div class="rule-item">
+                        <span class="rule-label">条件4：A盘 固定值</span>
+                        <input type="text" class="rule-input" id="rule4a" placeholder="默认：7" oninput="onRuleChange()">
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-label">条件4：B盘 min-max</span>
+                        <input type="text" class="rule-input" id="rule4b" placeholder="默认：3-4" oninput="onRuleChange()">
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-label">条件5：A盘 固定值</span>
+                        <input type="text" class="rule-input" id="rule5a" placeholder="默认：4" oninput="onRuleChange()">
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-label">条件5：B盘 固定值</span>
+                        <input type="text" class="rule-input" id="rule5b" placeholder="默认：6" oninput="onRuleChange()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 对比 -->
+            <div class="panel">
+                <div class="panel-title" style="color:#ff9c41">盘口对比结果</div>
+                <div class="result-section" id="compareResult"></div>
+            </div>
+        </div>
+    </div>
+
+<script>
+const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
+const countData = {1:{},2:{}};
+const minMax = {1:{min:0,max:0},2:{min:0,max:0}};
+let group1Lines = "";
+let group2Lines = "";
+
+let autoCompareTimer = null;
+let ruleChangeTimer = null;
+
+// 默认条件配置
+const defaultRules = [
+    {a: '1-2', b: '0-1'},
+    {a: '2-5', b: '2-4'},
+    {a: '6', b: '5'},
+    {a: '7', b: '3-4'},
+    {a: '4', b: '6'}
+];
+
+const padZero = n => n.toString().padStart(2, '0');
+const getZodiac = n => zodiacList[(n-1)%12];
+const uniqueSort = arr => [...new Set(arr)].sort((a,b)=>a-b);
+const format = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
+const inRange = (v, min, max) => v >= min && v <= max;
+
+// 恢复默认条件
+function resetRules() {
+    document.getElementById('rule1a').value = defaultRules[0].a;
+    document.getElementById('rule1b').value = defaultRules[0].b;
+    document.getElementById('rule2a').value = defaultRules[1].a;
+    document.getElementById('rule2b').value = defaultRules[1].b;
+    document.getElementById('rule3a').value = defaultRules[2].a;
+    document.getElementById('rule3b').value = defaultRules[2].b;
+    document.getElementById('rule4a').value = defaultRules[3].a;
+    document.getElementById('rule4b').value = defaultRules[3].b;
+    document.getElementById('rule5a').value = defaultRules[4].a;
+    document.getElementById('rule5b').value = defaultRules[4].b;
+    onRuleChange();
+}
+
+// 解析范围输入：支持 数字 或 热
+function parseRange(val, maxVal) {
+    val = (val || '').trim();
+    if (val.includes('-')) {
+        let [a, b] = val.split('-').map(v => v.trim());
+        a = a === '热' ? maxVal : parseInt(a) || 0;
+        b = b === '热' ? maxVal : parseInt(b) || 0;
+        return [Math.min(a,b), Math.max(a,b)];
+    }
+    let num = val === '热' ? maxVal : parseInt(val) || 0;
+    return [num, num];
+}
+
+// Fisher-Yates 随机打乱
+function shuffleArray(arr) {
+    const newArr = [...arr];
+    for (let i = newArr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+    }
+    return newArr;
+}
+
+// 一键打乱
+function shuffleNum(no) {
+    const el = document.getElementById(`numInput${no}`);
+    const nums = (el.value.match(/\d+/g) || []).map(Number);
+    if (nums.length === 0) return;
+    const shuffled = shuffleArray(nums);
+    el.value = shuffled.join(' ');
+    showInputInfo(no);
+    autoCalculate(no);
+}
+
+function showResult(no, show) {
+    const sections = ['baseResult','groupResult','zodiacResult'];
+    sections.forEach(id => {
+        const el = document.getElementById(`${id}${no}`);
+        el.style.display = show ? 'block' : 'none';
+    });
+}
+
+// 条件修改时触发更新
+function onRuleChange() {
+    clearTimeout(ruleChangeTimer);
+    ruleChangeTimer = setTimeout(() => {
+        const v1 = document.getElementById('numInput1').value.trim();
+        const v2 = document.getElementById('numInput2').value.trim();
+        if (v1 && v2) compareAll();
+    }, 200);
+}
+
+function autoCalculate(no) {
+    showInputInfo(no);
+    calculate(no);
+    clearTimeout(autoCompareTimer);
+    autoCompareTimer = setTimeout(() => {
+        const v1 = document.getElementById('numInput1').value.trim();
+        const v2 = document.getElementById('numInput2').value.trim();
+        if (v1 && v2) compareAll();
+        else clearCompare();
+    }, 260);
+}
+
+function showInputInfo(no){
+    const v = document.getElementById(`numInput${no}`).value;
+    const cnt = (v.match(/\d+/g) || []).length;
+    document.getElementById(`inputInfo${no}`).innerText = `已输入：${cnt} 个`;
+}
+
+function clearAll(no){
+    const ids = ['numInput','baseResult','groupResult','zodiacResult'];
+    ids.forEach(id => {
+        const el = document.getElementById(`${id}${no}`);
+        if (id === 'numInput') el.value = '';
+        else el.innerHTML = '';
+    });
+    countData[no] = {};
+    minMax[no] = {min:0, max:0};
+    if(no===1)group1Lines="";if(no===2)group2Lines="";
+    showInputInfo(no);
+    showResult(no, false);
+    clearCompare();
+}
+
+function copyText(text, tipId){
+    if(!text||text==='无'){alert('暂无内容');return;}
+    const tip=document.getElementById(tipId);
+    try{
+        navigator.clipboard.writeText(text).then(()=>showCopyTip(tip,true)).catch(()=>fallbackCopy(text,tip));
+    }catch(e){
+        fallbackCopy(text,tip);
+    }
+}
+function fallbackCopy(text,tip){
+    const ta=document.createElement('textarea');
+    ta.value=text;
+    ta.style.position='fixed';
+    ta.style.left='-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showCopyTip(tip,true);
+}
+function showCopyTip(tip,success){
+    tip.innerText=success?"✅已复制":"❌失败";
+    tip.style.color=success?"#6cce6c":"#ff6b6b";
+    setTimeout(()=>tip.innerText='',1500);
+}
+
+function uniqueNum(no){
+    const el=document.getElementById(`numInput${no}`);
+    const nums=el.value.match(/\d+/g)||[];
+    el.value=[...new Set(nums)].join(' ');
+    showInputInfo(no);
+    autoCalculate(no);
+}
+function sortNum(no){
+    const el=document.getElementById(`numInput${no}`);
+    const nums=(el.value.match(/\d+/g)||[]).map(Number).sort((a,b)=>a-b);
+    el.value=nums.join(' ');
+    showInputInfo(no);
+    autoCalculate(no);
+}
+
+function calculate(no){
+    const input=document.getElementById(`numInput${no}`).value.trim();
+    const inputArr=(input.match(/\d+/g)||[]).map(Number).filter(n=>!isNaN(n)&&n>=1&&n<=49);
+    if(inputArr.length===0){
+        countData[no]={};
+        minMax[no]={min:0,max:0};
+        showResult(no,false);
+        return;
+    }
+    showResult(no,true);
+    const all=Array.from({length:49},(_,i)=>i+1);
+    const countMap={};
+    all.forEach(n=>countMap[n]=0);
+    inputArr.forEach(n=>countMap[n]++);
+    countData[no]=countMap;
+    
+    const validCounts = Object.values(countMap).filter(v => v > 0);
+    if(validCounts.length === 0) {
+        minMax[no] = {min:0, max:0};
+    } else {
+        minMax[no]={min:Math.min(...validCounts),max:Math.max(...validCounts)};
+    }
+    
+    const group={};
+    all.forEach(n=>{
+        const c=countMap[n];
+        group[c]=group[c]||[];
+        group[c].push(n);
+    });
+    const sortedGroups=Object.keys(group).map(Number).sort((a,b)=>a-b);
+    if(no===1){
+        let l=[];
+        sortedGroups.forEach(c=>l.push(group[c].map(padZero).join(' ')));
+        group1Lines=l.join('\n');
+    }
+    if(no===2){
+        let l=[];
+        sortedGroups.forEach(c=>l.push(group[c].map(padZero).join(' ')));
+        group2Lines=l.join('\n');
+    }
+    const zodiac={};
+    zodiacList.forEach(z=>zodiac[z]=0);
+    inputArr.forEach(n=>zodiac[getZodiac(n)]++);
+    renderBase(no,inputArr.length,new Set(inputArr).size,minMax[no].max,minMax[no].min);
+    renderGroup(no,sortedGroups,group,minMax[no].max,minMax[no].min);
+    renderZodiac(no,zodiac);
+    bindCopyEvents();
+}
+
+function renderBase(no,total,unique,max,min){
+    document.getElementById(`baseResult${no}`).innerHTML=`
+    <div class="result-title">📊 基础统计</div>
+    <div class="base-row">
+        <div>总数：<span class="highlight">${total}</span></div>
+        <div>不重复：<span class="highlight">${unique}</span></div>
+        <div>最高：<span class="hot">${max}次</span></div>
+        <div>最低：<span class="cold">${min}次</span></div>
+    </div>`;
+}
+
+function renderGroup(no,sorted,group,maxCnt,minCnt){
+    let html=`<div class="result-title">📦 次数分组</div>`;
+    sorted.forEach((cnt,i)=>{
+        const list=group[cnt].map(padZero).join(' ');
+        let mark='';
+        if(cnt===maxCnt)mark='<span class="hot">热</span>';
+        if(cnt===minCnt)mark='<span class="cold">冷</span>';
+        html+=`<div class="group-item">${mark} ${cnt}次：${list}</div>`;
+    });
+    html+=`<div class="title-right"><button class="copy-btn" data-copy="${no==1?group1Lines:group2Lines}" data-tip="gTip${no}">复制全部</button><span id="gTip${no}" class="copy-tip"></span></div>`;
+    document.getElementById(`groupResult${no}`).innerHTML=html;
+}
+
+function renderZodiac(no,zodiac){
+    const sorted=Object.entries(zodiac).sort((a,b)=>b[1]-a[1]);
+    const max=sorted[0][1],min=sorted.at(-1)[1];
+    let html=`<div class="result-title">🐉 生肖统计</div>`;
+    sorted.forEach(([z,c])=>{
+        const cls=c===max?'zodiac-item hot':c===min?'zodiac-item cold':'zodiac-item';
+        html+=`<div class="${cls}">${z} ${c}</div>`;
+    });
+    document.getElementById(`zodiacResult${no}`).innerHTML=html;
+}
+
+function clearCompare(){
+    const el=document.getElementById('compareResult');
+    el.innerHTML='';
+    el.style.display='none';
+}
+
+// 核心：自定义对比逻辑 + 标题完全同步
+function compareAll(){
+    if(Object.keys(countData[1]).length===0||Object.keys(countData[2]).length===0){
+        clearCompare();
+        return;
+    }
+    document.getElementById('compareResult').style.display='block';
+    
+    const c1 = countData[1], c2 = countData[2];
+    const max1 = minMax[1].max, max2 = minMax[2].max;
+    const all = Array.from({length:49},(_,i)=>i+1);
+
+    // 获取用户输入 + 条件3自动拼接 -热
+    const ruleInputs = [
+        { a: document.getElementById('rule1a').value, b: document.getElementById('rule1b').value },
+        { a: document.getElementById('rule2a').value, b: document.getElementById('rule2b').value },
+        { a: document.getElementById('rule3a').value + '-热', b: document.getElementById('rule3b').value + '-热' },
+        { a: document.getElementById('rule4a').value, b: document.getElementById('rule4b').value },
+        { a: document.getElementById('rule5a').value, b: document.getElementById('rule5b').value },
+    ];
+
+    // 生成显示文字（输入为空则用默认）
+    const ruleTexts = ruleInputs.map((item, idx) => {
+        const aText = item.a || defaultRules[idx].a;
+        const bText = item.b || defaultRules[idx].b;
+        return `${aText} & ${bText}`;
+    });
+
+    // 解析用于筛选的范围
+    const ruleRanges = ruleInputs.map((item, idx) => ({
+        a: parseRange(item.a || defaultRules[idx].a, max1),
+        b: parseRange(item.b || defaultRules[idx].b, max2)
+    }));
+
+    // 筛选
+    const r1 = all.filter(n => inRange(c1[n],...ruleRanges[0].a) && inRange(c2[n],...ruleRanges[0].b));
+    const r2 = all.filter(n => inRange(c1[n],...ruleRanges[1].a) && inRange(c2[n],...ruleRanges[1].b));
+    const r3 = all.filter(n => inRange(c1[n],...ruleRanges[2].a) && inRange(c2[n],...ruleRanges[2].b));
+    const r4 = all.filter(n => inRange(c1[n],...ruleRanges[3].a) && inRange(c2[n],...ruleRanges[3].b));
+    const r5 = all.filter(n => inRange(c1[n],...ruleRanges[4].a) && inRange(c2[n],...ruleRanges[4].b));
+
+    const [s1,s2,s3,s4,s5] = [r1,r2,r3,r4,r5].map(format);
+    const final = uniqueSort([...r1,...r2,...r3,...r4,...r5]);
+    const finalText = format(final);
+    const finalCount = final.length;
+
+    // 渲染结果，标题完全同步输入内容
+    document.getElementById('compareResult').innerHTML=`
+    <div class="result-title">🎯 对比结果</div>
+    <div class="group-item compare-row">【${ruleTexts[0]}】：${s1}</div>
+    <div class="group-item compare-row">【${ruleTexts[1]}】：${s2}</div>
+    <div class="group-item compare-row">【${ruleTexts[2]}】：${s3}</div>
+    <div class="group-item compare-row">【${ruleTexts[3]}】：${s4}</div>
+    <div class="group-item compare-row">【${ruleTexts[4]}】：${s5}</div>
+    <div class="group-item final-row">✅ 推荐（${finalCount} 个）：${finalText}</div>
+    <div class="title-right"><button class="copy-btn" data-copy="${finalText}" data-tip="cfTip">复制推荐</button><span id="cfTip" class="copy-tip"></span></div>`;
+    
+    bindCopyEvents();
+}
+
+function bindCopyEvents(){
+    document.querySelectorAll('.copy-btn').forEach(btn=>{
+        btn.onclick=function(){
+            copyText(this.getAttribute('data-copy'),this.getAttribute('data-tip'));
+        }
+    });
+}
+</script>
+</body>
+</html>
