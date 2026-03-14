@@ -392,6 +392,7 @@ let group1Lines = "", group2Lines = "";
 // ====================== 定时器 ======================
 let autoCompareTimer = null;
 let ruleChangeTimer = null;
+let noteSaveTimer = null;
 
 // ====================== 工具函数 ======================
 const padZero = n => n.toString().padStart(2, '0');
@@ -473,10 +474,39 @@ function copyInput(no) {
     copyText(text, `inputTip${no}`);
 }
 
-// ====================== 记事本开关 ======================
+// ====================== 记事本 永久显示 + 本地保存 ======================
+function loadNote() {
+    const note = document.getElementById('noteTextarea');
+    const saved = localStorage.getItem('lottery_note');
+    if (saved) note.value = saved;
+}
+
+function saveNote() {
+    const note = document.getElementById('noteTextarea');
+    localStorage.setItem('lottery_note', note.value);
+}
+
+function autoSaveNote() {
+    clearTimeout(noteSaveTimer);
+    noteSaveTimer = setTimeout(saveNote, 500);
+}
+
 function toggleNote() {
     const note = document.getElementById('noteTextarea');
-    note.style.display = document.getElementById('noteSwitch').checked ? 'block' : 'none';
+    const isChecked = document.getElementById('noteSwitch').checked;
+    note.style.display = isChecked ? 'block' : 'none';
+    localStorage.setItem('note_visible', isChecked ? '1' : '0');
+}
+
+function keepNoteAlwaysVisible() {
+    const note = document.getElementById('noteTextarea');
+    const sw = document.getElementById('noteSwitch');
+    const savedVisible = localStorage.getItem('note_visible');
+    
+    if (savedVisible === '1') {
+        sw.checked = true;
+        note.style.display = 'block';
+    }
 }
 
 // ====================== 输入操作 ======================
@@ -706,7 +736,7 @@ function compareAll() {
             <input type="checkbox" id="noteSwitch" onchange="toggleNote()">
         </label>
     </div>
-    <textarea id="noteTextarea" class="note-textarea" placeholder="在这里记录备注信息..."></textarea>
+    <textarea id="noteTextarea" class="note-textarea" placeholder="在这里记录备注信息，自动永久保存..." oninput="autoSaveNote()"></textarea>
     <div class="group-item compare-row">【${texts[0]}】：${format(res[0])}</div>
     <div class="group-item compare-row">【${texts[1]}】：${format(res[1])}</div>
     <div class="group-item compare-row">【${texts[2]}】：${format(res[2])}</div>
@@ -716,6 +746,8 @@ function compareAll() {
     <div class="title-right"><button class="copy-btn" data-copy="${format(final)}" data-tip="cfTip">复制推荐</button><span id="cfTip" class="copy-tip"></span></div>`;
 
     bindCopyEvents();
+    loadNote();
+    keepNoteAlwaysVisible();
 }
 </script>
 </body>
