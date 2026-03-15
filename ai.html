@@ -795,13 +795,13 @@ function compareAll() {
         </label>
     </div>
     <textarea id="noteTextarea" class="note-textarea" placeholder="在这里记录备注信息，自动永久保存..." oninput="autoSaveNote()"></textarea>
-    <div class="group-item compare-row">【${texts[0]} · 共${res[0].length}个】：${format(res[0])}</div>
-    <div class="group-item compare-row">【${texts[1]} · 共${res[1].length}个】：${format(res[1])}</div>
-    <div class="group-item compare-row">【${texts[2]} · 共${res[2].length}个】：${format(res[2])}</div>
-    <div class="group-item compare-row">【${texts[3]} · 共${res[3].length}个】：${format(res[3])}</div>
-    <div class="group-item compare-row">【${texts[4]} · 共${res[4].length}个】：${format(res[4])}</div>
-    <div class="group-item final-row">✅ 智能精选（${final.length} 个）：${format(final)}</div>
-    <div class="title-right"><button class="copy-btn" data-copy="${format(final)}" data-tip="cfTip">复制精选号</button><span id="cfTip" class="copy-tip"></span></div>`;
+    <div class="group-item compare-row">【${texts[0]} · ${res[0].length}个】：${format(res[0])}</div>
+    <div class="group-item compare-row">【${texts[1]} · ${res[1].length}个】：${format(res[1])}</div>
+    <div class="group-item compare-row">【${texts[2]} · ${res[2].length}个】：${format(res[2])}</div>
+    <div class="group-item compare-row">【${texts[3]} · ${res[3].length}个】：${format(res[3])}</div>
+    <div class="group-item compare-row">【${texts[4]} · ${res[4].length}个】：${format(res[4])}</div>
+    <div class="group-item final-row">✅ 智选 ·${final.length} 个：${format(final)}</div>
+    <div class="title-right"><button class="copy-btn" data-copy="${format(final)}" data-tip="cfTip">复制智选号</button><span id="cfTip" class="copy-tip"></span></div>`;
 
     bindCopyEvents();
     loadNote();
