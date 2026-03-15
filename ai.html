@@ -76,6 +76,9 @@
             font-size: 12px;
             color: #888;
             margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
         .btn-group {
             display: flex;
@@ -94,6 +97,12 @@
             font-size: 14px;
             cursor: pointer;
             -webkit-appearance: none;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+        button:active {
+            opacity: 0.8;
+            transform: scale(0.98);
         }
         button:hover {
             background: #2d5a8c;
@@ -143,6 +152,7 @@
             margin-bottom: 6px;
             padding-bottom: 4px;
             border-bottom: 1px solid #444;
+            gap: 8px;
         }
         .highlight {
             color: #ffaa00;
@@ -195,7 +205,6 @@
         .copy-tip {
             color: #6cce6c;
             font-size: 12px;
-            margin-left: 4px;
         }
         .compare-row {
             background: #3b3629 !important;
@@ -248,6 +257,7 @@
             cursor: pointer;
             font-size: 13px;
             color: #ccc;
+            flex-shrink: 0;
         }
         .note-switch input {
             width: 36px;
@@ -258,6 +268,7 @@
             position: relative;
             cursor: pointer;
             transition: 0.2s;
+            flex-shrink: 0;
         }
         .note-switch input:checked {
             background: #3a6ea5;
@@ -290,7 +301,6 @@
             font-size: 14px;
         }
 
-        /* 底部版权 */
         .footer {
             text-align: center;
             margin-top: 12px;
@@ -325,7 +335,7 @@
             <div class="panel">
                 <div class="panel-title">第一组 · A盘</div>
                 <div class="input-box">
-                    <textarea id="numInput1" placeholder="输入数字" oninput="autoCalculate(1)"></textarea>
+                    <textarea id="numInput1" placeholder="输入数字，用空格/换行分隔" oninput="autoCalculate(1)"></textarea>
                     <div class="input-info" id="inputInfo1">已输入：0 个</div>
                 </div>
                 <div class="btn-group">
@@ -343,7 +353,7 @@
             <div class="panel">
                 <div class="panel-title">第二组 · B盘</div>
                 <div class="input-box">
-                    <textarea id="numInput2" placeholder="输入数字" oninput="autoCalculate(2)"></textarea>
+                    <textarea id="numInput2" placeholder="输入数字，用空格/换行分隔" oninput="autoCalculate(2)"></textarea>
                     <div class="input-info" id="inputInfo2">已输入：0 个</div>
                 </div>
                 <div class="btn-group">
@@ -359,7 +369,7 @@
             </div>
 
             <div class="panel" id="rulePanel" style="display:none;">
-                <div class="panel-title" style="color:#4fc3f7">🔧 对比条件</div>
+                <div class="panel-title" style="color:#4fc3f7">🔧 对比条件（输入 / 代表此行不统计）</div>
                 <div class="btn-group">
                     <button class="reset" onclick="resetRules()">🔄 恢复默认</button>
                 </div>
@@ -367,7 +377,7 @@
                     <div class="rule-item"><span class="rule-label">条件1：A盘</span><input type="text" class="rule-input" id="rule1a" oninput="onRuleChange()"></div>
                     <div class="rule-item"><span class="rule-label">条件1：B盘</span><input type="text" class="rule-input" id="rule1b" oninput="onRuleChange()"></div>
                     <div class="rule-item"><span class="rule-label">条件2：A盘</span><input type="text" class="rule-input" id="rule2a" oninput="onRuleChange()"></div>
-                    <div class="rule-item"><span class="rule-label">条件2：B盘 min-max</span><input type="text" class="rule-input" id="rule2b" oninput="onRuleChange()"></div>
+                    <div class="rule-item"><span class="rule-label">条件2：B盘</span><input type="text" class="rule-input" id="rule2b" oninput="onRuleChange()"></div>
                     <div class="rule-item"><span class="rule-label">条件3：A盘</span><input type="text" class="rule-input" id="rule3a" oninput="onRuleChange()"></div>
                     <div class="rule-item"><span class="rule-label">条件3：B盘</span><input type="text" class="rule-input" id="rule3b" oninput="onRuleChange()"></div>
                     <div class="rule-item"><span class="rule-label">条件4：A盘</span><input type="text" class="rule-input" id="rule4a" oninput="onRuleChange()"></div>
@@ -382,9 +392,8 @@
             </div>
         </div>
 
-        <!-- 底部版权链接 -->
         <div class="footer">
-            © 2026 蚂蚁数据统计 · 技术支持 <a href="https://m.hxyx.cc.cd" target="_blank">联系我们</a>
+            © 2026 蚂蚁数据统计 · 仅供数据参考
         </div>
     </div>
 
@@ -410,16 +419,20 @@ const padZero = n => n.toString().padStart(2, '0');
 const getZodiac = n => zodiacList[(n - 1) % 12];
 const uniqueSort = arr => [...new Set(arr)].sort((a, b) => a - b);
 const format = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
-const inRange = (v, min, max) => v >= min && v <= max;
 
-function parseRange(val) {
-    val = val?.trim() || '';
-    if (val.includes('-')) {
-        const [a, b] = val.split('-').map(v => parseInt(v) || 0);
-        return [Math.min(a, b), Math.max(a, b)];
+function matchRule(val, ruleText) {
+    ruleText = (ruleText || '').trim();
+    if (!ruleText) return true;
+
+    if (ruleText.includes('-')) {
+        const [a, b] = ruleText.split('-').map(v => parseInt(v) || 0);
+        const min = Math.min(a, b);
+        const max = Math.max(a, b);
+        return val >= min && val <= max;
     }
-    const num = parseInt(val) || 0;
-    return [num, num];
+
+    const num = parseInt(ruleText) || 0;
+    return val === num;
 }
 
 function shuffleArray(arr) {
@@ -444,7 +457,10 @@ function getDynamicDefaults() {
 }
 
 function copyText(text, tipId) {
-    if (!text || text === '无') return alert('暂无内容');
+    if (!text || text === '无') {
+        alert('暂无内容可复制');
+        return;
+    }
     const tip = document.getElementById(tipId);
     
     navigator.clipboard.writeText(text).then(() => {
@@ -475,7 +491,10 @@ function bindCopyEvents() {
 
 function copyInput(no) {
     const text = document.getElementById(`numInput${no}`).value.trim();
-    if (!text) return alert('输入框为空');
+    if (!text) {
+        alert('输入框为空');
+        return;
+    }
     copyText(text, `inputTip${no}`);
 }
 
@@ -599,6 +618,7 @@ function renderGroup(no, sorted, group, maxCnt) {
 
 function renderZodiac(no, zodiac) {
     const sorted = Object.entries(zodiac).sort((a,b) => b[1] - a[1]);
+    if(sorted.length === 0) return;
     const max = sorted[0][1], min = sorted.at(-1)[1];
     let html = `<div class="result-title">🐉 生肖出现次数</div>`;
     sorted.forEach(([z, c]) => {
@@ -700,21 +720,30 @@ function compareAll() {
     el.style.display = 'block';
 
     const rules = [
-        {a: document.getElementById('rule1a').value, b: document.getElementById('rule1b').value},
-        {a: document.getElementById('rule2a').value, b: document.getElementById('rule2b').value},
-        {a: document.getElementById('rule3a').value, b: document.getElementById('rule3b').value},
-        {a: document.getElementById('rule4a').value, b: document.getElementById('rule4b').value},
-        {a: document.getElementById('rule5a').value, b: document.getElementById('rule5b').value},
+        {a: document.getElementById('rule1a').value.trim(), b: document.getElementById('rule1b').value.trim()},
+        {a: document.getElementById('rule2a').value.trim(), b: document.getElementById('rule2b').value.trim()},
+        {a: document.getElementById('rule3a').value.trim(), b: document.getElementById('rule3b').value.trim()},
+        {a: document.getElementById('rule4a').value.trim(), b: document.getElementById('rule4b').value.trim()},
+        {a: document.getElementById('rule5a').value.trim(), b: document.getElementById('rule5b').value.trim()},
     ];
 
     const dyn = getDynamicDefaults();
-    const ranges = rules.map((r, i) => ({
-        a: parseRange(r.a || dyn[i].a),
-        b: parseRange(r.b || dyn[i].b)
-    }));
+    const res = rules.map((rule, i) => {
+        const ra = rule.a || dyn[i].a;
+        const rb = rule.b || dyn[i].b;
+        
+        if (ra === '/' || rb === '/') {
+            return [];
+        }
 
-    const texts = rules.map((r,i) => `${r.a || dyn[i].a} & ${r.b || dyn[i].b}`);
-    const res = ranges.map(rg => all.filter(n => inRange(c1[n], ...rg.a) && inRange(c2[n], ...rg.b)));
+        return all.filter(n => matchRule(c1[n], ra) && matchRule(c2[n], rb));
+    });
+
+    const texts = rules.map((r,i) => {
+        if (r.a === '/' || r.b === '/') return '不统计';
+        return `${r.a || dyn[i].a} & ${r.b || dyn[i].b}`;
+    });
+
     const final = uniqueSort(res.flat());
 
     el.innerHTML = `
