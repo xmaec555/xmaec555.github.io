@@ -12,29 +12,11 @@
             font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
-        html.light {
-            --bg: #ffffff;
-            --card: #f7f8fa;
-            --border: #dcdfe6;
-            --text: #333333;
-            --text2: #666666;
-            --input: #ffffff;
-            --result: #f2f3f5;
-        }
-        html.dark {
-            --bg: #121212;
-            --card: #1a1a1a;
-            --border: #333333;
-            --text: #e0e0e0;
-            --text2: #888888;
-            --input: #2a2a2a;
-            --result: #252525;
-        }
         html, body {
             width: 100%;
             min-height: 100vh;
-            background: var(--bg);
-            color: var(--text);
+            background: #121212;
+            color: #e0e0e0;
             padding: 8px;
             overflow-x: hidden;
             transition: all 0.2s;
@@ -45,23 +27,23 @@
             margin: 0 auto;
         }
         .tool-box {
-            background: var(--card);
+            background: #1a1a1a;
             padding: 12px;
             border-radius: 16px;
-            border: 1px solid var(--border);
+            border: 1px solid #333333;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             width: 100%;
         }
         h1 {
             text-align: center;
-            color: var(--text);
+            color: #e0e0e0;
             font-size: 20px;
             margin-bottom: 12px;
         }
         .panel {
             margin-bottom: 10px;
             padding-bottom: 10px;
-            border-bottom: 1px dashed var(--border);
+            border-bottom: 1px dashed #333333;
         }
         .panel:last-child {
             margin-bottom: 0;
@@ -70,7 +52,7 @@
         }
         .panel-title {
             font-size: 15px;
-            color: var(--text);
+            color: #e0e0e0;
             margin-bottom: 6px;
             font-weight: 500;
         }
@@ -81,12 +63,12 @@
             width: 100%;
             height: 80px;
             padding: 8px;
-            border: 1px solid var(--border);
+            border: 1px solid #333333;
             border-radius: 6px;
             resize: vertical;
             font-size: 14px;
-            background: var(--input);
-            color: var(--text);
+            background: #2a2a2a;
+            color: #e0e0e0;
             outline: none;
             -webkit-appearance: none;
         }
@@ -95,7 +77,7 @@
         }
         .input-info {
             font-size: 12px;
-            color: var(--text2);
+            color: #888888;
             margin-top: 2px;
             display: flex;
             align-items: center;
@@ -166,18 +148,12 @@
         button.reset:hover {
             background: #8A5F3A;
         }
-        button.mode-toggle {
-            background: #6c5ce7;
-        }
-        button.mode-toggle:hover {
-            background: #7a68e9;
-        }
         .result-section {
             margin-top: 8px;
             padding: 8px;
-            border: 1px solid var(--border);
+            border: 1px solid #333333;
             border-radius: 8px;
-            background: var(--result);
+            background: #252525;
             display: none;
             width: 100%;
         }
@@ -187,10 +163,10 @@
             justify-content: space-between;
             font-size: 14px;
             font-weight: bold;
-            color: var(--text);
+            color: #e0e0e0;
             margin-bottom: 6px;
             padding-bottom: 4px;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid #333333;
             gap: 8px;
         }
         .highlight {
@@ -212,11 +188,11 @@
             flex-wrap: wrap;
         }
         .group-item {
-            border: 1px solid var(--border);
+            border: 1px solid #333333;
             border-radius: 6px;
             padding: 6px 8px;
             margin: 4px 0;
-            background: var(--input);
+            background: #2a2a2a;
             font-size: 14px;
             word-break: break-all;
         }
@@ -225,10 +201,10 @@
             align-items: center;
             margin: 2px 4px 2px 0;
             padding: 2px 4px;
-            background: var(--card);
+            background: #1a1a1a;
             border-radius: 4px;
             font-size: 13px;
-            color: var(--text);
+            color: #e0e0e0;
         }
         .copy-btn {
             padding: 4px 7px;
@@ -276,15 +252,15 @@
         }
         .rule-label {
             font-size: 12px;
-            color: var(--text2);
+            color: #888888;
             text-align: center;
         }
         .rule-input {
             padding: 6px 5px;
-            border: 1px solid var(--border);
+            border: 1px solid #333333;
             border-radius: 4px;
-            background: var(--input);
-            color: var(--text);
+            background: #2a2a2a;
+            color: #e0e0e0;
             font-size: 13px;
             outline: none;
             -webkit-appearance: none;
@@ -301,14 +277,14 @@
             gap: 6px;
             cursor: pointer;
             font-size: 13px;
-            color: var(--text2);
+            color: #888888;
             flex-shrink: 0;
         }
         .note-switch input {
             width: 36px;
             height: 18px;
             appearance: none;
-            background: var(--border);
+            background: #333333;
             border-radius: 20px;
             position: relative;
             cursor: pointer;
@@ -339,10 +315,10 @@
             display: none;
             resize: vertical;
             padding: 8px;
-            border: 1px solid var(--border);
+            border: 1px solid #333333;
             border-radius: 6px;
-            background: var(--input);
-            color: var(--text);
+            background: #2a2a2a;
+            color: #e0e0e0;
             font-size: 14px;
         }
 
@@ -351,16 +327,13 @@
             margin-top: 12px;
             padding: 10px 0;
             font-size: 12px;
-            color: var(--text2);
+            color: #888888;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="tool-box">
-            <div style="text-align:center; margin-bottom:8px;">
-                <button class="mode-toggle" onclick="toggleMode()">🌓 切换深色/浅色模式</button>
-            </div>
             <h1>蚂蚁数据 · AI统计</h1>
             
             <div class="panel">
@@ -582,22 +555,6 @@ function loadSavedInput() {
     const v2 = localStorage.getItem('lottery_input2') || '';
     document.getElementById('numInput1').value = v1;
     document.getElementById('numInput2').value = v2;
-}
-
-// 深浅色模式
-function toggleMode() {
-    const html = document.documentElement;
-    const isDark = html.classList.contains('dark');
-    html.classList.remove('dark', 'light');
-    html.classList.add(isDark ? 'light' : 'dark');
-    localStorage.setItem('theme', isDark ? 'light' : 'dark');
-}
-
-function loadTheme() {
-    const html = document.documentElement;
-    const theme = localStorage.getItem('theme') || 'dark';
-    html.classList.remove('dark', 'light');
-    html.classList.add(theme);
 }
 
 function shuffleNum(no) {
@@ -852,7 +809,6 @@ function compareAll() {
 }
 
 window.onload = function(){
-    loadTheme();
     loadSavedInput();
     autoCalculate(1);
     autoCalculate(2);
