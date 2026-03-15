@@ -788,7 +788,7 @@ function compareAll() {
 
     el.innerHTML = `
     <div class="result-title">
-        🎯 对比结果
+        🎯 匹配结果
         <label class="note-switch">
             记事本
             <input type="checkbox" id="noteSwitch" onchange="toggleNote()">
@@ -800,8 +800,8 @@ function compareAll() {
     <div class="group-item compare-row">【${texts[2]} · 共${res[2].length}个】：${format(res[2])}</div>
     <div class="group-item compare-row">【${texts[3]} · 共${res[3].length}个】：${format(res[3])}</div>
     <div class="group-item compare-row">【${texts[4]} · 共${res[4].length}个】：${format(res[4])}</div>
-    <div class="group-item final-row">✅ 推荐（${final.length} 个）：${format(final)}</div>
-    <div class="title-right"><button class="copy-btn" data-copy="${format(final)}" data-tip="cfTip">复制推荐</button><span id="cfTip" class="copy-tip"></span></div>`;
+    <div class="group-item final-row">✅ 智能精选（${final.length} 个）：${format(final)}</div>
+    <div class="title-right"><button class="copy-btn" data-copy="${format(final)}" data-tip="cfTip">复制精选号</button><span id="cfTip" class="copy-tip"></span></div>`;
 
     bindCopyEvents();
     loadNote();
