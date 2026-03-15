@@ -3,149 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>蚂蚁澳彩统计工具</title>
+    <title>蚂蚁数字生肖统计</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Microsoft YaHei", sans-serif;
+            font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
-
-        body {
+        html, body {
+            width: 100%;
+            min-height: 100vh;
             background: #121212;
             color: #e0e0e0;
-            padding-top: 60px;
-            padding-bottom: 20px;
+            padding: 8px;
+            overflow-x: hidden;
         }
-
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0.9rem 5%;
-            background: #1e1e1e;
-            border-bottom: 1px solid #333;
-            z-index: 100;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 0.8rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .nav-links a {
-            color: #bbbbbb;
-            padding: 5px 8px;
-            text-decoration: none;
-            font-size: 15px;
-        }
-
-        .nav-links a:hover {
-            color: #ffffff;
-        }
-
         .container {
-            max-width: 900px;
-            margin: 20px auto;
-            padding: 0 12px;
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
         }
         .tool-box {
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 14px;
-            border: 1px solid #333;
+            background: #1a1a1a;
+            padding: 12px;
+            border-radius: 16px;
+            border: 1px solid #333333;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         h1 {
             text-align: center;
-            color: #ffffff;
-            margin-bottom: 20px;
-            font-size: 22px;
+            color: #e0e0e0;
+            font-size: 20px;
+            margin-bottom: 12px;
         }
-
-        .input-box {
-            margin-bottom: 16px;
+        .panel {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #333333;
         }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #fff;
+        .panel:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .panel-title {
             font-size: 15px;
+            color: #e0e0e0;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        .input-box {
+            margin-bottom: 8px;
         }
         textarea {
             width: 100%;
-            height: 120px;
-            padding: 12px;
-            border: 1px solid #444;
-            border-radius: 8px;
+            height: 80px;
+            padding: 8px;
+            border: 1px solid #333333;
+            border-radius: 6px;
             resize: vertical;
-            font-size: 15px;
+            font-size: 14px;
             background: #2a2a2a;
-            color: #ffffff;
+            color: #e0e0e0;
+            outline: none;
+        }
+        textarea:focus {
+            border-color: #3a6ea5;
         }
         .input-info {
             font-size: 12px;
-            color: #aaa;
-            margin-top: 5px;
+            color: #888888;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
         .btn-group {
             display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
+            gap: 5px;
+            margin-bottom: 8px;
             flex-wrap: wrap;
         }
         button {
             flex: 1;
-            min-width: 80px;
-            padding: 11px 8px;
+            min-width: 70px;
+            padding: 8px 6px;
             border: none;
-            border-radius: 8px;
-            background: #3a6ea5;
+            border-radius: 6px;
+            background: #2D3748;
             color: white;
             font-size: 14px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s;
+        }
+        button:active {
+            opacity: 0.8;
+            transform: scale(0.98);
         }
         button:hover {
-            background: #2d5a8c;
-        }
-        button.clear {
-            background: #a83232;
-        }
-        button.sort {
-            background: #b57c1b;
-        }
-        button.uniq {
-            background: #8049a8;
+            background: #3A475A;
         }
         button.shuffle {
-            background: #1f8a70;
+            background: #4C517A;
+        }
+        button.shuffle:hover {
+            background: #5A608C;
+        }
+        button.uniq {
+            background: #55497A;
+        }
+        button.uniq:hover {
+            background: #63578C;
+        }
+        button.sort {
+            background: #755F3A;
+        }
+        button.sort:hover {
+            background: #876D44;
+        }
+        button.copy-input {
+            background: #2D5552;
+        }
+        button.copy-input:hover {
+            background: #366662;
+        }
+        button.clear {
+            background: #693838;
+        }
+        button.clear:hover {
+            background: #7A4444;
         }
 
         .result-section {
-            margin-top: 16px;
-            padding: 14px;
-            border: 1px solid #444;
-            border-radius: 10px;
+            margin-top: 8px;
+            padding: 8px;
+            border: 1px solid #333333;
+            border-radius: 8px;
             background: #252525;
             display: none;
+            width: 100%;
         }
         .result-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #fff;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #444;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: bold;
+            color: #e0e0e0;
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #333333;
         }
         .highlight {
             color: #ffaa00;
@@ -159,273 +168,142 @@
             color: #4d9fff !important;
             font-weight: bold;
         }
+        .base-row {
+            display: flex;
+            gap: 12px;
+            font-size: 14px;
+            flex-wrap: wrap;
+        }
+        .group-item {
+            border: 1px solid #333333;
+            border-radius: 6px;
+            padding: 6px 8px;
+            margin: 4px 0;
+            background: #2a2a2a;
+            font-size: 14px;
+            word-break: break-all;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
         .zodiac-item {
             display: inline-flex;
             align-items: center;
-            margin: 6px 8px 6px 0;
-            padding: 6px 10px;
-            background: #333;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-        .group-item {
-            border: 1px solid #444;
-            border-radius: 8px;
-            padding: 12px;
-            margin: 8px 0;
-            background: #2a2a2a;
-            line-height: 1.5;
-            word-break: break-all;
-        }
-
-        .copy-btn {
-            padding: 4px 10px;
-            font-size: 12px;
+            margin: 2px 4px 2px 0;
+            padding: 2px 4px;
+            background: #1a1a1a;
             border-radius: 4px;
-            background: #4d7a43;
+            font-size: 13px;
+            color: #e0e0e0;
+        }
+        .copy-btn {
+            padding: 4px 7px;
+            background: #3A5A4A;
             color: #fff;
             border: none;
+            border-radius: 4px;
             cursor: pointer;
-        }
-        .copy-btn:hover {
-            background: #3f6436;
+            font-size: 12px;
+            flex-shrink: 0;
         }
         .copy-tip {
             color: #6cce6c;
-            font-size: 11px;
-            margin-left: 6px;
+            font-size: 12px;
+            margin-left: 4px;
         }
         .title-right {
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: flex-end;
+            margin-top: 2px;
         }
-
-        .base-row {
-            display: flex;
-            gap: 15px;
+        .num-count {
+            color: #ffaa00;
+            font-weight: bold;
             font-size: 14px;
-            flex-wrap: wrap;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 12px;
+            padding: 10px 0;
+            font-size: 12px;
+            color: #888888;
         }
     </style>
 </head>
 <body>
 
-<nav>
-    <div class="nav-links">
-        <a href="https://m.hxyx.cc.cd/sy.html">首页</a>
-        <a href="https://m.hxyx.cc.cd/28tj.html">28M</a>
-        <a href="https://m.hxyx.cc.cd/35tj.html">35M</a>
-        <a href="https://m.hxyx.cc.cd/gj.html">工具</a>
-    </div>
-</nav>
-
 <div class="container">
     <div class="tool-box">
-        <h1>蚂蚁澳彩统计工具</h1>
-
-        <div class="input-box">
-            <label>蚂蚁数据-澳彩专家：</label>
-            <textarea id="numInput1" placeholder="请输入数字" oninput="autoCalculate()"></textarea>
-            <div class="input-info" id="inputInfo1">已输入：0 个数字</div>
+        <h1>蚂蚁数字生肖统计</h1>
+        
+        <div class="panel">
+            <div class="panel-title"></div>
+            <div class="input-box">
+                <textarea id="numInput1" placeholder="输入数字，用空格/换行分隔"></textarea>
+                <div class="input-info" id="inputInfo1">已输入：0 个</div>
+            </div>
+            <div class="btn-group">
+                <button class="shuffle" onclick="shuffleNum()">🔀 打乱</button>
+                <button class="uniq" onclick="uniqueNum()">去重</button>
+                <button class="sort" onclick="sortNum()">排序</button>
+                <button class="copy-input" onclick="copyInput()">📋 复制</button>
+                <button class="clear" onclick="clearAll()">清空</button>
+            </div>
+            <div class="result-section" id="baseResult1"></div>
+            <div class="result-section" id="groupResult1"></div>
+            <div class="result-section" id="zodiacResult1"></div>
         </div>
-
-        <div class="btn-group">
-            <button class="shuffle" onclick="shuffleNum()">一键打乱</button>
-            <button class="uniq" onclick="uniqueNum()">一键去重</button>
-            <button class="sort" onclick="sortNum()">从小到大排序</button>
-            <button class="clear" onclick="clearAll()">清空</button>
-        </div>
-
-        <div class="result-section" id="baseResult1"></div>
-        <div class="result-section" id="groupResult1"></div>
-        <div class="result-section" id="zodiacResult1"></div>
     </div>
+
+    <div class="footer">© 2026 蚂蚁数据 · 版权所有</div>
 </div>
 
 <script>
 const zodiacList = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
 let countData = {};
-let minMax = {min:0, max:0};
+let minMax = { min: 0, max: 0 };
 let groupLines = "";
-let copyGroupNumbers = "";
 
 const padZero = n => n.toString().padStart(2, '0');
-const getZodiac = n => zodiacList[(n-1)%12];
+const getZodiac = n => zodiacList[(n - 1) % 12];
+const uniqueSort = arr => [...new Set(arr)].sort((a, b) => a - b);
+const format = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
 
-let timer = null;
-function autoCalculate() {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-        showInputInfo();
-        calculate();
-    }, 50);
-}
-
-function showResultPanels() {
-    document.getElementById('baseResult1').style.display = 'block';
-    document.getElementById('groupResult1').style.display = 'block';
-    document.getElementById('zodiacResult1').style.display = 'block';
-}
-function hideResultPanels() {
-    document.getElementById('baseResult1').style.display = 'none';
-    document.getElementById('groupResult1').style.display = 'none';
-    document.getElementById('zodiacResult1').style.display = 'none';
-}
-
-function showInputInfo(){
-    const v = document.getElementById(`numInput1`).value;
-    const cnt = (v.match(/\d+/g) || []).filter(n => n >= 1 && n <= 49).length;
-    document.getElementById(`inputInfo1`).innerText = `已输入：${cnt} 个数字`;
-}
-
-function clearAll(){
-    const ids = ['numInput1','baseResult1','groupResult1','zodiacResult1'];
-    ids.forEach(id => {
-        const el = document.getElementById(id);
-        id === 'numInput1' ? (el.value = '') : (el.innerHTML = '');
-    });
-    countData = {};
-    minMax = {min:0, max:0};
-    groupLines = "";
-    copyGroupNumbers = "";
-    hideResultPanels();
-    showInputInfo();
-}
-
-function copyText(text, tipId){
-    if(!text) { alert('暂无内容可复制'); return; }
-    const tip = document.getElementById(tipId);
-    try {
-        navigator.clipboard.writeText(text).then(() => showCopyTip(tip, true)).catch(fallback);
-    } catch (e) { fallback(); }
-    function fallback(){
-        const t = document.createElement("textarea");
-        t.value = text; t.style.cssText = "position:fixed;left:-9999px;opacity:0";
-        document.body.appendChild(t); t.select(); document.execCommand('copy');
-        document.body.removeChild(t); showCopyTip(tip, true);
+function shuffleArray(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
     }
+    return a;
+}
+
+function copyText(text, tipId) {
+    if (!text || text === '无') {
+        alert('暂无内容可复制');
+        return;
+    }
+    const tip = document.getElementById(tipId);
+    navigator.clipboard.writeText(text).then(() => {
+        showCopyTip(tip, true);
+    }).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.cssText = 'position:fixed;left:-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showCopyTip(tip, true);
+    });
 }
 
 function showCopyTip(tip, success) {
-    tip.innerText = success ? "✅ 已复制" : "❌ 失败";
-    tip.style.color = success ? "#6cce6c" : "#ff6b6b";
+    tip.innerText = success ? '✅已复制' : '❌失败';
+    tip.style.color = success ? '#6cce6c' : '#ff6b6b';
     setTimeout(() => tip.innerText = '', 1500);
-}
-
-function uniqueNum(){
-    const el = document.getElementById(`numInput1`);
-    el.value = [...new Set(el.value.match(/\d+/g) || [])].join(' ');
-    autoCalculate();
-}
-
-function sortNum(){
-    const el = document.getElementById(`numInput1`);
-    el.value = (el.value.match(/\d+/g) || []).map(Number).filter(n => n>=1&&n<=49).sort((a,b)=>a-b).join(' ');
-    autoCalculate();
-}
-
-// 一键打乱：点击一次随机打乱一次
-function shuffleNum(){
-    const el = document.getElementById(`numInput1`);
-    let nums = el.value.match(/\d+/g) || [];
-    if(nums.length === 0) return;
-    
-    // 随机打乱算法
-    for(let i = nums.length - 1; i > 0; i--){
-        const j = Math.floor(Math.random() * (i + 1));
-        [nums[i], nums[j]] = [nums[j], nums[i]];
-    }
-    el.value = nums.join(' ');
-    autoCalculate();
-}
-
-function calculate(){
-    const input = document.getElementById(`numInput1`).value.trim();
-    const inputArr = (input.match(/\d+/g) || []).map(Number).filter(n => n>=1&&n<=49);
-    
-    if(inputArr.length === 0){
-        hideResultPanels();
-        return;
-    }
-
-    const all = Array.from({length:49},(_,i)=>i+1);
-    const countMap = {};
-    all.forEach(n => countMap[n] = 0);
-    inputArr.forEach(n => countMap[n]++);
-    countData = countMap;
-
-    const vals = Object.values(countMap);
-    minMax = { min: Math.min(...vals), max: Math.max(...vals) };
-
-    const group = {};
-    all.forEach(n => { const c = countMap[n]; (group[c] = group[c] || []).push(n); });
-    const sortedGroups = Object.keys(group).map(Number).sort((a,b)=>a-b);
-
-    let copyLines = [];
-    sortedGroups.forEach(cnt => {
-        copyLines.push(group[cnt].map(padZero).join(' '));
-    });
-    copyGroupNumbers = copyLines.join('\n');
-
-    let lines = [];
-    sortedGroups.forEach(cnt => {
-        const list = group[cnt].map(padZero).join(' ');
-        lines.push(`出现${cnt}次（共${group[cnt].length}个）：${list}`);
-    });
-    groupLines = lines.join('\n');
-
-    const zodiac = {};
-    zodiacList.forEach(z => zodiac[z] = 0);
-    inputArr.forEach(n => zodiac[getZodiac(n)]++);
-
-    renderBase(inputArr.length, new Set(inputArr).size, minMax.max, minMax.min);
-    renderGroup(sortedGroups, group, minMax.max, minMax.min);
-    renderZodiac(zodiac);
-    
-    showResultPanels();
-    bindCopyEvents();
-}
-
-function renderBase(total, unique, max, min){
-    document.getElementById(`baseResult1`).innerHTML = `
-    <div class="result-title">📊 基础统计</div>
-    <div class="base-row">
-        <div>总数量：<span class="highlight">${total}</span></div>
-        <div>不重复：<span class="highlight">${unique}</span></div>
-        <div>最高频：<span class="hot">${max} 次</span></div>
-        <div>最低频：<span class="cold">${min} 次</span></div>
-    </div>`;
-}
-
-function renderGroup(sorted, group, maxCnt, minCnt){
-    let html = `<div class="result-title">
-        <span>📦 次数分组（最冷→最热）</span>
-        <div class="title-right">
-            <button class="copy-btn" data-copy="${copyGroupNumbers}" data-tip="g1Tip">复制全部</button>
-            <span id="g1Tip" class="copy-tip"></span>
-        </div>
-    </div>`;
-
-    sorted.forEach(cnt => {
-        const list = group[cnt].map(padZero).join(' ');
-        let mark = '';
-        if(cnt === maxCnt) mark = '<span class="hot">【最热】</span>';
-        if(cnt === minCnt) mark = '<span class="cold">【最冷】</span>';
-        html += `<div class="group-item">${mark} 出现${cnt}次（共${group[cnt].length}个）：${list}</div>`;
-    });
-    document.getElementById(`groupResult1`).innerHTML = html;
-}
-
-function renderZodiac(zodiac){
-    const sorted = Object.entries(zodiac).sort((a,b)=>b[1]-a[1]);
-    const max = sorted[0][1], min = sorted.at(-1)[1];
-    let html = `<div class="result-title"><span>🐉 生肖统计</span></div>`;
-    sorted.forEach(([z, c]) => {
-        const cls = c === max ? 'zodiac-item hot' : c === min ? 'zodiac-item cold' : 'zodiac-item';
-        html += `<div class="${cls}">${z}：${c}次</div>`;
-    });
-    document.getElementById(`zodiacResult1`).innerHTML = html;
 }
 
 function bindCopyEvents() {
@@ -433,6 +311,155 @@ function bindCopyEvents() {
         btn.onclick = () => copyText(btn.dataset.copy, btn.dataset.tip);
     });
 }
+
+function copyInput() {
+    const text = document.getElementById('numInput1').value.trim();
+    if (!text) { alert('输入框为空'); return; }
+    copyText(text, 'inputTip1');
+}
+
+function shuffleNum() {
+    const el = document.getElementById('numInput1');
+    const nums = (el.value.match(/\d+/g) || []).map(Number);
+    if (!nums.length) return;
+    el.value = shuffleArray(nums).map(padZero).join(' ');
+    autoCalculate();
+}
+
+function uniqueNum() {
+    const el = document.getElementById('numInput1');
+    let nums = (el.value.match(/\d+/g) || []).map(Number);
+    nums = [...new Set(nums)];
+    el.value = nums.map(padZero).join(' ');
+    autoCalculate();
+}
+
+function sortNum() {
+    const el = document.getElementById('numInput1');
+    let nums = (el.value.match(/\d+/g) || []).map(Number);
+    nums.sort((a,b)=>a-b);
+    el.value = nums.map(padZero).join(' ');
+    autoCalculate();
+}
+
+function showInputInfo() {
+    const v = document.getElementById('numInput1').value;
+    const cnt = (v.match(/\d+/g) || []).length;
+    const tip = `<span id="inputTip1" class="copy-tip"></span>`;
+    document.getElementById('inputInfo1').innerHTML = `已输入：${cnt} 个 ${tip}`;
+}
+
+function showResult(show) {
+    ['baseResult','groupResult','zodiacResult'].forEach(id => {
+        document.getElementById(`${id}1`).style.display = show ? 'block' : 'none';
+    });
+}
+
+function clearAll() {
+    document.getElementById('numInput1').value = '';
+    ['baseResult','groupResult','zodiacResult'].forEach(id => {
+        document.getElementById(`${id}1`).innerHTML = '';
+    });
+    countData = {};
+    minMax = { min: 0, max: 0 };
+    groupLines = '';
+    showInputInfo();
+    showResult(false);
+}
+
+function renderBase(total, unique, max) {
+    document.getElementById('baseResult1').innerHTML = `
+    <div class="result-title">📊 基础统计</div>
+    <div class="base-row">
+        <div>总数：<span class="highlight">${total}</span></div>
+        <div>不重复：<span class="highlight">${unique}</span></div>
+        <div>最高：<span class="hot">${max}次(L)</span></div>
+        <div>最低：<span class="cold">0次(N)</span></div>
+    </div>`;
+}
+
+function renderGroup(sorted, group, maxCnt) {
+    let html = `<div class="result-title">📦 次数分组</div>`;
+    sorted.forEach((c, index) => {
+        const list = group[c];
+        const numStr = list.map(padZero).join(' ');
+        const count = list.length;
+        const mark = c === maxCnt ? '<span class="hot">L</span>' : '';
+        const tipId = `rowTip${index}`;
+        
+        // 最终格式：1 次 (5个) ：01 02 03
+        html += `
+        <div class="group-item">
+            <div>${mark} ${c} 次 <span class="num-count">(${count}个)</span> ：${numStr}</div>
+            <div>
+                <button class="copy-btn" data-copy="${numStr}" data-tip="${tipId}">复制</button>
+                <span id="${tipId}" class="copy-tip"></span>
+            </div>
+        </div>`;
+    });
+    html += `<div class="title-right"><button class="copy-btn" data-copy="${groupLines}" data-tip="gTip1">复制全部</button><span id="gTip1" class="copy-tip"></span></div>`;
+    document.getElementById('groupResult1').innerHTML = html;
+}
+
+function renderZodiac(zodiac) {
+    const sorted = Object.entries(zodiac).sort((a,b) => b[1] - a[1]);
+    if(sorted.length === 0) return;
+    const max = sorted[0][1], min = sorted.at(-1)[1];
+    let html = `<div class="result-title">🐉 生肖统计</div>`;
+    sorted.forEach(([z, c]) => {
+        const cls = c === max ? 'zodiac-item hot' : c === min ? 'zodiac-item cold' : 'zodiac-item';
+        html += `<div class="${cls}">${z} ${c}</div>`;
+    });
+    document.getElementById('zodiacResult1').innerHTML = html;
+}
+
+function calculate() {
+    const input = document.getElementById('numInput1').value.trim();
+    const arr = (input.match(/\d+/g) || [])
+        .map(Number)
+        .filter(n => !isNaN(n) && n >= 1 && n <= 49);
+
+    if (!arr.length) {
+        countData = {};
+        minMax = { min: 0, max: 0 };
+        showResult(false);
+        return;
+    }
+    showResult(true);
+
+    const count = {};
+    for (let n = 1; n <= 49; n++) count[n] = 0;
+    arr.forEach(n => count[n]++);
+    countData = count;
+
+    const vals = Object.values(count).filter(v => v > 0);
+    minMax = { min: 0, max: vals.length ? Math.max(...vals) : 0 };
+
+    const group = {};
+    for (let n = 1; n <= 49; n++) {
+        const c = count[n];
+        (group[c] || (group[c] = [])).push(n);
+    }
+    const sorted = Object.keys(group).map(Number).sort((a,b) => a - b);
+    groupLines = sorted.map(c => group[c].map(padZero).join(' ')).join('\n');
+
+    const zodiac = {};
+    zodiacList.forEach(z => zodiac[z] = 0);
+    arr.forEach(n => zodiac[getZodiac(n)]++);
+
+    renderBase(arr.length, new Set(arr).size, minMax.max);
+    renderGroup(sorted, group, minMax.max);
+    renderZodiac(zodiac);
+    bindCopyEvents();
+}
+
+function autoCalculate() {
+    showInputInfo();
+    calculate();
+}
+
+document.getElementById('numInput1').addEventListener('input', autoCalculate);
+window.onload = autoCalculate;
 </script>
 </body>
 </html>
