@@ -42,10 +42,12 @@
         .panel {
             margin-bottom: 10px;
             padding-bottom: 10px;
+            border-bottom: 1px dashed #333;
         }
         .panel:last-child {
             margin-bottom: 0;
             padding-bottom: 0;
+            border-bottom: none;
         }
         .panel-title {
             font-size: 15px;
@@ -98,7 +100,7 @@
             cursor: pointer;
             -webkit-appearance: none;
             white-space: nowrap;
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
         button:active {
             opacity: 0.8;
@@ -317,9 +319,6 @@
         }
 
         @media (max-width: 400px) {
-            .rule-inputs {
-                grid-template-columns: 1fr;
-            }
             button {
                 font-size: 13px;
                 padding: 7px 4px;
@@ -423,6 +422,7 @@ const format = arr => uniqueSort(arr).map(padZero).join(' ') || '无';
 function matchRule(val, ruleText) {
     ruleText = (ruleText || '').trim();
     if (!ruleText) return true;
+    if (ruleText === '/') return false;
 
     if (ruleText.includes('-')) {
         const [a, b] = ruleText.split('-').map(v => parseInt(v) || 0);
