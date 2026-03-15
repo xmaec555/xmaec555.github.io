@@ -431,6 +431,7 @@ let group1Lines = "", group2Lines = "";
 let autoCompareTimer = null;
 let ruleChangeTimer = null;
 let noteSaveTimer = null;
+let inputSaveTimer = null;
 
 const padZero = n => n.toString().padStart(2, '0');
 const getZodiac = n => zodiacList[(n - 1) % 12];
@@ -550,6 +551,28 @@ function keepNoteAlwaysVisible() {
     }
 }
 
+// 自动保存输入框
+function saveInputContent() {
+    const v1 = document.getElementById('numInput1').value;
+    const v2 = document.getElementById('numInput2').value;
+    localStorage.setItem('lottery_input1', v1);
+    localStorage.setItem('lottery_input2', v2);
+}
+
+// 自动保存防抖
+function autoSaveInput() {
+    clearTimeout(inputSaveTimer);
+    inputSaveTimer = setTimeout(saveInputContent, 300);
+}
+
+// 加载保存的输入内容
+function loadSavedInput() {
+    const v1 = localStorage.getItem('lottery_input1') || '';
+    const v2 = localStorage.getItem('lottery_input2') || '';
+    document.getElementById('numInput1').value = v1;
+    document.getElementById('numInput2').value = v2;
+}
+
 function shuffleNum(no) {
     const el = document.getElementById(`numInput${no}`);
     const nums = (el.value.match(/\d+/g) || []).map(Number);
@@ -585,6 +608,10 @@ function showResult(no, show) {
 
 function clearAll(no) {
     document.getElementById(`numInput${no}`).value = '';
+    // 清空时同步删除保存的内容
+    if(no === 1) localStorage.removeItem('lottery_input1');
+    if(no === 2) localStorage.removeItem('lottery_input2');
+    
     ['baseResult','groupResult','zodiacResult'].forEach(id => {
         document.getElementById(`${id}${no}`).innerHTML = '';
     });
@@ -714,6 +741,7 @@ function onRuleChange() {
 function autoCalculate(no) {
     showInputInfo(no);
     calculate(no);
+    autoSaveInput(); // 输入时自动保存
 
     const v1 = document.getElementById('numInput1').value.trim();
     const v2 = document.getElementById('numInput2').value.trim();
@@ -785,6 +813,13 @@ function compareAll() {
     loadNote();
     keepNoteAlwaysVisible();
 }
+
+// 页面加载时自动恢复内容
+window.onload = function(){
+    loadSavedInput();
+    autoCalculate(1);
+    autoCalculate(2);
+};
 </script>
 </body>
 </html>
