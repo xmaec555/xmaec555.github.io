@@ -328,20 +328,6 @@
             font-size: 12px;
             color: #777;
         }
-        .footer a {
-            color: #3a6ea5;
-            text-decoration: none;
-        }
-        .footer a:hover {
-            color: #5599ff;
-        }
-
-        @media (max-width: 400px) {
-            button {
-                font-size: 13px;
-                padding: 7px 4px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -551,7 +537,6 @@ function keepNoteAlwaysVisible() {
     }
 }
 
-// 自动保存输入框
 function saveInputContent() {
     const v1 = document.getElementById('numInput1').value;
     const v2 = document.getElementById('numInput2').value;
@@ -559,13 +544,11 @@ function saveInputContent() {
     localStorage.setItem('lottery_input2', v2);
 }
 
-// 自动保存防抖
 function autoSaveInput() {
     clearTimeout(inputSaveTimer);
     inputSaveTimer = setTimeout(saveInputContent, 300);
 }
 
-// 加载保存的输入内容
 function loadSavedInput() {
     const v1 = localStorage.getItem('lottery_input1') || '';
     const v2 = localStorage.getItem('lottery_input2') || '';
@@ -608,7 +591,6 @@ function showResult(no, show) {
 
 function clearAll(no) {
     document.getElementById(`numInput${no}`).value = '';
-    // 清空时同步删除保存的内容
     if(no === 1) localStorage.removeItem('lottery_input1');
     if(no === 2) localStorage.removeItem('lottery_input2');
     
@@ -741,7 +723,7 @@ function onRuleChange() {
 function autoCalculate(no) {
     showInputInfo(no);
     calculate(no);
-    autoSaveInput(); // 输入时自动保存
+    autoSaveInput();
 
     const v1 = document.getElementById('numInput1').value.trim();
     const v2 = document.getElementById('numInput2').value.trim();
@@ -801,11 +783,11 @@ function compareAll() {
         </label>
     </div>
     <textarea id="noteTextarea" class="note-textarea" placeholder="在这里记录备注信息，自动永久保存..." oninput="autoSaveNote()"></textarea>
-    <div class="group-item compare-row">【${texts[0]}】：${format(res[0])}</div>
-    <div class="group-item compare-row">【${texts[1]}】：${format(res[1])}</div>
-    <div class="group-item compare-row">【${texts[2]}】：${format(res[2])}</div>
-    <div class="group-item compare-row">【${texts[3]}】：${format(res[3])}</div>
-    <div class="group-item compare-row">【${texts[4]}】：${format(res[4])}</div>
+    <div class="group-item compare-row">【${texts[0]} · 共${res[0].length}个】：${format(res[0])}</div>
+    <div class="group-item compare-row">【${texts[1]} · 共${res[1].length}个】：${format(res[1])}</div>
+    <div class="group-item compare-row">【${texts[2]} · 共${res[2].length}个】：${format(res[2])}</div>
+    <div class="group-item compare-row">【${texts[3]} · 共${res[3].length}个】：${format(res[3])}</div>
+    <div class="group-item compare-row">【${texts[4]} · 共${res[4].length}个】：${format(res[4])}</div>
     <div class="group-item final-row">✅ 推荐（${final.length} 个）：${format(final)}</div>
     <div class="title-right"><button class="copy-btn" data-copy="${format(final)}" data-tip="cfTip">复制推荐</button><span id="cfTip" class="copy-tip"></span></div>`;
 
@@ -814,7 +796,6 @@ function compareAll() {
     keepNoteAlwaysVisible();
 }
 
-// 页面加载时自动恢复内容
 window.onload = function(){
     loadSavedInput();
     autoCalculate(1);
