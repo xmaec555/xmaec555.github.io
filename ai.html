@@ -339,7 +339,7 @@
             <div class="panel">
                 <div class="panel-title">第一组 · A盘</div>
                 <div class="input-box">
-                    <textarea id="numInput1" placeholder="输入数字，用空格/换行分隔" oninput="autoCalculate(1)"></textarea>
+                    <textarea id="numInput1" placeholder="输入数字，用空格/换行分隔"></textarea>
                     <div class="input-info" id="inputInfo1">已输入：0 个</div>
                 </div>
                 <div class="btn-group">
@@ -357,7 +357,7 @@
             <div class="panel">
                 <div class="panel-title">第二组 · B盘</div>
                 <div class="input-box">
-                    <textarea id="numInput2" placeholder="输入数字，用空格/换行分隔" oninput="autoCalculate(2)"></textarea>
+                    <textarea id="numInput2" placeholder="输入数字，用空格/换行分隔"></textarea>
                     <div class="input-info" id="inputInfo2">已输入：0 个</div>
                 </div>
                 <div class="btn-group">
@@ -725,10 +725,8 @@ function onRuleChange() {
     ruleChangeTimer = setTimeout(compareAll, 200);
 }
 
-// 修复：保留空格，只自动补0，不清除空格
+// 自动统计，无格式化、无补0、无自动空格
 function autoCalculate(no) {
-    const el = document.getElementById(`numInput${no}`);
-    // 只提取数字补0，不改变原输入格式
     showInputInfo(no);
     calculate(no);
     autoSaveInput();
@@ -745,6 +743,31 @@ function autoCalculate(no) {
         rulePanel.style.display = hasBoth ? 'block' : 'none';
         hasBoth ? compareAll() : clearCompare();
     }, 260);
+}
+
+// 粘贴过滤：只保留1-49数字
+function bindPasteFilter() {
+    [document.getElementById('numInput1'), document.getElementById('numInput2')].forEach(input => {
+        input.addEventListener('paste', function (e) {
+            e.preventDefault();
+            const text = (e.clipboardData || window.clipboardData).getData('text');
+            const numbers = text.match(/\d+/g) || [];
+            const valid = numbers.map(Number).filter(n => n >= 1 && n <= 49);
+            const insert = valid.join(' ');
+            
+            const start = this.selectionStart;
+            const end = this.selectionEnd;
+            this.value = this.value.substring(0, start) + insert + this.value.substring(end);
+            
+            // 触发统计
+            autoCalculate(this.id === 'numInput1' ? 1 : 2);
+        });
+
+        // 输入实时统计
+        input.addEventListener('input', () => {
+            autoCalculate(input.id === 'numInput1' ? 1 : 2);
+        });
+    });
 }
 
 function compareAll() {
@@ -806,6 +829,7 @@ function compareAll() {
 
 window.onload = function(){
     loadSavedInput();
+    bindPasteFilter();
     autoCalculate(1);
     autoCalculate(2);
 };
